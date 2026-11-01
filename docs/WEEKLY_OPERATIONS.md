@@ -15,7 +15,7 @@
 | `diarys/YYYY-MM-DD.pdf` | 逐期 PDF 归档；旧文件应保留 | 是 |
 | `.github/workflows/pages.yml` | 监听 `site/**` 推送并部署 GitHub Pages | 是 |
 
-网页地址：[RoboticsNews 项目站点](https://hancheng-guo.github.io/RoboticsNews/)。PDF 链接指向仓库 `main` 分支根目录的 `diarys/`。当前构建脚本**不自动抓取新闻、不自动总结论文、也没有每周定时生成任务**；必须先完成采编并入库、生成，再交给用户审阅，获得明确同意后才提交和推送。GitHub Actions 只负责部署已提交的网站文件。
+网页地址：[RoboticsNews 项目站点](https://hancheng-guo.github.io/RoboticsNews/)。PDF 链接指向仓库 `main` 分支根目录的 `diarys/`。当前构建脚本**不自动抓取新闻、不自动总结论文、也没有每周定时生成任务**；必须先完成采编、入库、生成和核验。用户若在任务中明确授权直接发布，才可随任务提交、推送并验证站点；否则先交给用户审阅，获得明确同意后再提交和推送。GitHub Actions 只负责部署已提交的网站文件。
 
 截至 2026-11-01 的一次性状态：网站是 2026-11-02 周报预告；旧 2026-11-01 三日报 PDF 是历史归档，不能直接改名冒充覆盖 10 月 26 日至 11 月 1 日的完整周报。接手时重新检查 `git status`、站点和数据库，以实时状态为准。
 
@@ -154,7 +154,7 @@ node scripts/db.mjs search --date 2026-11-02 --status published --limit 100
 
 ### 6.4 审阅、提交、部署和核验
 
-完成核对后，**先把改动和检查结果交给用户审阅；未经用户明确同意，不得 commit 或 push**。用户审阅并明确授权后，才提交并推送网站、该期 PDF 和可公开的条目归档。现有 [Pages 工作流](../.github/workflows/pages.yml)只在 `site/**` 或工作流文件变化的 `main` 推送时启动；只推 PDF 不会触发网页部署。网站来源必须是 GitHub Actions。发布前检查公开仓库中可能暴露的内容。提交后检查对应工作流运行成功、站点实际返回本期内容、网页 PDF 链接可用。不要仅凭 `git push` 成功就声称网站已上线。
+完成核对后，先确定本次任务的授权范围：**用户已明确要求直接把本期周报发布到 GitHub Pages，并授权 commit 和 push**，即可提交并推送网站、该期 PDF 和可公开的条目归档；没有这项明确授权时，先把改动和检查结果交给用户审阅，待其明确同意后再提交和推送。不要把过去某期的发布授权当作以后每期的授权。现有 [Pages 工作流](../.github/workflows/pages.yml)只在 `site/**` 或工作流文件变化的 `main` 推送时启动；只推 PDF 不会触发网页部署。网站来源必须是 GitHub Actions。发布前检查公开仓库中可能暴露的内容。提交后检查对应工作流运行成功、站点实际返回本期内容、网页 PDF 链接可用。不要仅凭 `git push` 成功就声称网站已上线。
 
 ```powershell
 git add site/index.html site/current.json site/style.css diarys/2026-11-02.pdf data/issues/2026-11-02.entries.json
@@ -163,7 +163,7 @@ git commit -m "Publish robotics weekly brief for 2026-11-02"
 git push origin main
 ```
 
-以上命令**只供用户审阅并明确授权后执行**；路径和日期是示例，按实际刊期替换。若 `site/current.json` 被预告模式删除，应在提交时显式暂存该删除。推送后到 GitHub Actions 的 **Deploy RoboticsNews site** 运行页查看状态，再打开[站点](https://hancheng-guo.github.io/RoboticsNews/)检查标题、刊期、`AI生成` 和 PDF。Pages/CDN 可能短暂延迟；工作流失败时先查日志，按错误原因修复，不通过删除历史部署或 PDF 作为常规排障手段。
+以上命令仅在本次任务已明确授权 commit/push 后执行；路径和日期是示例，按实际刊期替换。若 `site/current.json` 被预告模式删除，应在提交时显式暂存该删除。推送后到 GitHub Actions 的 **Deploy RoboticsNews site** 运行页查看状态，再打开[站点](https://hancheng-guo.github.io/RoboticsNews/)检查标题、刊期、`AI生成` 和 PDF。Pages/CDN 可能短暂延迟；工作流失败时先查日志，按错误原因修复，不通过删除历史部署或 PDF 作为常规排障手段。
 
 ## 7. 常见故障与处理
 
@@ -186,4 +186,14 @@ git push origin main
 
 ## 9. 可直接交给新会话的任务描述
 
-> 请在 `RoboticsNews` 仓库中维护下一期机器人学周报。先读 `AGENTS.md`、`docs/WEEKLY_OPERATIONS.md`、`docs/EDITORIAL_GUIDE.md`、`docs/PRESENTATION_SPEC.md` 和 `docs/ISSUE_TEMPLATE.md`，确认当前北京时间、周一刊期和上一完整自然周的窗口。按信源目录采集并核实真实进展，论文逐篇读全文并补第一作者单位、摘要原文和中英全文贡献总结。将核实后的条目录入本地数据库并保存可恢复的刊期条目文件，生成当前网页和根目录 `diarys/` 中的新 PDF，检查 `AI生成` 标识、所有链接、日期、证据标签和页面/PDF 排版，并把改动交给我审阅。未经我明确同意，不要 commit 或 push。无法核实的内容暂缓，不以旧三日报充当新周报。
+新会话的提示词只需写**目标刊期**和**本次是否授权直接发布**；其余要求已在 `AGENTS.md` 及本手册引用的文档中。无需在提示词里重复信源、论文字段、版式或检查清单。
+
+直接发布版：
+
+> 请在 `RoboticsNews` 仓库按 `AGENTS.md` 及其引用文档，制作最新一期已结束统计周的周报。完成核验后，我授权你直接 commit、push 到 `main`，并确认 GitHub Pages 和 PDF 已更新；若关键内容无法核实，请暂缓该条并说明。
+
+先审阅版：
+
+> 请在 `RoboticsNews` 仓库按 `AGENTS.md` 及其引用文档，制作最新一期已结束统计周的周报。完成后把改动交给我审阅，暂时不要 commit 或 push。
+
+需要指定某期时，把“最新一期已结束统计周”替换成“`YYYY-MM-DD` 周一刊期”。提示词里的“直接发布”只授权**本次**周报，不自动授权以后每周。

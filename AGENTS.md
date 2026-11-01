@@ -15,4 +15,4 @@ Published paper entries must include the first author's affiliation(s), the cite
 
 If the user asks for a new issue, carry out the research and checks described in the runbook. Do not reuse or relabel the old 2026-11-01 three-day issue as a complete weekly issue.
 
-After editing files, show the user the changes for review. Do not commit or push unless the user explicitly approves that step after reviewing the result.
+Do not proactively commit or push. If the user's request explicitly authorizes publishing the issue to GitHub Pages, including commit and push, that authorization covers the task: complete the checks, commit, push, and verify the live site. Otherwise show the changes for review and wait for explicit approval before committing or pushing.
