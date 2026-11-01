@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dbPath = resolve(process.env.ROBOTICS_NEWS_DB ?? join(root, 'data', 'robotics_news.sqlite'));
-const out = resolve(process.env.ROBOTICS_NEWS_SITE_DIR ?? join(root, 'docs'));
+const out = resolve(process.env.ROBOTICS_NEWS_SITE_DIR ?? join(root, 'site'));
 const pdfDir = resolve(process.env.ROBOTICS_NEWS_PDF_DIR ?? join(root, 'diarys'));
 const pdfPublicBase = process.env.ROBOTICS_NEWS_PDF_URL_BASE ?? 'https://raw.githubusercontent.com/Hancheng-Guo/RoboticsNews/main/diarys';
 const python = process.env.ROBOTICS_NEWS_PYTHON ?? (process.platform === 'win32' ? 'python' : 'python3');
@@ -64,7 +64,9 @@ function main() {
   const date = argDate();
   mkdirSync(out, { recursive: true });
   writeFileSync(join(out, '.nojekyll'), '');
-  writeFileSync(join(out, 'style.css'), readFileSync(join(root, 'site', 'style.css')));
+  const sourceStyle = join(root, 'site', 'style.css');
+  const targetStyle = join(out, 'style.css');
+  if (targetStyle !== sourceStyle) writeFileSync(targetStyle, readFileSync(sourceStyle));
   let entries = [];
   if (existsSync(dbPath)) {
     const db = new DatabaseSync(dbPath, { readOnly: true });
