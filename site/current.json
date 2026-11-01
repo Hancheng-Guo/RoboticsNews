@@ -4,36 +4,6 @@
   "coverage_end": "2026-10-31",
   "timezone": "Asia/Shanghai",
   "pdf_url": "https://raw.githubusercontent.com/Hancheng-Guo/RoboticsNews/main/diarys/2026-11-01.pdf",
-  "editorial_note_zh": "本期覆盖北京时间 2026 年 10 月 29 日至 31 日三个完整自然日，按首次公开时间筛选。10 月 31 日的机器人学高价值新增较少，主要入选内容来自 29 日和 30 日。论文均为预印本，实验结果来自作者报告；产业条目以机构公告为依据，其性能或部署效果尚未独立验证。",
-  "editorial_note_en": "This three-day issue covers 29–31 October 2026 in Beijing time, using the first public release date. Few high-value robotics items qualified on 31 October; most selections were first disclosed on 29 or 30 October. Papers are preprints with author-reported results. Industry items rely on company announcements, and performance or deployment claims are not independently verified.",
-  "source_checks": [
-    {
-      "title_zh": "arXiv cs.RO：指定时间窗内无新投稿",
-      "result_zh": "按北京时间 10 月 31 日换算为 UTC 10 月 30 日 16:00 至 10 月 31 日 15:59，检索 arXiv cs.RO 的首次投稿时间，API 返回 0 条。此结论仅针对该分类和该时间窗，不代表其他论文平台没有更新。",
-      "result_en": "The arXiv API returned zero cs.RO first submissions between 30 October 16:00 and 31 October 15:59 UTC, the Beijing reporting window. This check does not cover other repositories or journals.",
-      "urls": [
-        "https://export.arxiv.org/api/query?search_query=cat%3Acs.RO%20AND%20submittedDate%3A%5B202610301600%20TO%202610311559%5D&start=0&max_results=1"
-      ]
-    },
-    {
-      "title_zh": "Space Station OS v0.9.0：旧版本被再次推送",
-      "result_zh": "ROS 社区页面的活动日期显示 10 月 31 日，但 GitHub 原始版本的发布时间为 8 月 23 日，不属于本期新增。",
-      "result_en": "A ROS community page showed activity on 31 October, but the original GitHub v0.9.0 release was published on 23 August, outside this issue.",
-      "urls": [
-        "https://discourse.openrobotics.org/t/space-station-os-v0-9-0-released-ros-2-jazzy-pixi-and-a-new-development-baseline/59382",
-        "https://github.com/space-station-os/space_station_os/releases/tag/v0.9.0"
-      ]
-    },
-    {
-      "title_zh": "液晶全息软体机器人论文：10 月 31 日报道并非新发表",
-      "result_zh": "科学网在 10 月 31 日转载了该成果介绍，但期刊原文的发表日期为 5 月 6 日，因此不作为昨日新论文。",
-      "result_en": "A 31 October write-up covered this soft-robotics paper, but the journal published it on 6 May. It is not a new paper from yesterday.",
-      "urls": [
-        "https://news.sciencenet.cn/htmlpaper/2026/10/2026103121349943157356.shtm",
-        "https://www.nature.com/articles/s41377-026-02287-5"
-      ]
-    }
-  ],
   "entries": [
     {
       "id": "2026-11-01-gym-anything",
