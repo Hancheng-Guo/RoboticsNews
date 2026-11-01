@@ -1,4 +1,5 @@
 name: Deploy RoboticsNews site
+run-name: Deploy the current site from main
 
 on:
   push:
