@@ -3,6 +3,7 @@
   "coverage_start": "2026-10-29",
   "coverage_end": "2026-10-31",
   "timezone": "Asia/Shanghai",
+  "pdf_url": "https://raw.githubusercontent.com/Hancheng-Guo/RoboticsNews/main/diarys/2026-11-01.pdf",
   "editorial_note_zh": "本期覆盖北京时间 2026 年 10 月 29 日至 31 日三个完整自然日，按首次公开时间筛选。10 月 31 日的机器人学高价值新增较少，主要入选内容来自 29 日和 30 日。论文均为预印本，实验结果来自作者报告；产业条目以机构公告为依据，其性能或部署效果尚未独立验证。",
   "editorial_note_en": "This three-day issue covers 29–31 October 2026 in Beijing time, using the first public release date. Few high-value robotics items qualified on 31 October; most selections were first disclosed on 29 or 30 October. Papers are preprints with author-reported results. Industry items rely on company announcements, and performance or deployment claims are not independently verified.",
   "source_checks": [

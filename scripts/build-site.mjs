@@ -8,6 +8,8 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dbPath = resolve(process.env.ROBOTICS_NEWS_DB ?? join(root, 'data', 'robotics_news.sqlite'));
 const out = resolve(process.env.ROBOTICS_NEWS_SITE_DIR ?? join(root, 'docs'));
+const pdfDir = resolve(process.env.ROBOTICS_NEWS_PDF_DIR ?? join(root, 'diarys'));
+const pdfPublicBase = process.env.ROBOTICS_NEWS_PDF_URL_BASE ?? 'https://raw.githubusercontent.com/Hancheng-Guo/RoboticsNews/main/diarys';
 const python = process.env.ROBOTICS_NEWS_PYTHON ?? (process.platform === 'win32' ? 'python' : 'python3');
 const todayBj = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 const html = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
@@ -49,7 +51,7 @@ function issuePage(issue) {
   const groups = sections.map(key => [key, issue.entries.filter(e => e.placement === key)]).filter(([, items]) => items.length);
   const note = issue.editorial_note_zh ? `<section class="content-section"><div class="section-title"><span class="section-mark"></span><h2>编辑说明</h2></div><p>${html(issue.editorial_note_zh)}</p><p class="entry-en" lang="en">${html(issue.editorial_note_en)}</p></section>` : '';
   const checks = (issue.source_checks ?? []).length ? `<section class="content-section"><div class="section-title"><span class="section-mark"></span><h2>核查记录</h2></div><div class="entries">${issue.source_checks.map(c => `<article class="entry"><h3>${html(c.title_zh)}</h3><p>${html(c.result_zh)}</p><p class="entry-en" lang="en">${html(c.result_en)}</p><div class="entry-links">${c.urls.map((u, i) => `<a href="${url(u)}" target="_blank" rel="noopener noreferrer">依据 ${i + 1} ↗</a>`).join('')}</div></article>`).join('')}</div></section>` : '';
-  const body = `<main class="shell"><section class="hero"><div class="eyebrow">THREE-DAY BRIEF · ${html(issue.date)}</div><h1>机器人学研究进展三日报</h1><p class="hero-sub">Robotics Research & Industry · Three-Day Brief</p><div class="hero-meta"><span>北京时间 ${html(issue.date)} 发布</span><span>${issue.entries.length} 条合格新增</span><a class="pdf-link" href="pdf/${html(issue.date)}.pdf">下载本期 PDF ↓</a></div></section><p class="issue-note">覆盖北京时间 ${html(issue.coverage_start)} 00:00 至 ${html(issue.coverage_end)} 24:00 首次公开的信息。${issue.entries.length ? '企业或机构单方发布的内容会明确标注；点击每条原始来源查看依据。' : '本期未检出符合采编标准的新增进展。'}</p>${note}${groups.map(([key, items]) => `<section class="content-section"><div class="section-title"><span class="section-mark"></span><h2>${labels[key]}</h2><span class="section-count">${items.length}</span></div><div class="entries">${items.map(entryCard).join('')}</div></section>`).join('')}${checks}</main>`;
+  const body = `<main class="shell"><section class="hero"><div class="eyebrow">THREE-DAY BRIEF · ${html(issue.date)}</div><h1>机器人学研究进展三日报</h1><p class="hero-sub">Robotics Research & Industry · Three-Day Brief</p><div class="hero-meta"><span>北京时间 ${html(issue.date)} 发布</span><span>${issue.entries.length} 条合格新增</span><a class="pdf-link" href="${url(issue.pdf_url)}" target="_blank" rel="noopener noreferrer">查看本期 PDF ↗</a></div></section><p class="issue-note">覆盖北京时间 ${html(issue.coverage_start)} 00:00 至 ${html(issue.coverage_end)} 24:00 首次公开的信息。${issue.entries.length ? '企业或机构单方发布的内容会明确标注；点击每条原始来源查看依据。' : '本期未检出符合采编标准的新增进展。'}</p>${note}${groups.map(([key, items]) => `<section class="content-section"><div class="section-title"><span class="section-mark"></span><h2>${labels[key]}</h2><span class="section-count">${items.length}</span></div><div class="entries">${items.map(entryCard).join('')}</div></section>`).join('')}${checks}</main>`;
   return layout(`${issue.date} 三日报`, body);
 }
 
@@ -82,6 +84,7 @@ function main() {
     coverageDate.setUTCDate(coverageDate.getUTCDate() - 2);
     const issue = { date, coverage_start: meta.coverage_start ?? coverageDate.toISOString().slice(0, 10),
       coverage_end: meta.coverage_end ?? coverageEnd, timezone: 'Asia/Shanghai',
+      pdf_url: `${pdfPublicBase.replace(/\/$/, '')}/${date}.pdf`,
       editorial_note_zh: meta.editorial_note_zh ?? '', editorial_note_en: meta.editorial_note_en ?? '',
       source_checks: meta.source_checks ?? [], entries };
     for (const item of entries) {
@@ -91,7 +94,6 @@ function main() {
       }
     }
     const currentJson = join(out, 'current.json');
-    const pdfDir = join(out, 'pdf');
     mkdirSync(pdfDir, { recursive: true });
     writeFileSync(currentJson, JSON.stringify(issue, null, 2) + '\n');
     execFileSync(python, [join(root, 'scripts', 'build-pdf.py'), currentJson, join(pdfDir, `${date}.pdf`)], { stdio: 'inherit' });
