@@ -1,6 +1,6 @@
 # RoboticsNews 周报维护手册
 
-本手册供新的会话或维护者直接接手周报。先按本文件执行操作，再用 [采编规范](../EDITORIAL_GUIDE.md) 判断信源、选题和证据。遇到文档与程序不一致，以**实际代码和数据库结构**为准，修正文档后继续；不要猜测命令已经具备的功能。
+本手册供新的会话或维护者直接接手周报。先按本文件执行操作，再用 [采编规范](EDITORIAL_GUIDE.md) 判断信源、选题和证据，按 [呈现规范](PRESENTATION_SPEC.md) 与 [周报模板](ISSUE_TEMPLATE.md) 核对网页和 PDF。遇到文档与程序不一致，以**实际代码和数据库结构**为准，修正文档后继续；不要猜测命令已经具备的功能。
 
 ## 1. 本项目究竟如何运行
 
@@ -15,14 +15,14 @@
 | `diarys/YYYY-MM-DD.pdf` | 逐期 PDF 归档；旧文件应保留 | 是 |
 | `.github/workflows/pages.yml` | 监听 `site/**` 推送并部署 GitHub Pages | 是 |
 
-网页地址：[RoboticsNews 项目站点](https://hancheng-guo.github.io/RoboticsNews/)。PDF 链接指向仓库 `main` 分支根目录的 `diarys/`。当前构建脚本**不自动抓取新闻、不自动总结论文、也没有每周定时生成任务**；必须先完成采编并入库，然后生成、提交、推送。GitHub Actions 只负责部署已提交的网站文件。
+网页地址：[RoboticsNews 项目站点](https://hancheng-guo.github.io/RoboticsNews/)。PDF 链接指向仓库 `main` 分支根目录的 `diarys/`。当前构建脚本**不自动抓取新闻、不自动总结论文、也没有每周定时生成任务**；必须先完成采编并入库、生成，再交给用户审阅，获得明确同意后才提交和推送。GitHub Actions 只负责部署已提交的网站文件。
 
 截至 2026-11-01 的一次性状态：网站是 2026-11-02 周报预告；旧 2026-11-01 三日报 PDF 是历史归档，不能直接改名冒充覆盖 10 月 26 日至 11 月 1 日的完整周报。接手时重新检查 `git status`、站点和数据库，以实时状态为准。
 
 ## 2. 新会话开始时先做什么
 
 1. 在仓库根目录确认当前北京时间、分支、远端和未提交修改；不要覆盖他人正在编辑的文件。
-2. 读本文件、[采编规范](../EDITORIAL_GUIDE.md)、[README](../README.md)、[数据库说明](../data/README.md)。确认最近一次周报的刊期和站点状态。
+2. 读本文件、[采编规范](EDITORIAL_GUIDE.md)、[呈现规范](PRESENTATION_SPEC.md)、[周报模板](ISSUE_TEMPLATE.md)、[README](../README.md)、[数据库说明](../data/README.md)。确认最近一次周报的刊期和站点状态。
 3. 确认 Node.js 24、Python 3 和 `reportlab` 可用；执行 `node scripts/db.mjs init` 创建或迁移本地库。
 4. 用 `node scripts/db.mjs stats` 检查库内是否有预期条目。**不能因为库为空就生成并发布空白周报**：先查找备份或已提交的 `data/issues/*.entries.json`，再按需导入。
 5. 明确本次刊期 `YYYY-MM-DD`：必须是北京时间周一；覆盖上一周一 00:00（含）至本周一 00:00（不含）。例如 **2026-11-02 刊覆盖 2026-10-26 至 2026-11-01**。周日尚未结束时，只能发布预告。
@@ -53,7 +53,7 @@ node scripts/db.mjs search --date 2026-11-02 --limit 100
 
 ## 3. 每周采集与候选池
 
-按 [采编规范第 2–3 节](../EDITORIAL_GUIDE.md) 的主题地图和信源目录持续扫描：arXiv 与论文/会议官方页面、高校与实验室公告、ROS/GitHub/Hugging Face 等技术平台、企业/客户原始公告、证券披露、监管与标准正文。全球范围内按价值入选，兼顾中国，不设地区或企业席位。学术为主，但不设固定比例。
+按 [采编规范第 2–3 节](EDITORIAL_GUIDE.md) 的主题地图和信源目录持续扫描：arXiv 与论文/会议官方页面、高校与实验室公告、ROS/GitHub/Hugging Face 等技术平台、企业/客户原始公告、证券披露、监管与标准正文。全球范围内按价值入选，兼顾中国，不设地区或企业席位。学术为主，但不设固定比例。
 
 发现线索时立即保存：原始 URL、发布主体、原始时间和时区、北京时间换算、首次发现时间、事件类型、候选理由。媒体转载和社交平台可帮忙发现，不单独支撑事实。核对的终点应是论文版本页及全文、会议录用页、项目仓库 release、企业公告、客户文件、监管披露或标准原文。链接失效、发布时间不清、正文与标题冲突时保持候选或暂缓状态。
 
@@ -69,7 +69,7 @@ node scripts/db.mjs search --date 2026-11-02 --limit 100
 
 ## 4. 选题与证据判定
 
-候选先满足四个条件：直接关联机器人研发/应用；有新的事件或证据；能确认时间窗口；有可追溯的一手来源。再按新增量、影响、证据强度、读者可用性各 0–2 分排序，并保持主题多样性。评分辅助编辑，不取代核验。具体评分、排除项和分类型清单见 [采编规范第 4–6 节](../EDITORIAL_GUIDE.md)。
+候选先满足四个条件：直接关联机器人研发/应用；有新的事件或证据；能确认时间窗口；有可追溯的一手来源。再按新增量、影响、证据强度、读者可用性各 0–2 分排序，并保持主题多样性。评分辅助编辑，不取代核验。具体评分、排除项和分类型清单见 [采编规范第 4–6 节](EDITORIAL_GUIDE.md)。
 
 对每条至少核对：标题中的事实、发布时间、主体、所有数字及单位、实验或部署条件、支持材料是否真的可访问、主张是否只来自机构本身。企业单方发布可入选甚至成为重点，但证据标签用 `official_claim`，标题和正文明确归属，页面显示“机构宣称，未独立验证”。预印本用 `preprint`，不能写成已同行评审。会议/期刊状态要在官方页面核对。
 
@@ -150,11 +150,11 @@ git diff --check
 node scripts/db.mjs search --date 2026-11-02 --status published --limit 100
 ```
 
-若系统有 Poppler，可用 `pdfinfo diarys/2026-11-02.pdf` 检查页数，并用 `pdftoppm -f 1 -l 1 -png diarys/2026-11-02.pdf tmp/weekly-cover` 渲染首页目视检查。多页时抽查中间页和末页。网页也需在浏览器查看桌面与窄屏布局。只检查命令退出码不足以证明页面可读。
+若系统有 Poppler，可用 `pdfinfo diarys/2026-11-02.pdf` 检查页数，并用 `pdftoppm -f 1 -l 1 -png diarys/2026-11-02.pdf tmp/weekly-cover` 渲染首页目视检查。多页时抽查中间页和末页。网页也需在浏览器查看桌面与窄屏布局。逐项对照[呈现规范](PRESENTATION_SPEC.md)和[周报模板](ISSUE_TEMPLATE.md)；只检查命令退出码不足以证明页面可读。
 
-### 6.4 提交、部署和核验
+### 6.4 审阅、提交、部署和核验
 
-核对通过后提交并推送**网站、该期 PDF 和可公开的条目归档**。现有 [Pages 工作流](../.github/workflows/pages.yml)只在 `site/**` 或工作流文件变化的 `main` 推送时启动；只推 PDF 不会触发网页部署。网站来源必须是 GitHub Actions。发布前检查公开仓库中可能暴露的内容。提交后检查对应工作流运行成功、站点实际返回本期内容、网页 PDF 链接可用。不要仅凭 `git push` 成功就声称网站已上线。
+完成核对后，**先把改动和检查结果交给用户审阅；未经用户明确同意，不得 commit 或 push**。用户审阅并明确授权后，才提交并推送网站、该期 PDF 和可公开的条目归档。现有 [Pages 工作流](../.github/workflows/pages.yml)只在 `site/**` 或工作流文件变化的 `main` 推送时启动；只推 PDF 不会触发网页部署。网站来源必须是 GitHub Actions。发布前检查公开仓库中可能暴露的内容。提交后检查对应工作流运行成功、站点实际返回本期内容、网页 PDF 链接可用。不要仅凭 `git push` 成功就声称网站已上线。
 
 ```powershell
 git add site/index.html site/current.json site/style.css diarys/2026-11-02.pdf data/issues/2026-11-02.entries.json
@@ -163,7 +163,7 @@ git commit -m "Publish robotics weekly brief for 2026-11-02"
 git push origin main
 ```
 
-以上路径和日期是示例，按实际刊期替换。若 `site/current.json` 被预告模式删除，应在提交时显式暂存该删除。推送后到 GitHub Actions 的 **Deploy RoboticsNews site** 运行页查看状态，再打开[站点](https://hancheng-guo.github.io/RoboticsNews/)检查标题、刊期、`AI生成` 和 PDF。Pages/CDN 可能短暂延迟；工作流失败时先查日志，按错误原因修复，不通过删除历史部署或 PDF 作为常规排障手段。
+以上命令**只供用户审阅并明确授权后执行**；路径和日期是示例，按实际刊期替换。若 `site/current.json` 被预告模式删除，应在提交时显式暂存该删除。推送后到 GitHub Actions 的 **Deploy RoboticsNews site** 运行页查看状态，再打开[站点](https://hancheng-guo.github.io/RoboticsNews/)检查标题、刊期、`AI生成` 和 PDF。Pages/CDN 可能短暂延迟；工作流失败时先查日志，按错误原因修复，不通过删除历史部署或 PDF 作为常规排障手段。
 
 ## 7. 常见故障与处理
 
@@ -186,4 +186,4 @@ git push origin main
 
 ## 9. 可直接交给新会话的任务描述
 
-> 请在 `RoboticsNews` 仓库中维护下一期机器人学周报。先读 `AGENTS.md`、`docs/WEEKLY_OPERATIONS.md` 和 `EDITORIAL_GUIDE.md`，确认当前北京时间、周一刊期和上一完整自然周的窗口。按信源目录采集并核实真实进展，论文逐篇读全文并补第一作者单位、摘要原文和中英全文贡献总结。将核实后的条目录入本地数据库并保存可恢复的刊期条目文件，生成当前网页和根目录 `diarys/` 中的新 PDF，检查 `AI生成` 标识、所有链接、日期、证据标签和页面/PDF 排版，再按本项目发布流程提交、推送并验证 GitHub Pages。无法核实的内容暂缓，不以旧三日报充当新周报。
+> 请在 `RoboticsNews` 仓库中维护下一期机器人学周报。先读 `AGENTS.md`、`docs/WEEKLY_OPERATIONS.md`、`docs/EDITORIAL_GUIDE.md`、`docs/PRESENTATION_SPEC.md` 和 `docs/ISSUE_TEMPLATE.md`，确认当前北京时间、周一刊期和上一完整自然周的窗口。按信源目录采集并核实真实进展，论文逐篇读全文并补第一作者单位、摘要原文和中英全文贡献总结。将核实后的条目录入本地数据库并保存可恢复的刊期条目文件，生成当前网页和根目录 `diarys/` 中的新 PDF，检查 `AI生成` 标识、所有链接、日期、证据标签和页面/PDF 排版，并把改动交给我审阅。未经我明确同意，不要 commit 或 push。无法核实的内容暂缓，不以旧三日报充当新周报。

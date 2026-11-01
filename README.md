@@ -1,6 +1,6 @@
 # RoboticsNews
 
-机器人学研究进展周报的采编规则见 [EDITORIAL_GUIDE.md](EDITORIAL_GUIDE.md)。新会话接手与每期发布的操作流程见 [docs/WEEKLY_OPERATIONS.md](docs/WEEKLY_OPERATIONS.md)。每周一北京时间 08:00 发布，汇总上一个完整自然周（周一至周日）的进展。
+机器人学研究进展周报的采编规则见 [EDITORIAL_GUIDE.md](docs/EDITORIAL_GUIDE.md)，网页/PDF 规则与结构模板见 [PRESENTATION_SPEC.md](docs/PRESENTATION_SPEC.md) 和 [ISSUE_TEMPLATE.md](docs/ISSUE_TEMPLATE.md)。新会话接手与每期发布的操作流程见 [WEEKLY_OPERATIONS.md](docs/WEEKLY_OPERATIONS.md)。每周一北京时间 08:00 发布，汇总上一个完整自然周（周一至周日）的进展。
 
 ## 数据存储与查找
 
@@ -38,5 +38,5 @@ node scripts/build-site.mjs --preview --date 2026-11-02
 
 不传 `--date` 时，默认以最近一个北京时间周一为刊期。刊期日期必须是周一；例如 2026-11-02 刊覆盖 2026-10-26 至 2026-11-01。周报应在覆盖周结束后、周一 08:00 发布。脚本从本地 SQLite 读取该刊期**已发布**条目，覆盖 `site/index.html` 与 `site/current.json`，并在仓库根目录的 `diarys/YYYY-MM-DD.pdf` 新增该期 PDF。网页只显示本期内容；旧 PDF 按日期保留，网页通过 GitHub 原始文件链接访问 PDF。刊期元数据可写在 `data/issues/YYYY-MM-DD.json`，已核实条目可保存为 `data/issues/YYYY-MM-DD.entries.json` 并导入数据库。没有条目且没有刊期元数据时，首页显示暂无内容；有刊期元数据时仍生成 PDF。PDF 使用 Python 3 与 `reportlab`；网页生成使用 Node.js 24 的内置 SQLite。若仓库地址改变，设置 `ROBOTICS_NEWS_PDF_URL_BASE` 为 `diarys` 的公开 URL 基址；PDF 输出目录可由 `ROBOTICS_NEWS_PDF_DIR` 覆盖。
 
-在 GitHub 仓库 **Settings → Pages → Build and deployment** 中将 Source 设为 **GitHub Actions**。提交并推送 `site/` 后，[Pages 工作流](.github/workflows/pages.yml)会发布网站；预期项目站点地址为 `https://hancheng-guo.github.io/RoboticsNews/`，以工作流返回的实际 URL 为准。本地数据库不会上传，只有 `site/` 内的已发布内容会公开。每周一完成新刊后重新生成并推送即可。网页顶部和 PDF 首页均标明“AI生成”。
+在 GitHub 仓库 **Settings → Pages → Build and deployment** 中将 Source 设为 **GitHub Actions**。提交并推送 `site/` 后，[Pages 工作流](.github/workflows/pages.yml)会发布网站；预期项目站点地址为 `https://hancheng-guo.github.io/RoboticsNews/`，以工作流返回的实际 URL 为准。本地数据库不会上传，只有 `site/` 内的已发布内容会公开。每周一完成新刊后先交给用户审阅，获得明确同意后再提交、推送。网页顶部和 PDF 首页均标明“AI生成”。
 
