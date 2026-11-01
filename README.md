@@ -1,6 +1,6 @@
 # RoboticsNews
 
-机器人学研究进展周报的采编规则见 [EDITORIAL_GUIDE.md](EDITORIAL_GUIDE.md)。每周一北京时间 08:00 发布，汇总上一个完整自然周（周一至周日）的进展。
+机器人学研究进展周报的采编规则见 [EDITORIAL_GUIDE.md](EDITORIAL_GUIDE.md)。新会话接手与每期发布的操作流程见 [docs/WEEKLY_OPERATIONS.md](docs/WEEKLY_OPERATIONS.md)。每周一北京时间 08:00 发布，汇总上一个完整自然周（周一至周日）的进展。
 
 ## 数据存储与查找
 
