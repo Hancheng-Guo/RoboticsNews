@@ -52,6 +52,10 @@ ST = {
     "body": style("body", 9.3, 16),
     "english": style("english", 8.3, 13, MUTED, font="Helvetica"),
     "meta": style("meta", 8, 13, MUTED),
+    "ai_notice": style("ai_notice", 10, 17, INK,
+                       backColor=colors.HexColor("#FFF2C9"),
+                       borderColor=colors.HexColor("#D6A644"),
+                       borderWidth=0.7, borderPadding=7),
     "subheading": style("subheading", 9, 15, ACCENT, spaceBefore=2 * mm),
 }
 
@@ -96,7 +100,8 @@ def build(source, target):
              para("机器人学研究进展周报", "title"), Spacer(1, 1 * mm),
              para("Robotics Research & Industry · Weekly Brief", "subtitle"), Spacer(1, 5 * mm),
              para(f"北京时间 {issue['date']} 发布  ·  {len(issue['entries'])} 条进展", "meta"),
-             para("AI生成：内容由 AI 辅助整理与总结，请以原始来源为准。", "meta"),
+             Spacer(1, 2 * mm),
+             para("AI生成：内容由 AI 辅助整理与总结，请以原始来源为准。", "ai_notice"),
              Spacer(1, 4 * mm),
              HRFlowable(width="100%", thickness=1, color=colors.HexColor("#DAE3E8")),
              Spacer(1, 4 * mm),
