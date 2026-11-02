@@ -17,7 +17,7 @@
 
 网页地址：[RoboticsNews 项目站点](https://hancheng-guo.github.io/RoboticsNews/)。PDF 链接指向仓库 `main` 分支根目录的 `diarys/`。当前构建脚本**不自动抓取新闻、不自动总结论文、也没有每周定时生成任务**；必须先完成采编、入库、生成和核验。用户若在任务中明确授权直接发布，才可随任务提交、推送并验证站点；否则先交给用户审阅，获得明确同意后再提交和推送。GitHub Actions 只负责部署已提交的网站文件。
 
-截至 2026-11-01 的一次性状态：网站是 2026-11-02 周报预告；旧 2026-11-01 三日报 PDF 是历史归档，不能直接改名冒充覆盖 10 月 26 日至 11 月 1 日的完整周报。接手时重新检查 `git status`、站点和数据库，以实时状态为准。
+本项目只维护周报。接手时重新检查 `git status`、站点和数据库，以实时状态为准；不要从已删除的旧刊恢复或改名生成周报。
 
 ## 2. 新会话开始时先做什么
 
@@ -55,7 +55,7 @@ node scripts/db.mjs search --date 2026-11-02 --limit 100
 
 按 [采编规范第 2–3 节](EDITORIAL_GUIDE.md) 的主题地图和信源目录持续扫描：arXiv 与论文/会议官方页面、高校与实验室公告、ROS/GitHub/Hugging Face 等技术平台、企业/客户原始公告、证券披露、监管与标准正文。全球范围内按价值入选，兼顾中国，不设地区或企业席位。学术为主，但不设固定比例。
 
-发现线索时立即保存：原始 URL、发布主体、原始时间和时区、北京时间换算、首次发现时间、事件类型、候选理由。媒体转载和社交平台可帮忙发现，不单独支撑事实。核对的终点应是论文版本页及全文、会议录用页、项目仓库 release、企业公告、客户文件、监管披露或标准原文。链接失效、发布时间不清、正文与标题冲突时保持候选或暂缓状态。
+发现线索时立即保存：原始 URL、发布主体、原始时间和时区、北京时间换算、首次发现时间、事件类型、候选理由。媒体转载和社交平台可帮忙发现，不单独支撑事实。核对的终点应是论文版本页与摘要、作者署名的一手材料、会议录用页、项目仓库 release、企业公告、客户文件、监管披露或标准原文。链接失效、发布时间不清、正文与标题冲突时保持候选或暂缓状态。
 
 逐个方向检索，避免只靠单一热词。至少覆盖机器人学习、操作与触觉、移动与导航、控制、感知、硬件形态、仿真与开源、安全与人机协作、行业应用、政策标准和投融资。周中持续去重和深读；周一凌晨只补足周日尾段与最终核验。
 
@@ -75,10 +75,10 @@ node scripts/db.mjs search --date 2026-11-02 --limit 100
 
 论文必须额外完成以下工作：
 
-1. 打开**本条所引用版本**的论文全文，核对题名、第一作者、作者排序、第一作者所有单位、版本号、DOI/arXiv ID、首次公开/正式录用日期。单位以论文署名页为准；不根据作者国籍或新闻稿推断。
-2. 从同一版本保存摘要原文到 `abstract_original`，保留原词、符号、数字及限定语；记录 `abstract_language`、`abstract_source_url`。核对公开转载摘要的许可与署名条件；未确认可发布时暂缓该论文，不用自行改写的摘要冒充原文。
-3. 阅读方法、实验、结果表、消融和局限；记录实际阅读的 `full_text_url` 和 `full_text_verified_at`。对关键数字标注正文图/表/章节位置于内部 `claim_evidence_notes`，不得只凭摘要或新闻稿编写“全文总结”。
-4. `full_text_contributions_zh` 与 `full_text_contributions_en` 写**基于全文的主要贡献**：新方法是什么，主要实验观察是什么、条件和基线是什么，相对已有工作的增量与边界是什么。区分作者报告与独立验证。页面顺序固定为“第一作者及单位 → 摘要原文 → 全文主要贡献”。
+1. 打开**本条所引用版本**的论文页面，核对题名、作者排序、版本号、DOI/arXiv ID、首次公开/正式录用日期。第一作者姓名取自该版本作者列表。
+2. 单独核实**第一作者单位**：优先用可访问的论文署名页；无法访问全文时，用出版方作者信息页、研究团队官方项目页等一手材料。多个单位全部按署名顺序记录，将确实列出单位的一手依据存入 `first_author_affiliation_source_url` 并在网页/PDF 上链接。该 URL 可以与 `primary_url` 相同，只要它本身能证明单位；不必找第二个不同来源。不要把通讯作者单位或作者现职误标成第一作者单位；无法核实时暂缓。
+3. 从同一版本保存摘要原文到 `abstract_original`，保留原词、符号、数字及限定语；记录 `abstract_language`、`abstract_source_url`。非中文摘要另存完整、忠实的 `abstract_zh_translation`。核对公开转载摘要的许可与署名条件；未确认可发布时暂缓该论文，不用自行改写的摘要冒充原文。
+4. **不要求访问论文全文，不撰写基于全文的贡献总结。** 页面顺序为“第一作者 → 第一作者单位 → 摘要原文 → 摘要中文翻译（原文非中文时）”。摘要以外的实验性能、落地和局限只写其他可访问的一手资料明确支持的内容；不凭摘要推断。
 5. 检查代码、权重、数据、评测协议是否实际开放；“有链接”不等于“可复现”。别跨任务或跨评测协议直接比较数值。
 
 ## 5. 录入与状态流转
@@ -87,7 +87,7 @@ node scripts/db.mjs search --date 2026-11-02 --limit 100
 
 | 字段组 | 使用规则 |
 | --- | --- |
-| `title_original`, `title_zh`, `title_en`, `summary_zh`, `summary_en` | 所有条目都要填写；论文的 `summary_*` 为检索/数据字段，公开页面以原文摘要和全文贡献总结为主 |
+| `title_original`, `title_zh`, `title_en`, `summary_zh`, `summary_en` | 所有条目都要填写；论文的 `summary_*` 为检索/数据字段，公开页面展示原文摘要与中文翻译 |
 | `category`, `placement` | 类型与栏目不同；`paper_briefs` 只是展示位置，不能降低论文核验门槛 |
 | `evidence_status`, `publication_status`, `deployment_stage` | 分别表示证据状态、论文出版状态和实际部署阶段；不要混用 |
 | `primary_url`, `supporting_urls`, `paper_id`, `code_url`, `data_url` | 原始材料与辅助证据；空缺时用 `null` 或空数组，不伪造 URL |
@@ -95,7 +95,7 @@ node scripts/db.mjs search --date 2026-11-02 --limit 100
 | `claim_evidence_notes` | 内部核查记录；构建器不把该字段写进 `site/current.json`、网页或 PDF，但若提交条目 JSON 到公开仓库，该文件本身仍可被公众查看 |
 | `editorial_status` | `candidate` → `verifying` → `approved` → `published`；证据不足用 `held`，不收录用 `rejected`，更正用 `corrected`。构建器只读取 `published` |
 
-论文在 2026-11-02 及之后的刊期标为 `published` 时，数据库写入程序要求第一作者、单位、摘要原文及来源、全文链接与核验时间、两种语言的贡献总结。网页构建器再次检查这些字段。先保存候选 JSON，完成核验后再改为 `published` 并用 `add`/`replace` 入库。`add` 和 `replace` 都接受单个对象或对象数组文件。
+论文在 2026-11-02 及之后的刊期标为 `published` 时，数据库写入程序要求第一作者、单位及其一手依据 URL、摘要原文及来源；原文不是中文时还要求中文翻译。网页构建器再次检查这些字段。先保存候选 JSON，完成核验后再改为 `published` 并用 `add`/`replace` 入库。`add` 和 `replace` 都接受单个对象或对象数组文件。
 
 ```powershell
 node scripts/db.mjs add data/issues/2026-11-02.entries.json
@@ -103,7 +103,7 @@ node scripts/db.mjs get example-2026-11-02-001
 node scripts/db.mjs search --date 2026-11-02 --status published --limit 100
 ```
 
-上述 `example-...` 是命令格式示意，不能作为真实新闻入库。正式条目文件应只包含真实核验结果。现有 2026-11-01 旧条目缺少新论文字段，不能简单把 `issue_date` 改成 2026-11-02；必须逐篇重查论文全文、第一作者单位、摘要许可，并补齐整周其他日期的采集。
+上述 `example-...` 是命令格式示意，不能作为真实新闻入库。正式条目文件应只包含真实核验结果；不能从旧刊改日期或恢复成新周报。
 
 ## 6. 周一出版流程
 
@@ -138,10 +138,10 @@ node scripts/build-site.mjs --preview --date 2026-11-02
 
 - 日期是周一，窗口恰好是上周一至周日；没有把未结束的周报成完整刊，也没有因源站时区误放条目。
 - `site/current.json` 的 `date`、`coverage_start/end`、条目数与正文一致；每条来源链接可打开；没有 `claim_evidence_notes`、编辑说明或核查记录。
-- 每篇论文都显示**第一作者单位、摘要原文、全文主要贡献**，且摘要与所引版本逐字核对；PDF 和网页顺序一致。
+- 每篇论文都分别标记**第一作者**与**第一作者单位**，给出能证明单位的“单位依据”链接，展示摘要原文和非中文摘要的中文翻译；PDF 和网页顺序一致，不出现全文贡献总结。
 - 企业宣称和预印本有恰当证据标签；数字、单位、会议/期刊状态、部署阶段及局限写法与原文一致。
 - 网页顶部有醒目的 **`AI生成`**；PDF 首页有同样标记；网站上不出现编辑说明与内部核查记录。
-- PDF 可以打开，标题、页数、中文和英文都正常显示，无截断、重叠或空页；PDF 链接指向本期真实文件。旧 PDF 未被删除或覆盖。
+- PDF 文件存在且非空，工具可读取页数和基本元数据；若能可靠提取文本，核对刊期、标题、`AI生成`、论文单位、摘要及译文。PDF 链接指向本期真实文件，历史**周报** PDF 未被误删或覆盖。
 - `git diff` 中只包含预期文件；尤其检查 `site/index.html`、`site/current.json`、`diarys/YYYY-MM-DD.pdf` 和归档条目文件。不要提交本地 SQLite、临时文件、未授权摘要或内部敏感信息。
 
 ```powershell
@@ -150,7 +150,7 @@ git diff --check
 node scripts/db.mjs search --date 2026-11-02 --status published --limit 100
 ```
 
-若系统有 Poppler，可用 `pdfinfo diarys/2026-11-02.pdf` 检查页数，并用 `pdftoppm -f 1 -l 1 -png diarys/2026-11-02.pdf tmp/weekly-cover` 渲染首页目视检查。多页时抽查中间页和末页。网页也需在浏览器查看桌面与窄屏布局。逐项对照[呈现规范](PRESENTATION_SPEC.md)和[周报模板](ISSUE_TEMPLATE.md)；只检查命令退出码不足以证明页面可读。
+若系统有 Poppler，可用 `pdfinfo diarys/2026-11-02.pdf` 检查页数，并在文本提取可靠时用 `pdftotext diarys/2026-11-02.pdf -` 抽查关键字段。对照[呈现规范](PRESENTATION_SPEC.md)和[周报模板](ISSUE_TEMPLATE.md)检查 HTML、JSON 与 PDF 的内容一致性。浏览器或图片渲染检查仅作可选补充，不是发布门槛；未执行时如实说明。
 
 ### 6.4 审阅、提交、部署和核验
 
@@ -173,7 +173,7 @@ git push origin main
 | --- | --- | --- |
 | `Weekly issue date must be a Monday` | `--date` 是否为北京时间周一 | 用正确刊期，不改程序放宽限制 |
 | `Entry ... is outside the Beijing coverage window` | `event_time_bj`、原始时区、刊期 | 核对源时间并换算；不在本周的新事件移至正确刊期或补录 |
-| `Published paper ... lacks ... fields` | 第一作者/单位、原文摘要、全文 URL、贡献总结和核验时间 | 回到论文全文补齐；未核实则改回 `held`，不编造 |
+| `Published paper ... lacks ... fields` | 第一作者及其单位、单位依据 URL、原文摘要、摘要来源、中文翻译 | 回到可访问的一手资料补齐；未核实则改回 `held`，不编造 |
 | 本地没有数据库或条目数为 0 | 本地 `data/*.sqlite` 是否丢失、条目归档是否存在 | 恢复备份或导入经核实的归档；不要发布空刊 |
 | Python 无法启动 / `reportlab` 缺失 | `ROBOTICS_NEWS_PYTHON` 路径与 Python 环境 | 指向可执行 Python，安装 `reportlab` 后在隔离输出目录重试 |
 | 元数据窗口不一致 | `data/issues/YYYY-MM-DD.json` 的 `coverage_start/end` | 改成上周一/周日，不修改生成器的周界规则 |

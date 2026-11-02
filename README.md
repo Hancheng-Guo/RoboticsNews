@@ -21,7 +21,7 @@ node scripts/db.mjs stats
 
 ## 生成周报网页与 PDF
 
-先运行 `node scripts/db.mjs init` 迁移旧数据库。将条目的 `editorial_status` 设为 `published`，并填写周一的 `issue_date`、中英概述和 `placement`。论文还须填写第一作者及其全部单位、所引版本的摘要原文、摘要来源、全文链接及基于全文阅读的中英主要贡献总结，再运行：
+先运行 `node scripts/db.mjs init` 迁移旧数据库。将条目的 `editorial_status` 设为 `published`，并填写周一的 `issue_date`、中英概述和 `placement`。论文还须填写第一作者姓名、其全部单位和能显示该单位的一手依据 URL（可与论文原始链接相同）、所引版本的摘要原文与来源；非中文摘要另填忠实的中文翻译。网页和 PDF 分别标记“第一作者”“第一作者单位”并链接单位依据，不要求阅读论文全文或撰写全文贡献总结。完成后运行：
 
 ```powershell
 $env:ROBOTICS_NEWS_PYTHON = 'C:\path\to\python.exe' # 需安装 reportlab；若 python 已在 PATH 可省略

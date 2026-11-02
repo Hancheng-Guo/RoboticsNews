@@ -11,8 +11,10 @@ Use the current date in **Asia/Shanghai**. The issue date is a Monday; its windo
 
 The local SQLite database is ignored by Git. Confirm that the intended issue's records exist before generating or publishing. `site/index.html` contains only the current issue or preview; PDFs are archived in the root `diarys/` directory. The Pages workflow only deploys files already committed to `site/`; it does not research or write a new issue.
 
-Published paper entries must include the first author's affiliation(s), the cited version's verbatim abstract, and a bilingual contribution summary based on the full paper. Preserve the prominent `AI生成` notice. Keep editorial notes and verification logs out of the public webpage and PDF.
+Published paper entries must display the first author's name and affiliation(s) as separately labeled fields on both the website and PDF, link to the primary source that actually states the affiliation (which may be the paper's primary URL), and show the cited version's verbatim abstract plus a faithful Chinese translation when the original is not Chinese. Do not require full-paper access or write a full-paper contribution summary. Preserve the prominent `AI生成` notice. Keep editorial notes and verification logs out of the public webpage and PDF.
 
-If the user asks for a new issue, carry out the research and checks described in the runbook. Do not reuse or relabel the old 2026-11-01 three-day issue as a complete weekly issue.
+Use executable content and structure checks for publication. Visual review is optional and must not block a verified issue when it is unavailable; report checks that were not performed accurately.
+
+If the user asks for a new issue, carry out the research and checks described in the runbook. Work only from weekly-issue records and current sources.
 
 Do not proactively commit or push. If the user's request explicitly authorizes publishing the issue to GitHub Pages, including commit and push, that authorization covers the task: complete the checks, commit, push, and verify the live site. Otherwise show the changes for review and wait for explicit approval before committing or pushing.
