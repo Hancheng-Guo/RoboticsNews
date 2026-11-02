@@ -82,7 +82,7 @@ function previewPage(date) {
   start.setUTCDate(start.getUTCDate() - 7);
   const end = new Date(`${date}T00:00:00Z`);
   end.setUTCDate(end.getUTCDate() - 1);
-  const body = `<main class="shell"><section class="hero home-hero"><div class="eyebrow">WEEKLY BRIEF · COMING SOON</div><h1>机器人学研究<br><em>进展周报</em></h1><p class="hero-sub">面向研究人员与工程师，汇总上一完整自然周的学术、技术与产业进展。</p><div class="hero-meta"><span>下期：北京时间 ${html(date)} 周一 08:00</span><span>覆盖 ${html(start.toISOString().slice(0, 10))} 至 ${html(end.toISOString().slice(0, 10))}</span></div></section><section class="content-section"><p class="empty">周报正在编制中。完整统计窗口结束并完成核验后，本页将更新为本期内容和 PDF。</p></section></main>`;
+  const body = `<main class="shell"><section class="hero home-hero"><div class="eyebrow">WEEKLY BRIEF · COMING SOON</div><h1>机器人学研究<br><em>进展周报</em></h1><p class="hero-sub">面向研究人员与工程师，汇总上一完整自然周的学术、技术与产业进展。</p><div class="hero-meta"><span>待发布刊期：北京时间 ${html(date)} 周一</span><span>覆盖 ${html(start.toISOString().slice(0, 10))} 至 ${html(end.toISOString().slice(0, 10))}</span></div></section><section class="content-section"><p class="empty">周报正在编制中。完整统计窗口结束并完成核验后，本页将更新为本期内容和 PDF。</p></section></main>`;
   return layout('周报预告', body);
 }
 
