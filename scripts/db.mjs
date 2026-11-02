@@ -63,6 +63,7 @@ function openDb() {
   db.exec(readFileSync(schemaPath, 'utf8'));
   const columns = new Set(db.prepare('PRAGMA table_info(entries)').all().map(row => row.name));
   const additions = {
+    paper_source_type: "TEXT NOT NULL DEFAULT 'primary'",
     first_author_name: 'TEXT', paper_authors: "TEXT NOT NULL DEFAULT '[]'",
     first_author_affiliations: "TEXT NOT NULL DEFAULT '[]'",
     first_author_affiliation_source_url: 'TEXT',
@@ -82,20 +83,30 @@ function addEntry(db, item, replace = false) {
   date(item.issue_date, 'issue_date');
   if (!/^https?:\/\//.test(item.primary_url)) throw new Error('primary_url must be an HTTP(S) URL');
   if (item.category === 'paper' && item.editorial_status === 'published' && item.issue_date >= '2026-11-02') {
-    for (const key of ['first_author_name', 'abstract_original', 'abstract_language']) requireText(item[key], key);
+    requireText(item.first_author_name, 'first_author_name');
+    const eventDate = (item.event_time_bj ?? item.event_time_original ?? '').slice(0, 10);
+    date(eventDate, 'paper event date');
+    if (!eventDate) throw new Error('Published papers require a verifiable event date');
+    if (!['primary', 'reprint'].includes(item.paper_source_type ?? 'primary')) {
+      throw new Error('paper_source_type must be primary or reprint');
+    }
     if (!Array.isArray(item.paper_authors) || !item.paper_authors.length ||
         item.paper_authors.some(value => typeof value !== 'string' || !value.trim()) ||
         item.paper_authors[0].trim() !== item.first_author_name.trim()) {
       throw new Error('Published papers require paper_authors in source order, starting with first_author_name');
     }
-    if (!/^zh(?:-|$)/i.test(item.abstract_language ?? '')) requireText(item.abstract_zh_translation, 'abstract_zh_translation');
-    if (!Array.isArray(item.first_author_affiliations) || !item.first_author_affiliations.length ||
-        item.first_author_affiliations.some(value => typeof value !== 'string' ||
-          !/^.+，[^，]+$/.test(value.trim()))) {
-      throw new Error('Published papers require first_author_affiliations as institution，country or region');
+    if (item.abstract_original) {
+      requireText(item.abstract_language, 'abstract_language');
+      if (!/^https?:\/\//.test(item.abstract_source_url ?? '')) throw new Error('abstract_source_url must be an HTTP(S) URL');
+      if (!/^zh(?:-|$)/i.test(item.abstract_language)) requireText(item.abstract_zh_translation, 'abstract_zh_translation');
     }
-    for (const key of ['abstract_source_url', 'first_author_affiliation_source_url']) {
-      if (!/^https?:\/\//.test(item[key] ?? '')) throw new Error(`${key} must be an HTTP(S) URL`);
+    if (item.first_author_affiliations !== undefined && (!Array.isArray(item.first_author_affiliations) ||
+        item.first_author_affiliations.some(value => typeof value !== 'string' ||
+          !/^.+，[^，]+$/.test(value.trim())))) {
+      throw new Error('first_author_affiliations must use institution，country or region');
+    }
+    if (item.first_author_affiliations?.length && !/^https?:\/\//.test(item.first_author_affiliation_source_url ?? '')) {
+      throw new Error('first_author_affiliation_source_url must be an HTTP(S) URL when affiliation is shown');
     }
   }
   if (replace && !db.prepare('SELECT 1 FROM entries WHERE id = ?').get(item.id)) {
@@ -111,7 +122,7 @@ function addEntry(db, item, replace = false) {
     'id', 'issue_date', 'event_time_original', 'event_time_bj', 'first_seen_at', 'last_verified_at',
     'category', 'topics', 'geography', 'entities', 'title_original', 'title_zh', 'title_en',
     'summary_zh', 'summary_en', 'why_it_matters_zh', 'limitations_zh', 'evidence_status',
-    'deployment_stage', 'primary_url', 'supporting_urls', 'paper_id', 'first_author_name', 'paper_authors',
+    'deployment_stage', 'primary_url', 'supporting_urls', 'paper_id', 'paper_source_type', 'first_author_name', 'paper_authors',
     'first_author_affiliations', 'first_author_affiliation_source_url',
     'abstract_original', 'abstract_language', 'abstract_source_url',
     'abstract_zh_translation', 'abstract_credit', 'publication_status',
@@ -126,6 +137,7 @@ function addEntry(db, item, replace = false) {
     optionalText(item.why_it_matters_zh), optionalText(item.limitations_zh), item.evidence_status,
     item.deployment_stage ?? 'not_applicable', item.primary_url,
     textArray(item.supporting_urls, 'supporting_urls'), optionalText(item.paper_id),
+    item.paper_source_type ?? 'primary',
     optionalText(item.first_author_name), textArray(item.paper_authors, 'paper_authors'),
     textArray(item.first_author_affiliations, 'first_author_affiliations'),
     optionalText(item.first_author_affiliation_source_url),

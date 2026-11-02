@@ -21,6 +21,7 @@
   "primary_url": "https://example.org/replace-me",
   "supporting_urls": [],
   "paper_id": null,
+  "paper_source_type": "primary",
   "first_author_name": "Example Author",
   "paper_authors": ["Example Author", "Second Author"],
   "first_author_affiliations": ["Example University，国家或地区"],

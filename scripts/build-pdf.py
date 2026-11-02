@@ -101,7 +101,7 @@ def build(source, target):
              para("Robotics Research & Industry · Weekly Brief", "subtitle"), Spacer(1, 5 * mm),
              para(f"北京时间 {issue['date']} 发布  ·  {len(issue['entries'])} 条进展", "meta"),
              Spacer(1, 2 * mm),
-             para("AI生成：内容由 AI 辅助整理与总结，请以原始来源为准。", "ai_notice"),
+             para("AI生成：内容由 AI 辅助整理与总结，请以所列来源为准。", "ai_notice"),
              Spacer(1, 4 * mm),
              HRFlowable(width="100%", thickness=1, color=colors.HexColor("#DAE3E8")),
              Spacer(1, 4 * mm),
@@ -122,14 +122,19 @@ def build(source, target):
                 authors = [name + ("（第一作者）" if index == 0 else "")
                            for index, name in enumerate(item["paper_authors"])]
                 block += [para("作者：" + "、".join(authors), "meta"),
-                          para("第一作者单位：" + "；".join(item["first_author_affiliations"]), "meta"),
-                          para("论文摘要原文 / Original abstract", "subheading"),
-                          para(item["abstract_original"], "body" if (item.get("abstract_language") or "").lower().startswith("zh") else "english")]
-                if item.get("abstract_zh_translation"):
-                    block += [para("摘要中文翻译", "subheading"),
-                              para(item["abstract_zh_translation"], "body")]
-                if item.get("abstract_credit"):
-                    block += [para(item["abstract_credit"], "meta")]
+                          para("第一作者单位：" + ("；".join(item["first_author_affiliations"]) or "不明确"), "meta")]
+                if item.get("abstract_original"):
+                    block += [para("论文摘要原文 / Original abstract", "subheading"),
+                              para(item["abstract_original"], "body" if (item.get("abstract_language") or "").lower().startswith("zh") else "english")]
+                    if item.get("abstract_zh_translation"):
+                        block += [para("摘要中文翻译", "subheading"),
+                                  para(item["abstract_zh_translation"], "body")]
+                    if item.get("abstract_credit"):
+                        block += [para(item["abstract_credit"], "meta")]
+                else:
+                    block += [para("论文内容转述 / Paraphrase", "subheading"),
+                              para(item["summary_zh"], "body"),
+                              para(item["summary_en"], "english")]
             else:
                 block += [para(item["summary_zh"], "body"),
                           Spacer(1, 1 * mm), para(item["summary_en"], "english")]
@@ -137,10 +142,15 @@ def build(source, target):
                 block += [Spacer(1, 1 * mm), para("意义：" + item["why_it_matters_zh"], "body")]
             if item.get("limitations_zh"):
                 block += [Spacer(1, 1 * mm), para("局限：" + item["limitations_zh"], "body")]
-            block += [Spacer(1, 2 * mm), source_link(item["primary_url"])]
+            source_label = "转载来源" if item.get("category") == "paper" and item.get("paper_source_type") == "reprint" else "原始来源"
+            block += [Spacer(1, 2 * mm), source_link(item["primary_url"], source_label)]
             if item.get("category") == "paper":
-                block += [source_link(item["abstract_source_url"], "摘要原文"),
-                          source_link(item["first_author_affiliation_source_url"], "单位依据")]
+                if item.get("paper_source_type") == "reprint":
+                    block += [para("未找到论文一手链接；以上内容来自转载。", "meta")]
+                if item.get("abstract_original") and item.get("abstract_source_url"):
+                    block += [source_link(item["abstract_source_url"], "摘要原文")]
+                if item.get("first_author_affiliations") and item.get("first_author_affiliation_source_url"):
+                    block += [source_link(item["first_author_affiliation_source_url"], "单位依据")]
                 if item.get("supporting_urls") and item["supporting_urls"][0] == "https://creativecommons.org/licenses/by/4.0/":
                     block.append(source_link(item["supporting_urls"][0], "摘要许可 CC BY 4.0；中文译文由 RoboticsNews 翻译"))
             block.append(Spacer(1, 5 * mm))

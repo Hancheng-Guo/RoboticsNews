@@ -37,7 +37,7 @@ function argDate() {
 }
 
 function layout(title, body) {
-  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="机器人学研究进展周报：论文、技术和产业动态"><title>${html(title)} · RoboticsNews</title><link rel="stylesheet" href="style.css"></head><body><header class="site-header"><div class="shell header-inner"><a class="brand" href="index.html">Robotics<span>News</span></a><span class="header-note">机器人学研究进展周报</span></div></header><div class="ai-disclosure" role="note"><div class="shell"><strong>AI生成</strong><span>内容由 AI 辅助整理与总结；请以每条原始来源为准。</span></div></div>${body}<footer class="site-footer"><div class="shell">RoboticsNews · 每周一追踪可核实的机器人学进展</div></footer></body></html>`;
+  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="机器人学研究进展周报：论文、技术和产业动态"><title>${html(title)} · RoboticsNews</title><link rel="stylesheet" href="style.css"></head><body><header class="site-header"><div class="shell header-inner"><a class="brand" href="index.html">Robotics<span>News</span></a><span class="header-note">机器人学研究进展周报</span></div></header><div class="ai-disclosure" role="note"><div class="shell"><strong>AI生成</strong><span>内容由 AI 辅助整理与总结；请以每条所列来源为准。</span></div></div>${body}<footer class="site-footer"><div class="shell">RoboticsNews · 每周一追踪可核实的机器人学进展</div></footer></body></html>`;
 }
 
 const labels = {
@@ -52,16 +52,23 @@ const sections = ['lead', 'research', 'industry', 'ecosystem', 'paper_briefs', '
 
 function entryCard(item) {
   const tags = [evidence[item.evidence_status] ?? item.evidence_status, ...(item.topics ?? []).slice(0, 3)];
-  const links = [`<a href="${url(item.primary_url)}" target="_blank" rel="noopener noreferrer">原始来源 ↗</a>`];
+  const isPaper = item.category === 'paper';
+  const isReprint = isPaper && item.paper_source_type === 'reprint';
+  if (isReprint) tags.push('转载来源；未找到论文一手链接');
+  const sourceLabel = isReprint ? '转载来源' : isPaper ? '论文来源' : '原始来源';
+  const links = [`<a href="${url(item.primary_url)}" target="_blank" rel="noopener noreferrer">${sourceLabel} ↗</a>`];
   if (item.code_url) links.push(`<a href="${url(item.code_url)}" target="_blank" rel="noopener noreferrer">代码 ↗</a>`);
   if (item.data_url) links.push(`<a href="${url(item.data_url)}" target="_blank" rel="noopener noreferrer">数据 ↗</a>`);
-  if (item.category === 'paper') {
-    links.push(`<a href="${url(item.abstract_source_url)}" target="_blank" rel="noopener noreferrer">摘要原文 ↗</a>`);
-    links.push(`<a href="${url(item.first_author_affiliation_source_url)}" target="_blank" rel="noopener noreferrer">单位依据 ↗</a>`);
+  if (isPaper) {
+    if (item.abstract_original && item.abstract_source_url) links.push(`<a href="${url(item.abstract_source_url)}" target="_blank" rel="noopener noreferrer">摘要原文 ↗</a>`);
+    if (item.first_author_affiliations?.length && item.first_author_affiliation_source_url) links.push(`<a href="${url(item.first_author_affiliation_source_url)}" target="_blank" rel="noopener noreferrer">单位依据 ↗</a>`);
     if (item.supporting_urls?.[0] === 'https://creativecommons.org/licenses/by/4.0/') links.push(`<a href="${url(item.supporting_urls[0])}" target="_blank" rel="noopener noreferrer">摘要许可 CC BY 4.0；中文译文由 RoboticsNews 翻译 ↗</a>`);
   }
-  const content = item.category === 'paper'
-    ? `<p class="paper-affiliation"><strong>作者：</strong>${item.paper_authors.map((name, index) => html(name) + (index === 0 ? '（第一作者）' : '')).join('、')}<br><strong>第一作者单位：</strong>${html(item.first_author_affiliations.join('；'))}</p><div class="paper-abstract"><h4>论文摘要原文 / Original abstract</h4><p lang="${html(item.abstract_language ?? 'en')}">${html(item.abstract_original)}</p>${item.abstract_zh_translation ? `<h4>摘要中文翻译</h4><p lang="zh-CN">${html(item.abstract_zh_translation)}</p>` : ''}${item.abstract_credit ? `<p class="entry-en">${html(item.abstract_credit)}</p>` : ''}</div>`
+  const paperBody = item.abstract_original
+    ? `<div class="paper-abstract"><h4>论文摘要原文 / Original abstract</h4><p lang="${html(item.abstract_language ?? 'en')}">${html(item.abstract_original)}</p>${item.abstract_zh_translation ? `<h4>摘要中文翻译</h4><p lang="zh-CN">${html(item.abstract_zh_translation)}</p>` : ''}${item.abstract_credit ? `<p class="entry-en">${html(item.abstract_credit)}</p>` : ''}</div>`
+    : `<div class="paper-abstract"><h4>论文内容转述 / Paraphrase</h4><p>${html(item.summary_zh)}</p><p class="entry-en" lang="en">${html(item.summary_en)}</p></div>`;
+  const content = isPaper
+    ? `<p class="paper-affiliation"><strong>作者：</strong>${item.paper_authors.map((name, index) => html(name) + (index === 0 ? '（第一作者）' : '')).join('、')}<br><strong>第一作者单位：</strong>${item.first_author_affiliations.length ? html(item.first_author_affiliations.join('；')) : '不明确'}</p>${paperBody}`
     : `<p>${html(item.summary_zh)}</p><p class="entry-en" lang="en">${html(item.summary_en)}</p>`;
   return `<article class="entry" id="${html(item.id)}"><div class="tags">${tags.map(t => `<span class="tag">${html(t)}</span>`).join('')}<span class="tag">${item.event_time_bj ? '北京时间' : '原文日期'} ${html((item.event_time_bj ?? item.event_time_original ?? '').slice(0, 10))}</span></div><h3>${html(item.title_zh)}</h3><p class="entry-en-title">${html(item.title_en)}</p>${content}${item.why_it_matters_zh ? `<p><strong>意义：</strong>${html(item.why_it_matters_zh)}</p>` : ''}${item.limitations_zh ? `<p class="limitations"><strong>局限：</strong>${html(item.limitations_zh)}</p>` : ''}<div class="entry-links">${links.join('')}</div></article>`;
 }
@@ -130,12 +137,13 @@ function main() {
       pdf_url: `${pdfPublicBase.replace(/\/$/, '')}/${date}.pdf`, entries };
     for (const item of entries) {
       if (item.category === 'paper' && (!item.first_author_name || !item.paper_authors.length ||
-          item.paper_authors[0] !== item.first_author_name || !item.first_author_affiliations.length ||
+          item.paper_authors[0] !== item.first_author_name ||
           item.first_author_affiliations.some(value => !/^.+，[^，]+$/.test(value.trim())) ||
-          !/^https?:\/\//i.test(item.first_author_affiliation_source_url ?? '') ||
-          !item.abstract_original || !item.abstract_language || !/^https?:\/\//i.test(item.abstract_source_url ?? '') ||
-          (!/^zh(?:-|$)/i.test(item.abstract_language) && !item.abstract_zh_translation))) {
-        throw new Error(`Published paper ${item.id} lacks first-author affiliation, original abstract, or Chinese translation`);
+          (item.first_author_affiliations.length && !/^https?:\/\//i.test(item.first_author_affiliation_source_url ?? '')) ||
+          (item.abstract_original && (!item.abstract_language || !/^https?:\/\//i.test(item.abstract_source_url ?? '') ||
+            (!/^zh(?:-|$)/i.test(item.abstract_language) && !item.abstract_zh_translation))) ||
+          !['primary', 'reprint'].includes(item.paper_source_type ?? 'primary'))) {
+        throw new Error(`Published paper ${item.id} has invalid author, affiliation, abstract, or source fields`);
       }
       const eventDate = (item.event_time_bj ?? item.event_time_original)?.slice(0, 10);
       if (!eventDate || eventDate < issue.coverage_start || eventDate > issue.coverage_end) {

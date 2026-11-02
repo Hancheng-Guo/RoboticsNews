@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS entries (
   primary_url TEXT NOT NULL,
   supporting_urls TEXT NOT NULL DEFAULT '[]' CHECK (json_valid(supporting_urls) AND json_type(supporting_urls) = 'array'),
   paper_id TEXT,
+  paper_source_type TEXT NOT NULL DEFAULT 'primary' CHECK (paper_source_type IN ('primary','reprint')),
   first_author_name TEXT,
   paper_authors TEXT NOT NULL DEFAULT '[]' CHECK (json_valid(paper_authors) AND json_type(paper_authors) = 'array'),
   first_author_affiliations TEXT NOT NULL DEFAULT '[]' CHECK (json_valid(first_author_affiliations) AND json_type(first_author_affiliations) = 'array'),
