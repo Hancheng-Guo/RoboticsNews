@@ -56,11 +56,11 @@ function entryCard(item) {
   if (item.code_url) links.push(`<a href="${url(item.code_url)}" target="_blank" rel="noopener noreferrer">代码 ↗</a>`);
   if (item.data_url) links.push(`<a href="${url(item.data_url)}" target="_blank" rel="noopener noreferrer">数据 ↗</a>`);
   if (item.category === 'paper') {
-    links.push(`<a href="${url(item.full_text_url)}" target="_blank" rel="noopener noreferrer">论文全文 ↗</a>`);
     links.push(`<a href="${url(item.abstract_source_url)}" target="_blank" rel="noopener noreferrer">摘要原文 ↗</a>`);
+    links.push(`<a href="${url(item.first_author_affiliation_source_url)}" target="_blank" rel="noopener noreferrer">单位依据 ↗</a>`);
   }
   const content = item.category === 'paper'
-    ? `<p class="paper-affiliation"><strong>第一作者及单位：</strong>${html(item.first_author_name)} · ${html(item.first_author_affiliations.join('；'))}</p><div class="paper-abstract"><h4>论文摘要原文 / Original abstract</h4><p lang="${html(item.abstract_language ?? 'en')}">${html(item.abstract_original)}</p></div><div class="paper-contributions"><h4>基于全文的主要贡献 / Main contributions from the full paper</h4><p>${html(item.full_text_contributions_zh)}</p><p class="entry-en" lang="en">${html(item.full_text_contributions_en)}</p></div>`
+    ? `<p class="paper-affiliation"><strong>第一作者：</strong>${html(item.first_author_name)}<br><strong>第一作者单位：</strong>${html(item.first_author_affiliations.join('；'))}</p><div class="paper-abstract"><h4>论文摘要原文 / Original abstract</h4><p lang="${html(item.abstract_language ?? 'en')}">${html(item.abstract_original)}</p>${item.abstract_zh_translation ? `<h4>摘要中文翻译</h4><p lang="zh-CN">${html(item.abstract_zh_translation)}</p>` : ''}</div>`
     : `<p>${html(item.summary_zh)}</p><p class="entry-en" lang="en">${html(item.summary_en)}</p>`;
   return `<article class="entry" id="${html(item.id)}"><div class="tags">${tags.map(t => `<span class="tag">${html(t)}</span>`).join('')}<span class="tag">${item.event_time_bj ? '北京时间' : '原文日期'} ${html((item.event_time_bj ?? item.event_time_original ?? '').slice(0, 10))}</span></div><h3>${html(item.title_zh)}</h3><p class="entry-en-title">${html(item.title_en)}</p>${content}${item.why_it_matters_zh ? `<p><strong>意义：</strong>${html(item.why_it_matters_zh)}</p>` : ''}${item.limitations_zh ? `<p class="limitations"><strong>局限：</strong>${html(item.limitations_zh)}</p>` : ''}<div class="entry-links">${links.join('')}</div></article>`;
 }
@@ -72,7 +72,7 @@ function issuePage(issue) {
 }
 
 function emptyPage() {
-  const body = `<main class="shell"><section class="hero home-hero"><div class="eyebrow">RESEARCH · SYSTEMS · INDUSTRY</div><h1>机器人学研究<br><em>进展周报</em></h1><p class="hero-sub">面向研究人员与工程师。每周一聚焦上一周值得核实、值得追踪的机器人学进展。</p><div class="hero-meta"><span>每周一北京时间 08:00</span><span>论文摘要原文与全文贡献总结</span><span>网页与 PDF</span></div></section><section class="content-section"><p class="empty">本期暂无已发布内容。</p></section></main>`;
+  const body = `<main class="shell"><section class="hero home-hero"><div class="eyebrow">RESEARCH · SYSTEMS · INDUSTRY</div><h1>机器人学研究<br><em>进展周报</em></h1><p class="hero-sub">面向研究人员与工程师。每周一聚焦上一周值得核实、值得追踪的机器人学进展。</p><div class="hero-meta"><span>每周一北京时间 08:00</span><span>论文摘要原文与第一作者单位</span><span>网页与 PDF</span></div></section><section class="content-section"><p class="empty">本期暂无已发布内容。</p></section></main>`;
   return layout('周报', body);
 }
 
@@ -105,7 +105,8 @@ function main() {
       const rows = db.prepare(`SELECT * FROM entries WHERE issue_date = ? AND editorial_status = 'published'
         ORDER BY (score_novelty + score_impact + score_evidence + score_utility) DESC, id`).all(date);
       entries = rows.map(row => {
-        const { claim_evidence_notes, ...publicRow } = row;
+        const { claim_evidence_notes, full_text_url, full_text_contributions_zh,
+          full_text_contributions_en, full_text_verified_at, ...publicRow } = row;
         return { ...publicRow, topics: JSON.parse(row.topics), geography: JSON.parse(row.geography),
           entities: JSON.parse(row.entities), supporting_urls: JSON.parse(row.supporting_urls),
           first_author_affiliations: JSON.parse(row.first_author_affiliations ?? '[]') };
@@ -127,9 +128,10 @@ function main() {
       pdf_url: `${pdfPublicBase.replace(/\/$/, '')}/${date}.pdf`, entries };
     for (const item of entries) {
       if (item.category === 'paper' && (!item.first_author_name || !item.first_author_affiliations.length ||
-          !item.abstract_original || !item.abstract_language || !item.abstract_source_url || !item.full_text_url ||
-          !item.full_text_contributions_zh || !item.full_text_contributions_en || !item.full_text_verified_at)) {
-        throw new Error(`Published paper ${item.id} lacks affiliation, original abstract, or full-text contribution fields`);
+          !/^https?:\/\//i.test(item.first_author_affiliation_source_url ?? '') ||
+          !item.abstract_original || !item.abstract_language || !/^https?:\/\//i.test(item.abstract_source_url ?? '') ||
+          (!/^zh(?:-|$)/i.test(item.abstract_language) && !item.abstract_zh_translation))) {
+        throw new Error(`Published paper ${item.id} lacks first-author affiliation, original abstract, or Chinese translation`);
       }
       const eventDate = (item.event_time_bj ?? item.event_time_original)?.slice(0, 10);
       if (!eventDate || eventDate < issue.coverage_start || eventDate > issue.coverage_end) {

@@ -119,12 +119,13 @@ def build(source, target):
                      para(f"{EVIDENCE.get(item['evidence_status'], item['evidence_status'])} · {'北京时间' if item.get('event_time_bj') else '原文日期'} {(item.get('event_time_bj') or item.get('event_time_original') or '')[:10]}", "meta"),
                      Spacer(1, 2 * mm)]
             if item.get("category") == "paper":
-                block += [para("第一作者及单位：" + item["first_author_name"] + " · " + "；".join(item["first_author_affiliations"]), "meta"),
+                block += [para("第一作者：" + item["first_author_name"], "meta"),
+                          para("第一作者单位：" + "；".join(item["first_author_affiliations"]), "meta"),
                           para("论文摘要原文 / Original abstract", "subheading"),
-                          para(item["abstract_original"], "english"),
-                          para("基于全文的主要贡献 / Main contributions from the full paper", "subheading"),
-                          para(item["full_text_contributions_zh"], "body"),
-                          Spacer(1, 1 * mm), para(item["full_text_contributions_en"], "english")]
+                          para(item["abstract_original"], "body" if (item.get("abstract_language") or "").lower().startswith("zh") else "english")]
+                if item.get("abstract_zh_translation"):
+                    block += [para("摘要中文翻译", "subheading"),
+                              para(item["abstract_zh_translation"], "body")]
             else:
                 block += [para(item["summary_zh"], "body"),
                           Spacer(1, 1 * mm), para(item["summary_en"], "english")]
@@ -135,7 +136,7 @@ def build(source, target):
             block += [Spacer(1, 2 * mm), source_link(item["primary_url"])]
             if item.get("category") == "paper":
                 block += [source_link(item["abstract_source_url"], "摘要原文"),
-                          source_link(item["full_text_url"], "论文全文")]
+                          source_link(item["first_author_affiliation_source_url"], "单位依据")]
             block.append(Spacer(1, 5 * mm))
             if item.get("category") == "paper":
                 story.extend(block)
