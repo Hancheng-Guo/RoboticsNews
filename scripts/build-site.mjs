@@ -61,7 +61,7 @@ function entryCard(item) {
     if (item.supporting_urls?.[0] === 'https://creativecommons.org/licenses/by/4.0/') links.push(`<a href="${url(item.supporting_urls[0])}" target="_blank" rel="noopener noreferrer">摘要许可 CC BY 4.0；中文译文由 RoboticsNews 翻译 ↗</a>`);
   }
   const content = item.category === 'paper'
-    ? `<p class="paper-affiliation"><strong>第一作者：</strong>${html(item.first_author_name)}<br><strong>第一作者单位：</strong>${html(item.first_author_affiliations.join('；'))}</p><div class="paper-abstract"><h4>论文摘要原文 / Original abstract</h4><p lang="${html(item.abstract_language ?? 'en')}">${html(item.abstract_original)}</p>${item.abstract_zh_translation ? `<h4>摘要中文翻译</h4><p lang="zh-CN">${html(item.abstract_zh_translation)}</p>` : ''}${item.abstract_credit ? `<p class="entry-en">${html(item.abstract_credit)}</p>` : ''}</div>`
+    ? `<p class="paper-affiliation"><strong>作者：</strong>${item.paper_authors.map((name, index) => html(name) + (index === 0 ? '（第一作者）' : '')).join('、')}<br><strong>第一作者单位：</strong>${html(item.first_author_affiliations.join('；'))}</p><div class="paper-abstract"><h4>论文摘要原文 / Original abstract</h4><p lang="${html(item.abstract_language ?? 'en')}">${html(item.abstract_original)}</p>${item.abstract_zh_translation ? `<h4>摘要中文翻译</h4><p lang="zh-CN">${html(item.abstract_zh_translation)}</p>` : ''}${item.abstract_credit ? `<p class="entry-en">${html(item.abstract_credit)}</p>` : ''}</div>`
     : `<p>${html(item.summary_zh)}</p><p class="entry-en" lang="en">${html(item.summary_en)}</p>`;
   return `<article class="entry" id="${html(item.id)}"><div class="tags">${tags.map(t => `<span class="tag">${html(t)}</span>`).join('')}<span class="tag">${item.event_time_bj ? '北京时间' : '原文日期'} ${html((item.event_time_bj ?? item.event_time_original ?? '').slice(0, 10))}</span></div><h3>${html(item.title_zh)}</h3><p class="entry-en-title">${html(item.title_en)}</p>${content}${item.why_it_matters_zh ? `<p><strong>意义：</strong>${html(item.why_it_matters_zh)}</p>` : ''}${item.limitations_zh ? `<p class="limitations"><strong>局限：</strong>${html(item.limitations_zh)}</p>` : ''}<div class="entry-links">${links.join('')}</div></article>`;
 }
@@ -110,7 +110,8 @@ function main() {
           full_text_contributions_en, full_text_verified_at, ...publicRow } = row;
         return { ...publicRow, topics: JSON.parse(row.topics), geography: JSON.parse(row.geography),
           entities: JSON.parse(row.entities), supporting_urls: JSON.parse(row.supporting_urls),
-          first_author_affiliations: JSON.parse(row.first_author_affiliations ?? '[]') };
+          first_author_affiliations: JSON.parse(row.first_author_affiliations ?? '[]'),
+          paper_authors: JSON.parse(row.paper_authors ?? '[]') };
       });
     } finally { db.close(); }
   }
@@ -128,7 +129,9 @@ function main() {
       coverage_end: coverageEnd, timezone: 'Asia/Shanghai',
       pdf_url: `${pdfPublicBase.replace(/\/$/, '')}/${date}.pdf`, entries };
     for (const item of entries) {
-      if (item.category === 'paper' && (!item.first_author_name || !item.first_author_affiliations.length ||
+      if (item.category === 'paper' && (!item.first_author_name || !item.paper_authors.length ||
+          item.paper_authors[0] !== item.first_author_name || !item.first_author_affiliations.length ||
+          item.first_author_affiliations.some(value => !/^.+，[^，]+$/.test(value.trim())) ||
           !/^https?:\/\//i.test(item.first_author_affiliation_source_url ?? '') ||
           !item.abstract_original || !item.abstract_language || !/^https?:\/\//i.test(item.abstract_source_url ?? '') ||
           (!/^zh(?:-|$)/i.test(item.abstract_language) && !item.abstract_zh_translation))) {

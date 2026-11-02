@@ -119,7 +119,9 @@ def build(source, target):
                      para(f"{EVIDENCE.get(item['evidence_status'], item['evidence_status'])} · {'北京时间' if item.get('event_time_bj') else '原文日期'} {(item.get('event_time_bj') or item.get('event_time_original') or '')[:10]}", "meta"),
                      Spacer(1, 2 * mm)]
             if item.get("category") == "paper":
-                block += [para("第一作者：" + item["first_author_name"], "meta"),
+                authors = [name + ("（第一作者）" if index == 0 else "")
+                           for index, name in enumerate(item["paper_authors"])]
+                block += [para("作者：" + "、".join(authors), "meta"),
                           para("第一作者单位：" + "；".join(item["first_author_affiliations"]), "meta"),
                           para("论文摘要原文 / Original abstract", "subheading"),
                           para(item["abstract_original"], "body" if (item.get("abstract_language") or "").lower().startswith("zh") else "english")]

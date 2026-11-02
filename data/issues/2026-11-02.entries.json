@@ -21,10 +21,11 @@
     "supporting_urls": ["https://creativecommons.org/licenses/by/4.0/"],
     "paper_id": "10.1038/s41598-026-46111-x",
     "first_author_name": "Ali Tahir Karasahin",
+    "paper_authors": ["Ali Tahir Karasahin", "Ziniu Wu", "Basaran Bahadir Kocer"],
     "first_author_affiliations": [
-      "School of Civil, Aerospace and Design Engineering, University of Bristol, Bristol, BS8 1QU, UK",
-      "Faculty of Engineering, Department of Mechatronics Engineering, Necmettin Erbakan University, 42090, Konya, Turkey",
-      "Bristol Robotics Laboratory, University of the West of England (UWE), Bristol BS16 1QY, UK"
+      "University of Bristol，英国",
+      "Necmettin Erbakan University，土耳其",
+      "University of the West of England，英国"
     ],
     "first_author_affiliation_source_url": "https://www.nature.com/articles/s41598-026-46111-x",
     "abstract_original": "Flights with suspended payloads are particularly challenging because of their coupled dynamics, which lead to instability and increased sensitivity to disturbances. Although reinforcement learning (RL) has successfully achieved controller performance, the generalization and robustness of a single policy remain significant areas of investigation. In this study, we characterized the performance and robustness of a single RL policy for an aerial robot with different trajectory profiles, including a smooth, feasible lemniscate curve and a sharp-turning, infeasible pentagram, under varying velocity references (0.5 m s−1 and 1.0 m s−1) and crosswind disturbances (1.0 m s−1). We trained a single RL policy using proximal policy optimization with collective thrust and body-rate control using a high-fidelity physics simulator based on the SimpleFlight framework. Real-world experimental results on the Crazyflie 2.1 platform show that the single RL policy successfully generalizes to different trajectory profiles and velocity references and maintains stability under a crosswind disturbance of up to 1.0 m s−1 which is a substantial challenge for this small class platform and even smaller payload underneath, where such aerodynamic forces are significant compared to the available control authority and system mass. Furthermore, the single RL policy was systematically evaluated using the mean Euclidean distance error, cable length transitions, and swing angle distributions. Although the single RL policy maintained a robust control performance, the experimental results indicated performance degradation at higher velocities owing to increased dynamic challenges such as nonlinear aerodynamic drag and actuator saturation. This study provides a detailed performance characterization that highlights the generalization capability of a single-payload-aware RL policy in real-world applications and the limitations arising from the hybrid dynamics of the system.",

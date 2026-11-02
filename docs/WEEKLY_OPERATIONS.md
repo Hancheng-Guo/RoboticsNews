@@ -75,15 +75,15 @@ node scripts/db.mjs search --date 2026-11-02 --limit 100
 
 论文必须额外完成以下工作：
 
-1. 打开**本条所引用版本**的论文页面，核对题名、作者排序、版本号、DOI/arXiv ID、首次公开/正式录用日期。第一作者姓名取自该版本作者列表。
-2. 单独核实**第一作者单位**：优先用可访问的论文署名页；无法访问全文时，用出版方作者信息页、研究团队官方项目页等一手材料。多个单位全部按署名顺序记录，将确实列出单位的一手依据存入 `first_author_affiliation_source_url` 并在网页/PDF 上链接。该 URL 可以与 `primary_url` 相同，只要它本身能证明单位；不必找第二个不同来源。不要把通讯作者单位或作者现职误标成第一作者单位；无法核实时暂缓。
+1. 打开**本条所引用版本**的论文页面，核对题名、全部作者全名及署名顺序、版本号、DOI/arXiv ID、首次公开/正式录用日期。`paper_authors` 首项须与 `first_author_name` 一致；不凭缩写猜测全名。
+2. 单独核实**第一作者单位**：优先用可访问的论文署名页；无法访问全文时，用出版方作者信息页、研究团队官方项目页等一手材料。多个单位全部按署名顺序记录，每项压缩成“单位名，国家或地区”，省略院系和详细地址，除非院系或实验室本身就是署名单位。将确实列出单位的一手依据存入 `first_author_affiliation_source_url` 并在网页/PDF 上链接。该 URL 可以与 `primary_url` 相同，只要它本身能证明单位；不必找第二个不同来源。不要把通讯作者单位或作者现职误标成第一作者单位；无法核实时暂缓。
 3. 从同一版本保存摘要原文到 `abstract_original`，保留原词、符号、数字及限定语；记录 `abstract_language`、`abstract_source_url`。非中文摘要另存完整、忠实的 `abstract_zh_translation`。核对公开转载摘要的许可与署名条件；未确认可发布时暂缓该论文，不用自行改写的摘要冒充原文。
-4. **不要求访问论文全文，不撰写基于全文的贡献总结。** 页面顺序为“第一作者 → 第一作者单位 → 摘要原文 → 摘要中文翻译（原文非中文时）”。摘要以外的实验性能、落地和局限只写其他可访问的一手资料明确支持的内容；不凭摘要推断。
+4. **不要求访问论文全文，不撰写基于全文的贡献总结。** 页面顺序为“全部作者（标出第一作者）→ 第一作者单位 → 摘要原文 → 摘要中文翻译（原文非中文时）”。摘要以外的实验性能、落地和局限只写其他可访问的一手资料明确支持的内容；不凭摘要推断。
 5. 检查代码、权重、数据、评测协议是否实际开放；“有链接”不等于“可复现”。别跨任务或跨评测协议直接比较数值。
 
 ## 5. 录入与状态流转
 
-字段以 [schema.sql](../data/schema.sql) 和 [示例条目](../data/entry.example.json) 为准；`db.mjs` 不会替你完成事实核验。`id` 是稳定事件 ID，不随标题修改；`issue_date` 是周一刊期。`event_time_original` 保留源时区，`event_time_bj` 使用可核实的北京时间。日期只有日精度时可用 `YYYY-MM-DD`。`topics`、`geography`、`entities`、`supporting_urls`、`first_author_affiliations` 都是数组。
+字段以 [schema.sql](../data/schema.sql) 和 [示例条目](../data/entry.example.json) 为准；`db.mjs` 不会替你完成事实核验。`id` 是稳定事件 ID，不随标题修改；`issue_date` 是周一刊期。`event_time_original` 保留源时区，`event_time_bj` 使用可核实的北京时间。日期只有日精度时可用 `YYYY-MM-DD`。`topics`、`geography`、`entities`、`supporting_urls`、`paper_authors`、`first_author_affiliations` 都是数组。
 
 | 字段组 | 使用规则 |
 | --- | --- |
@@ -95,7 +95,7 @@ node scripts/db.mjs search --date 2026-11-02 --limit 100
 | `claim_evidence_notes` | 内部核查记录；构建器不把该字段写进 `site/current.json`、网页或 PDF，但若提交条目 JSON 到公开仓库，该文件本身仍可被公众查看 |
 | `editorial_status` | `candidate` → `verifying` → `approved` → `published`；证据不足用 `held`，不收录用 `rejected`，更正用 `corrected`。构建器只读取 `published` |
 
-论文在 2026-11-02 及之后的刊期标为 `published` 时，数据库写入程序要求第一作者、单位及其一手依据 URL、摘要原文及来源；原文不是中文时还要求中文翻译。网页构建器再次检查这些字段。先保存候选 JSON，完成核验后再改为 `published` 并用 `add`/`replace` 入库。`add` 和 `replace` 都接受单个对象或对象数组文件。
+论文在 2026-11-02 及之后的刊期标为 `published` 时，数据库写入程序要求全部作者全名与顺序、第一作者单位及其一手依据 URL、摘要原文及来源；原文不是中文时还要求中文翻译。网页构建器再次检查这些字段。先保存候选 JSON，完成核验后再改为 `published` 并用 `add`/`replace` 入库。`add` 和 `replace` 都接受单个对象或对象数组文件。
 
 ```powershell
 node scripts/db.mjs add data/issues/2026-11-02.entries.json
@@ -138,7 +138,7 @@ node scripts/build-site.mjs --preview --date 2026-11-02
 
 - 日期是周一，窗口恰好是上周一至周日；没有把未结束的周报成完整刊，也没有因源站时区误放条目。
 - `site/current.json` 的 `date`、`coverage_start/end`、条目数与正文一致；每条来源链接可打开；没有 `claim_evidence_notes`、编辑说明或核查记录。
-- 每篇论文都分别标记**第一作者**与**第一作者单位**，给出能证明单位的“单位依据”链接，展示摘要原文和非中文摘要的中文翻译；PDF 和网页顺序一致，不出现全文贡献总结。
+- 每篇论文都列出按署名顺序排列的**全部作者全名**并标出第一作者；第一作者单位以“单位名，国家或地区”列出，给出能证明单位的“单位依据”链接，展示摘要原文和非中文摘要的中文翻译；PDF 和网页顺序一致，不出现全文贡献总结。
 - 企业宣称和预印本有恰当证据标签；数字、单位、会议/期刊状态、部署阶段及局限写法与原文一致。
 - 网页顶部有醒目的 **`AI生成`**；PDF 首页有同样标记；网站上不出现编辑说明与内部核查记录。
 - PDF 文件存在且非空，工具可读取页数和基本元数据；若能可靠提取文本，核对刊期、标题、`AI生成`、论文单位、摘要及译文。PDF 链接指向本期真实文件，历史**周报** PDF 未被误删或覆盖。
@@ -173,7 +173,7 @@ git push origin main
 | --- | --- | --- |
 | `Weekly issue date must be a Monday` | `--date` 是否为北京时间周一 | 用正确刊期，不改程序放宽限制 |
 | `Entry ... is outside the Beijing coverage window` | `event_time_bj`、原始时区、刊期 | 核对源时间并换算；不在本周的新事件移至正确刊期或补录 |
-| `Published paper ... lacks ... fields` | 第一作者及其单位、单位依据 URL、原文摘要、摘要来源、中文翻译 | 回到可访问的一手资料补齐；未核实则改回 `held`，不编造 |
+| `Published paper ... lacks ... fields` | 全部作者全名及顺序、第一作者单位、单位依据 URL、原文摘要、摘要来源、中文翻译 | 回到可访问的一手资料补齐；未核实则改回 `held`，不编造 |
 | 本地没有数据库或条目数为 0 | 本地 `data/*.sqlite` 是否丢失、条目归档是否存在 | 恢复备份或导入经核实的归档；不要发布空刊 |
 | Python 无法启动 / `reportlab` 缺失 | `ROBOTICS_NEWS_PYTHON` 路径与 Python 环境 | 指向可执行 Python，安装 `reportlab` 后在隔离输出目录重试 |
 | 元数据窗口不一致 | `data/issues/YYYY-MM-DD.json` 的 `coverage_start/end` | 改成上周一/周日，不修改生成器的周界规则 |

@@ -49,7 +49,7 @@
       "placement": "lead",
       "correction_of": null,
       "created_at": "2026-11-02 01:51:56",
-      "updated_at": "2026-11-02 01:53:27",
+      "updated_at": "2026-11-02 07:03:57",
       "first_author_name": null,
       "first_author_affiliations": [],
       "abstract_original": null,
@@ -57,7 +57,8 @@
       "abstract_source_url": null,
       "first_author_affiliation_source_url": null,
       "abstract_zh_translation": null,
-      "abstract_credit": null
+      "abstract_credit": null,
+      "paper_authors": []
     },
     {
       "id": "agility-churchill-capital-2026-10-30",
@@ -104,7 +105,7 @@
       "placement": "ecosystem",
       "correction_of": null,
       "created_at": "2026-11-02 01:51:56",
-      "updated_at": "2026-11-02 01:53:27",
+      "updated_at": "2026-11-02 07:03:57",
       "first_author_name": null,
       "first_author_affiliations": [],
       "abstract_original": null,
@@ -112,7 +113,8 @@
       "abstract_source_url": null,
       "first_author_affiliation_source_url": null,
       "abstract_zh_translation": null,
-      "abstract_credit": null
+      "abstract_credit": null,
+      "paper_authors": []
     },
     {
       "id": "gxo-agility-expansion-2026-10-26",
@@ -157,7 +159,7 @@
       "placement": "lead",
       "correction_of": null,
       "created_at": "2026-11-02 01:51:56",
-      "updated_at": "2026-11-02 01:53:27",
+      "updated_at": "2026-11-02 07:03:57",
       "first_author_name": null,
       "first_author_affiliations": [],
       "abstract_original": null,
@@ -165,7 +167,8 @@
       "abstract_source_url": null,
       "first_author_affiliation_source_url": null,
       "abstract_zh_translation": null,
-      "abstract_credit": null
+      "abstract_credit": null,
+      "paper_authors": []
     },
     {
       "id": "s41598-026-46111-x",
@@ -214,19 +217,24 @@
       "placement": "research",
       "correction_of": null,
       "created_at": "2026-11-02 01:51:56",
-      "updated_at": "2026-11-02 01:53:27",
+      "updated_at": "2026-11-02 07:03:57",
       "first_author_name": "Ali Tahir Karasahin",
       "first_author_affiliations": [
-        "School of Civil, Aerospace and Design Engineering, University of Bristol, Bristol, BS8 1QU, UK",
-        "Faculty of Engineering, Department of Mechatronics Engineering, Necmettin Erbakan University, 42090, Konya, Turkey",
-        "Bristol Robotics Laboratory, University of the West of England (UWE), Bristol BS16 1QY, UK"
+        "University of Bristol，英国",
+        "Necmettin Erbakan University，土耳其",
+        "University of the West of England，英国"
       ],
       "abstract_original": "Flights with suspended payloads are particularly challenging because of their coupled dynamics, which lead to instability and increased sensitivity to disturbances. Although reinforcement learning (RL) has successfully achieved controller performance, the generalization and robustness of a single policy remain significant areas of investigation. In this study, we characterized the performance and robustness of a single RL policy for an aerial robot with different trajectory profiles, including a smooth, feasible lemniscate curve and a sharp-turning, infeasible pentagram, under varying velocity references (0.5 m s−1 and 1.0 m s−1) and crosswind disturbances (1.0 m s−1). We trained a single RL policy using proximal policy optimization with collective thrust and body-rate control using a high-fidelity physics simulator based on the SimpleFlight framework. Real-world experimental results on the Crazyflie 2.1 platform show that the single RL policy successfully generalizes to different trajectory profiles and velocity references and maintains stability under a crosswind disturbance of up to 1.0 m s−1 which is a substantial challenge for this small class platform and even smaller payload underneath, where such aerodynamic forces are significant compared to the available control authority and system mass. Furthermore, the single RL policy was systematically evaluated using the mean Euclidean distance error, cable length transitions, and swing angle distributions. Although the single RL policy maintained a robust control performance, the experimental results indicated performance degradation at higher velocities owing to increased dynamic challenges such as nonlinear aerodynamic drag and actuator saturation. This study provides a detailed performance characterization that highlights the generalization capability of a single-payload-aware RL policy in real-world applications and the limitations arising from the hybrid dynamics of the system.",
       "abstract_language": "en",
       "abstract_source_url": "https://www.nature.com/articles/s41598-026-46111-x",
       "first_author_affiliation_source_url": "https://www.nature.com/articles/s41598-026-46111-x",
       "abstract_zh_translation": "吊载飞行因耦合动力学而格外困难，这会导致不稳定并提高系统对扰动的敏感性。尽管强化学习（RL）已取得控制器性能方面的成果，单一策略的泛化性和鲁棒性仍是重要研究问题。本研究表征了单一强化学习策略在不同轨迹形状下控制吊载无人机的性能与鲁棒性：轨迹包括平滑且可行的双纽线，以及急转弯且不可行的五角星；速度参考值为 0.5 m s−1 和 1.0 m s−1，侧风扰动为 1.0 m s−1。我们基于 SimpleFlight 框架的高保真物理仿真器，采用近端策略优化训练了一个以总推力和机体角速度为控制量的强化学习策略。在 Crazyflie 2.1 平台上的实机实验表明，该单一策略能够泛化到不同轨迹和速度参考值，并在最高 1.0 m s−1 的侧风扰动下保持稳定；对于这种小型平台及其下方更小的吊载而言，相对于可用控制能力和系统质量，这类气动力是相当大的挑战。此外，研究系统评估了该策略的平均欧氏距离误差、绳长变化和摆角分布。虽然该策略保持了稳健的控制性能，实验结果显示，由于非线性气动阻力和执行器饱和等动态挑战增加，较高速度下性能下降。本研究详细表征了单一吊载感知强化学习策略在真实应用中的泛化能力，以及系统混合动力学带来的局限。",
-      "abstract_credit": "摘要来源：Karasahin, A. T., Wu, Z. & Kocer, B. B., Scientific Reports 16, 34215 (2026), CC BY 4.0。中文译文由 RoboticsNews 翻译；数学单位改为纯文本排版。"
+      "abstract_credit": "摘要来源：Karasahin, A. T., Wu, Z. & Kocer, B. B., Scientific Reports 16, 34215 (2026), CC BY 4.0。中文译文由 RoboticsNews 翻译；数学单位改为纯文本排版。",
+      "paper_authors": [
+        "Ali Tahir Karasahin",
+        "Ziniu Wu",
+        "Basaran Bahadir Kocer"
+      ]
     },
     {
       "id": "exotec-robot-regret-survey-2026-10-28",
@@ -272,7 +280,7 @@
       "placement": "ecosystem",
       "correction_of": null,
       "created_at": "2026-11-02 01:51:56",
-      "updated_at": "2026-11-02 01:53:27",
+      "updated_at": "2026-11-02 07:03:57",
       "first_author_name": null,
       "first_author_affiliations": [],
       "abstract_original": null,
@@ -280,7 +288,8 @@
       "abstract_source_url": null,
       "first_author_affiliation_source_url": null,
       "abstract_zh_translation": null,
-      "abstract_credit": null
+      "abstract_credit": null,
+      "paper_authors": []
     }
   ]
 }
