@@ -58,9 +58,10 @@ function entryCard(item) {
   if (item.category === 'paper') {
     links.push(`<a href="${url(item.abstract_source_url)}" target="_blank" rel="noopener noreferrer">摘要原文 ↗</a>`);
     links.push(`<a href="${url(item.first_author_affiliation_source_url)}" target="_blank" rel="noopener noreferrer">单位依据 ↗</a>`);
+    if (item.supporting_urls?.[0] === 'https://creativecommons.org/licenses/by/4.0/') links.push(`<a href="${url(item.supporting_urls[0])}" target="_blank" rel="noopener noreferrer">摘要许可 CC BY 4.0；中文译文由 RoboticsNews 翻译 ↗</a>`);
   }
   const content = item.category === 'paper'
-    ? `<p class="paper-affiliation"><strong>第一作者：</strong>${html(item.first_author_name)}<br><strong>第一作者单位：</strong>${html(item.first_author_affiliations.join('；'))}</p><div class="paper-abstract"><h4>论文摘要原文 / Original abstract</h4><p lang="${html(item.abstract_language ?? 'en')}">${html(item.abstract_original)}</p>${item.abstract_zh_translation ? `<h4>摘要中文翻译</h4><p lang="zh-CN">${html(item.abstract_zh_translation)}</p>` : ''}</div>`
+    ? `<p class="paper-affiliation"><strong>第一作者：</strong>${html(item.first_author_name)}<br><strong>第一作者单位：</strong>${html(item.first_author_affiliations.join('；'))}</p><div class="paper-abstract"><h4>论文摘要原文 / Original abstract</h4><p lang="${html(item.abstract_language ?? 'en')}">${html(item.abstract_original)}</p>${item.abstract_zh_translation ? `<h4>摘要中文翻译</h4><p lang="zh-CN">${html(item.abstract_zh_translation)}</p>` : ''}${item.abstract_credit ? `<p class="entry-en">${html(item.abstract_credit)}</p>` : ''}</div>`
     : `<p>${html(item.summary_zh)}</p><p class="entry-en" lang="en">${html(item.summary_en)}</p>`;
   return `<article class="entry" id="${html(item.id)}"><div class="tags">${tags.map(t => `<span class="tag">${html(t)}</span>`).join('')}<span class="tag">${item.event_time_bj ? '北京时间' : '原文日期'} ${html((item.event_time_bj ?? item.event_time_original ?? '').slice(0, 10))}</span></div><h3>${html(item.title_zh)}</h3><p class="entry-en-title">${html(item.title_en)}</p>${content}${item.why_it_matters_zh ? `<p><strong>意义：</strong>${html(item.why_it_matters_zh)}</p>` : ''}${item.limitations_zh ? `<p class="limitations"><strong>局限：</strong>${html(item.limitations_zh)}</p>` : ''}<div class="entry-links">${links.join('')}</div></article>`;
 }

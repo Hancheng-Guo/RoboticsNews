@@ -66,7 +66,7 @@ function openDb() {
     first_author_name: 'TEXT', first_author_affiliations: "TEXT NOT NULL DEFAULT '[]'",
     first_author_affiliation_source_url: 'TEXT',
     abstract_original: 'TEXT', abstract_language: 'TEXT', abstract_source_url: 'TEXT',
-    abstract_zh_translation: 'TEXT'
+    abstract_zh_translation: 'TEXT', abstract_credit: 'TEXT'
   };
   for (const [name, type] of Object.entries(additions)) {
     if (!columns.has(name)) db.exec(`ALTER TABLE entries ADD COLUMN ${name} ${type}`);
@@ -107,7 +107,7 @@ function addEntry(db, item, replace = false) {
     'deployment_stage', 'primary_url', 'supporting_urls', 'paper_id', 'first_author_name',
     'first_author_affiliations', 'first_author_affiliation_source_url',
     'abstract_original', 'abstract_language', 'abstract_source_url',
-    'abstract_zh_translation', 'publication_status',
+    'abstract_zh_translation', 'abstract_credit', 'publication_status',
     'code_url', 'data_url', 'claim_evidence_notes', 'score_novelty', 'score_impact',
     'score_evidence', 'score_utility', 'editorial_status', 'placement', 'correction_of'
   ];
@@ -122,7 +122,7 @@ function addEntry(db, item, replace = false) {
     optionalText(item.first_author_name), textArray(item.first_author_affiliations, 'first_author_affiliations'),
     optionalText(item.first_author_affiliation_source_url),
     optionalText(item.abstract_original), optionalText(item.abstract_language), optionalText(item.abstract_source_url),
-    optionalText(item.abstract_zh_translation),
+    optionalText(item.abstract_zh_translation), optionalText(item.abstract_credit),
     item.publication_status ?? 'not_applicable', optionalText(item.code_url), optionalText(item.data_url),
     optionalText(item.claim_evidence_notes), ...scores, item.editorial_status ?? 'candidate',
     item.placement ?? 'unassigned',

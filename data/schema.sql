@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS entries (
   abstract_language TEXT,
   abstract_source_url TEXT,
   abstract_zh_translation TEXT,
+  abstract_credit TEXT,
   publication_status TEXT NOT NULL DEFAULT 'not_applicable' CHECK (publication_status IN ('preprint','under_review','accepted','published','not_applicable')),
   code_url TEXT,
   data_url TEXT,

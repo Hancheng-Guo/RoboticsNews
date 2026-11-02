@@ -126,6 +126,8 @@ def build(source, target):
                 if item.get("abstract_zh_translation"):
                     block += [para("摘要中文翻译", "subheading"),
                               para(item["abstract_zh_translation"], "body")]
+                if item.get("abstract_credit"):
+                    block += [para(item["abstract_credit"], "meta")]
             else:
                 block += [para(item["summary_zh"], "body"),
                           Spacer(1, 1 * mm), para(item["summary_en"], "english")]
@@ -137,6 +139,8 @@ def build(source, target):
             if item.get("category") == "paper":
                 block += [source_link(item["abstract_source_url"], "摘要原文"),
                           source_link(item["first_author_affiliation_source_url"], "单位依据")]
+                if item.get("supporting_urls") and item["supporting_urls"][0] == "https://creativecommons.org/licenses/by/4.0/":
+                    block.append(source_link(item["supporting_urls"][0], "摘要许可 CC BY 4.0；中文译文由 RoboticsNews 翻译"))
             block.append(Spacer(1, 5 * mm))
             if item.get("category") == "paper":
                 story.extend(block)

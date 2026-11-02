@@ -170,6 +170,7 @@ abstract_original: "论文所引用版本的摘要原文，逐字保存；非论
 abstract_language: "摘要原文语言，例如 en 或 zh"
 abstract_source_url: "摘要来源的原始 URL"
 abstract_zh_translation: "非中文摘要的忠实中文翻译；原文为中文时可留空"
+abstract_credit: "摘要作者、出处、许可和翻译/排版说明；需公开展示时填写"
 publication_status: "preprint | under_review | accepted | published | not_applicable"
 code_url: "代码地址；未开放则留空"
 data_url: "数据地址；未开放则留空"
