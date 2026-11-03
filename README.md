@@ -28,7 +28,7 @@ $env:ROBOTICS_NEWS_PYTHON = 'C:\path\to\python.exe' # 需安装 reportlab；若 
 node scripts/build-site.mjs --date 2026-11-02
 ```
 
-转载开放许可摘要时，可在 `abstract_credit` 写明作者、出处、许可及翻译说明，并把许可 URL 存入 `supporting_urls`；网页和 PDF 会展示署名，CC BY 4.0 的许可链接也会展示。
+转载开放许可摘要时，可在 `abstract_credit` 写明作者、出处、许可及翻译说明，并把许可 URL 存入 `supporting_urls` 供核验。网页和 PDF 每条只展示一条 `primary_url` 来源链接，不额外展示摘要、单位、许可、代码或数据链接；使用摘要仍须满足其许可条件。
 
 在完整统计周结束、正式内容尚未核验完成时，可以先发布下一期预告页：
 

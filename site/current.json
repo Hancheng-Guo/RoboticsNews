@@ -4,8 +4,8 @@
   "coverage_end": "2026-11-01",
   "timezone": "Asia/Shanghai",
   "pdf_url": "https://raw.githubusercontent.com/Hancheng-Guo/RoboticsNews/main/diarys/2026-11-02.pdf",
-  "revision_note": "2026-11-04 修订：重点条目归入对应栏目并标记，补充有明确依据的通讯作者及单位，调整 PDF 版式；上一版 PDF 已存档。",
-  "previous_pdf_url": "https://raw.githubusercontent.com/Hancheng-Guo/RoboticsNews/main/diarys/2026-11-02.v2.pdf",
+  "revision_note": "2026-11-04 修订：公开条目仅保留一条来源链接，辅助核查依据继续记录在数据中；上一版 PDF 已存档。",
+  "previous_pdf_url": "https://raw.githubusercontent.com/Hancheng-Guo/RoboticsNews/main/diarys/2026-11-02.v3.pdf",
   "entries": [
     {
       "id": "arxiv-2610.35075",

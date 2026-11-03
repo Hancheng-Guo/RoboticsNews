@@ -211,14 +211,6 @@ def build(source, target):
             if item.get("category") == "paper":
                 if item.get("paper_source_type") == "reprint":
                     block += [para("未找到论文一手链接；以上内容来自转载。", "meta")]
-                if item.get("abstract_original") and item.get("abstract_source_url"):
-                    block += [source_link(item["abstract_source_url"], "摘要原文")]
-                if item.get("first_author_affiliations") and item.get("first_author_affiliation_source_url"):
-                    block += [source_link(item["first_author_affiliation_source_url"], "单位依据")]
-                for author in item.get("corresponding_authors") or []:
-                    block += [source_link(author["source_url"], author["name"] + " 通讯作者依据")]
-                if item.get("supporting_urls") and item["supporting_urls"][0] == "https://creativecommons.org/licenses/by/4.0/":
-                    block.append(source_link(item["supporting_urls"][0], "摘要许可 CC BY 4.0；中文译文由 RoboticsNews 翻译"))
             block += [Spacer(1, 2 * mm), HRFlowable(width="100%", thickness=0.7, color=LINE), Spacer(1, 4 * mm)]
             if item.get("category") == "paper":
                 story.extend(block)
