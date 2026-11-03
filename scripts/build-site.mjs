@@ -41,14 +41,14 @@ function layout(title, body) {
 }
 
 const labels = {
-  lead: '本周重点', research: '学术研究', industry: '工业与应用', ecosystem: '生态动态',
+  research: '学术研究', industry: '工业与应用', ecosystem: '生态动态',
   paper_briefs: '论文速览', corrections: '补录与更正', unassigned: '其他进展'
 };
 const evidence = {
   peer_reviewed: '同行评审', preprint: '预印本', official_claim: '机构宣称，未独立验证',
   independent_evidence: '有独立证据', corrected: '已更正', unverified: '待核实'
 };
-const sections = ['lead', 'research', 'industry', 'ecosystem', 'paper_briefs', 'corrections', 'unassigned'];
+const sections = ['research', 'industry', 'ecosystem', 'paper_briefs', 'corrections', 'unassigned'];
 
 function entryCard(item) {
   const tags = [evidence[item.evidence_status] ?? item.evidence_status, ...(item.topics ?? []).slice(0, 3)];
@@ -62,20 +62,21 @@ function entryCard(item) {
   if (isPaper) {
     if (item.abstract_original && item.abstract_source_url) links.push(`<a href="${url(item.abstract_source_url)}" target="_blank" rel="noopener noreferrer">摘要原文 ↗</a>`);
     if (item.first_author_affiliations?.length && item.first_author_affiliation_source_url) links.push(`<a href="${url(item.first_author_affiliation_source_url)}" target="_blank" rel="noopener noreferrer">单位依据 ↗</a>`);
+    for (const author of item.corresponding_authors ?? []) links.push(`<a href="${url(author.source_url)}" target="_blank" rel="noopener noreferrer">${html(author.name)} 通讯作者依据 ↗</a>`);
     if (item.supporting_urls?.[0] === 'https://creativecommons.org/licenses/by/4.0/') links.push(`<a href="${url(item.supporting_urls[0])}" target="_blank" rel="noopener noreferrer">摘要许可 CC BY 4.0；中文译文由 RoboticsNews 翻译 ↗</a>`);
   }
   const paperBody = item.abstract_original
     ? `<div class="paper-abstract"><h4>论文摘要原文 / Original abstract</h4><p lang="${html(item.abstract_language ?? 'en')}">${html(item.abstract_original)}</p>${item.abstract_zh_translation ? `<h4>摘要中文翻译</h4><p lang="zh-CN">${html(item.abstract_zh_translation)}</p>` : ''}${item.abstract_credit ? `<p class="entry-en">${html(item.abstract_credit)}</p>` : ''}</div>`
     : `<div class="paper-abstract"><h4>论文内容转述 / Paraphrase</h4><p>${html(item.summary_zh)}</p><p class="entry-en" lang="en">${html(item.summary_en)}</p></div>`;
   const content = isPaper
-    ? `<p class="paper-affiliation"><strong>作者：</strong>${item.paper_authors.map((name, index) => html(name) + (index === 0 ? '（第一作者）' : '')).join('、')}<br><strong>第一作者单位：</strong>${item.first_author_affiliations.length ? html(item.first_author_affiliations.join('；')) : '不明确'}</p>${paperBody}`
+    ? `<p class="paper-affiliation"><strong>作者：</strong>${item.paper_authors.map((name, index) => html(name) + (index === 0 ? '（第一作者）' : '') + ((item.corresponding_authors ?? []).some(author => author.name === name) ? '（通讯作者）' : '')).join('、')}<br><strong>第一作者单位：</strong>${item.first_author_affiliations.length ? html(item.first_author_affiliations.join('；')) : '不明确'}<br><strong>通讯作者单位：</strong>${item.corresponding_authors?.length ? item.corresponding_authors.map(author => `${html(author.name)}：${html(author.affiliations.join('；'))}`).join('；') : '论文未注明通讯作者'}</p>${paperBody}`
     : `<p>${html(item.summary_zh)}</p><p class="entry-en" lang="en">${html(item.summary_en)}</p>`;
-  return `<article class="entry" id="${html(item.id)}"><div class="tags">${tags.map(t => `<span class="tag">${html(t)}</span>`).join('')}<span class="tag">${item.event_time_bj ? '北京时间' : '原文日期'} ${html((item.event_time_bj ?? item.event_time_original ?? '').slice(0, 10))}</span></div><h3>${html(item.title_zh)}</h3><p class="entry-en-title">${html(item.title_en)}</p>${content}${item.why_it_matters_zh ? `<p><strong>意义：</strong>${html(item.why_it_matters_zh)}</p>` : ''}${item.limitations_zh ? `<p class="limitations"><strong>局限：</strong>${html(item.limitations_zh)}</p>` : ''}<div class="entry-links">${links.join('')}</div></article>`;
+  return `<article class="entry${item.featured ? ' featured' : ''}" id="${html(item.id)}">${item.featured ? '<span class="featured-corner" role="img" aria-label="重点条目" title="重点条目"></span>' : ''}<div class="tags">${tags.map(t => `<span class="tag">${html(t)}</span>`).join('')}<span class="tag">${item.event_time_bj ? '北京时间' : '原文日期'} ${html((item.event_time_bj ?? item.event_time_original ?? '').slice(0, 10))}</span></div><h3>${html(item.title_zh)}</h3><p class="entry-en-title">${html(item.title_en)}</p>${content}${item.why_it_matters_zh ? `<p><strong>意义：</strong>${html(item.why_it_matters_zh)}</p>` : ''}${item.limitations_zh ? `<p class="limitations"><strong>局限：</strong>${html(item.limitations_zh)}</p>` : ''}<div class="entry-links">${links.join('')}</div></article>`;
 }
 
 function issuePage(issue) {
   const groups = sections.map(key => [key, issue.entries.filter(e => e.placement === key)]).filter(([, items]) => items.length);
-  const revision = issue.revision_note ? `<p class="issue-note">${html(issue.revision_note)}${issue.previous_pdf_url ? ` <a href="${url(issue.previous_pdf_url)}" target="_blank" rel="noopener noreferrer">查看初版 PDF ↗</a>` : ''}</p>` : '';
+  const revision = issue.revision_note ? `<p class="issue-note">${html(issue.revision_note)}${issue.previous_pdf_url ? ` <a href="${url(issue.previous_pdf_url)}" target="_blank" rel="noopener noreferrer">查看上一版 PDF ↗</a>` : ''}</p>` : '';
   const body = `<main class="shell"><section class="hero"><div class="eyebrow">WEEKLY BRIEF · ${html(issue.date)}</div><h1>机器人学研究进展周报</h1><p class="hero-sub">Robotics Research & Industry · Weekly Brief</p><div class="hero-meta"><span>北京时间 ${html(issue.date)} 发布</span><span>${issue.entries.length} 条合格新增</span><a class="pdf-link" href="${url(issue.pdf_url)}" target="_blank" rel="noopener noreferrer">查看本期 PDF ↗</a></div></section><p class="issue-note">覆盖北京时间 ${html(issue.coverage_start)} 00:00 至 ${html(issue.coverage_end)} 24:00 首次公开的信息。${issue.entries.length ? '企业或机构单方发布的内容会明确标注；点击每条原始来源查看依据。' : '本期未检出符合采编标准的新增进展。'}</p>${revision}${groups.map(([key, items]) => `<section class="content-section"><div class="section-title"><span class="section-mark"></span><h2>${labels[key]}</h2><span class="section-count">${items.length}</span></div><div class="entries">${items.map(entryCard).join('')}</div></section>`).join('')}</main>`;
   return layout(`${issue.date} 周报`, body);
 }
@@ -112,14 +113,15 @@ function main() {
     const db = new DatabaseSync(dbPath, { readOnly: true });
     try {
       const rows = db.prepare(`SELECT * FROM entries WHERE issue_date = ? AND editorial_status = 'published'
-        ORDER BY (score_novelty + score_impact + score_evidence + score_utility) DESC, id`).all(date);
+        ORDER BY featured DESC, (score_novelty + score_impact + score_evidence + score_utility) DESC, importance_rank ASC, id`).all(date);
       entries = rows.map(row => {
         const { claim_evidence_notes, full_text_url, full_text_contributions_zh,
           full_text_contributions_en, full_text_verified_at, ...publicRow } = row;
         return { ...publicRow, topics: JSON.parse(row.topics), geography: JSON.parse(row.geography),
           entities: JSON.parse(row.entities), supporting_urls: JSON.parse(row.supporting_urls),
           first_author_affiliations: JSON.parse(row.first_author_affiliations ?? '[]'),
-          paper_authors: JSON.parse(row.paper_authors ?? '[]') };
+          paper_authors: JSON.parse(row.paper_authors ?? '[]'), featured: Boolean(row.featured),
+          corresponding_authors: JSON.parse(row.corresponding_authors ?? '[]') };
       });
     } finally { db.close(); }
   }
@@ -148,9 +150,13 @@ function main() {
           (item.first_author_affiliations.length && !/^https?:\/\//i.test(item.first_author_affiliation_source_url ?? '')) ||
           (item.abstract_original && (!item.abstract_language || !/^https?:\/\//i.test(item.abstract_source_url ?? '') ||
             (!/^zh(?:-|$)/i.test(item.abstract_language) && !item.abstract_zh_translation))) ||
-          !['primary', 'reprint'].includes(item.paper_source_type ?? 'primary'))) {
+          !['primary', 'reprint'].includes(item.paper_source_type ?? 'primary') ||
+          item.corresponding_authors.some(author => !item.paper_authors.includes(author.name) ||
+            !author.affiliations?.length || author.affiliations.some(value => !/^.+，[^，]+$/.test(value)) ||
+            !/^https?:\/\//i.test(author.source_url ?? '')))) {
         throw new Error(`Published paper ${item.id} has invalid author, affiliation, abstract, or source fields`);
       }
+      if (item.placement === 'lead') throw new Error(`Legacy lead placement remains on ${item.id}; assign its subject section and set featured`);
       const eventDate = (item.event_time_bj ?? item.event_time_original)?.slice(0, 10);
       if (!eventDate || eventDate < issue.coverage_start || eventDate > issue.coverage_end) {
         throw new Error(`Entry ${item.id} is outside the Beijing coverage window`);

@@ -15,7 +15,7 @@ from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.cidfonts import UnicodeCIDFont
 from reportlab.platypus import (
     BaseDocTemplate, CondPageBreak, Frame, KeepTogether, PageTemplate, Paragraph, Spacer,
-    HRFlowable,
+    HRFlowable, Table, TableStyle, Flowable,
 )
 
 pdfmetrics.registerFont(UnicodeCIDFont("STSong-Light"))
@@ -23,9 +23,12 @@ FONT = "STSong-Light"
 INK = colors.HexColor("#18263A")
 MUTED = colors.HexColor("#617184")
 ACCENT = colors.HexColor("#196D82")
+PALE = colors.HexColor("#F7FAFB")
+LINE = colors.HexColor("#DAE3E8")
+ORANGE = colors.HexColor("#E88926")
 
 LABELS = {
-    "lead": "本周重点", "research": "学术研究", "industry": "工业与应用",
+    "research": "学术研究", "industry": "工业与应用",
     "ecosystem": "生态动态", "paper_briefs": "论文速览",
     "corrections": "补录与更正", "unassigned": "其他进展",
 }
@@ -57,7 +60,57 @@ ST = {
                        borderColor=colors.HexColor("#D6A644"),
                        borderWidth=0.7, borderPadding=7),
     "subheading": style("subheading", 9, 15, ACCENT, spaceBefore=2 * mm),
+    "tag": style("tag", 7.5, 12, ACCENT),
 }
+
+
+class FeaturedCorner(Flowable):
+    """Small top-right marker shared with the website's featured cards."""
+    def __init__(self):
+        super().__init__()
+        self.width = 12 * mm
+        self.height = 12 * mm
+
+    def draw(self):
+        path = self.canv.beginPath()
+        path.moveTo(0, self.height)
+        path.lineTo(self.width, self.height)
+        path.lineTo(self.width, 0)
+        path.close()
+        self.canv.setFillColor(ORANGE)
+        self.canv.drawPath(path, fill=1, stroke=0)
+
+
+def card_header(item, width):
+    heading = [para(item["title_zh"], "headline"), para(item["title_en"], "en_title")]
+    right = FeaturedCorner() if item.get("featured") else ""
+    table = Table([[heading, right]], colWidths=[width - 16 * mm, 16 * mm], hAlign="LEFT")
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, -1), colors.white),
+        ("LINEABOVE", (0, 0), (-1, 0), 0.8, LINE),
+        ("LINEBEFORE", (0, 0), (0, -1), 0.8, LINE),
+        ("LINEAFTER", (-1, 0), (-1, -1), 0.8, LINE),
+        ("TOPPADDING", (0, 0), (0, 0), 7 * mm),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 3 * mm),
+        ("LEFTPADDING", (0, 0), (0, 0), 5 * mm),
+        ("RIGHTPADDING", (-1, 0), (-1, -1), 0),
+        ("TOPPADDING", (1, 0), (1, 0), 0),
+    ]))
+    return table
+
+
+def section_heading(label, count, width):
+    table = Table([["", para(label, "section"), para(str(count), "meta")]],
+                  colWidths=[3 * mm, width - 15 * mm, 12 * mm], hAlign="LEFT")
+    table.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (0, 0), ACCENT),
+        ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
+        ("LEFTPADDING", (0, 0), (-1, -1), 3 * mm),
+        ("RIGHTPADDING", (0, 0), (-1, -1), 0),
+        ("TOPPADDING", (0, 0), (-1, -1), 1 * mm),
+        ("BOTTOMPADDING", (0, 0), (-1, -1), 1 * mm),
+    ]))
+    return table
 
 
 def para(text, kind):
@@ -75,7 +128,9 @@ def source_link(link, label="原始来源"):
 def page(canvas, doc):
     canvas.saveState()
     width, height = A4
-    canvas.setStrokeColor(colors.HexColor("#DAE3E8"))
+    canvas.setFillColor(PALE)
+    canvas.rect(0, 0, width, height, fill=1, stroke=0)
+    canvas.setStrokeColor(LINE)
     canvas.line(19 * mm, 17 * mm, width - 19 * mm, 17 * mm)
     canvas.setFillColor(MUTED)
     canvas.setFont("Helvetica", 8)
@@ -103,7 +158,7 @@ def build(source, target):
              Spacer(1, 2 * mm),
              para("AI生成：内容由 AI 辅助整理与总结，请以所列来源为准。", "ai_notice"),
              Spacer(1, 4 * mm),
-             HRFlowable(width="100%", thickness=1, color=colors.HexColor("#DAE3E8")),
+             HRFlowable(width="100%", thickness=1, color=LINE),
              Spacer(1, 4 * mm),
              para(f"覆盖北京时间 {issue.get('coverage_start', '')} 00:00 至 {issue.get('coverage_end', '')} 24:00 首次公开的信息。", "meta"),
              Spacer(1, 5 * mm)]
@@ -111,24 +166,27 @@ def build(source, target):
     if issue.get("revision_note"):
         story += [para(issue["revision_note"], "meta")]
         if issue.get("previous_pdf_url"):
-            story += [source_link(issue["previous_pdf_url"], "初版 PDF")]
+            story += [source_link(issue["previous_pdf_url"], "上一版 PDF")]
         story += [Spacer(1, 5 * mm)]
 
     for section in SECTIONS:
         items = [e for e in issue["entries"] if e.get("placement", "unassigned") == section]
         if not items:
             continue
-        story += [CondPageBreak(100 * mm), para(LABELS[section], "section")]
+        story += [CondPageBreak(60 * mm), section_heading(LABELS[section], len(items), doc.width), Spacer(1, 3 * mm)]
         for item in items:
-            block = [para(item["title_zh"], "headline"), Spacer(1, 1 * mm),
-                     para(item["title_en"], "en_title"), Spacer(1, 1 * mm),
-                     para(f"{EVIDENCE.get(item['evidence_status'], item['evidence_status'])} · {'北京时间' if item.get('event_time_bj') else '原文日期'} {(item.get('event_time_bj') or item.get('event_time_original') or '')[:10]}", "meta"),
-                     Spacer(1, 2 * mm)]
+            topics = " · ".join((item.get("topics") or [])[:3])
+            block = [CondPageBreak(55 * mm),
+                     para(f"{EVIDENCE.get(item['evidence_status'], item['evidence_status'])} · {topics} · {'北京时间' if item.get('event_time_bj') else '原文日期'} {(item.get('event_time_bj') or item.get('event_time_original') or '')[:10]}", "tag"),
+                     Spacer(1, 1 * mm), card_header(item, doc.width), Spacer(1, 2 * mm)]
             if item.get("category") == "paper":
-                authors = [name + ("（第一作者）" if index == 0 else "")
+                corresponding = item.get("corresponding_authors") or []
+                authors = [name + ("（第一作者）" if index == 0 else "") +
+                           ("（通讯作者）" if any(author["name"] == name for author in corresponding) else "")
                            for index, name in enumerate(item["paper_authors"])]
                 block += [para("作者：" + "、".join(authors), "meta"),
-                          para("第一作者单位：" + ("；".join(item["first_author_affiliations"]) or "不明确"), "meta")]
+                          para("第一作者单位：" + ("；".join(item["first_author_affiliations"]) or "不明确"), "meta"),
+                          para("通讯作者单位：" + ("；".join(author["name"] + "：" + "；".join(author["affiliations"]) for author in corresponding) if corresponding else "论文未注明通讯作者"), "meta")]
                 if item.get("abstract_original"):
                     block += [para("论文摘要原文 / Original abstract", "subheading"),
                               para(item["abstract_original"], "body" if (item.get("abstract_language") or "").lower().startswith("zh") else "english")]
@@ -157,9 +215,11 @@ def build(source, target):
                     block += [source_link(item["abstract_source_url"], "摘要原文")]
                 if item.get("first_author_affiliations") and item.get("first_author_affiliation_source_url"):
                     block += [source_link(item["first_author_affiliation_source_url"], "单位依据")]
+                for author in item.get("corresponding_authors") or []:
+                    block += [source_link(author["source_url"], author["name"] + " 通讯作者依据")]
                 if item.get("supporting_urls") and item["supporting_urls"][0] == "https://creativecommons.org/licenses/by/4.0/":
                     block.append(source_link(item["supporting_urls"][0], "摘要许可 CC BY 4.0；中文译文由 RoboticsNews 翻译"))
-            block.append(Spacer(1, 5 * mm))
+            block += [Spacer(1, 2 * mm), HRFlowable(width="100%", thickness=0.7, color=LINE), Spacer(1, 4 * mm)]
             if item.get("category") == "paper":
                 story.extend(block)
             else:

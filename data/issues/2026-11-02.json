@@ -1,8 +1,8 @@
 {
   "coverage_start": "2026-10-26",
   "coverage_end": "2026-11-01",
-  "revised_on": "2026-11-03",
-  "revision_note": "2026-11-03 修订：补齐 8 篇论文的第一作者单位、arXiv 摘要原文及中文翻译；初版 PDF 已存档。",
-  "previous_pdf": "2026-11-02.v1.pdf",
-  "previous_commit": "4517b41"
+  "revised_on": "2026-11-04",
+  "revision_note": "2026-11-04 修订：重点条目归入对应栏目并标记，补充有明确依据的通讯作者及单位，调整 PDF 版式；上一版 PDF 已存档。",
+  "previous_pdf": "2026-11-02.v2.pdf",
+  "previous_commit": "e9b3eb5"
 }

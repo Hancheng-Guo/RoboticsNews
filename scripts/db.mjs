@@ -67,6 +67,8 @@ function openDb() {
     first_author_name: 'TEXT', paper_authors: "TEXT NOT NULL DEFAULT '[]'",
     first_author_affiliations: "TEXT NOT NULL DEFAULT '[]'",
     first_author_affiliation_source_url: 'TEXT',
+    corresponding_authors: "TEXT NOT NULL DEFAULT '[]'",
+    featured: 'INTEGER NOT NULL DEFAULT 0', importance_rank: 'INTEGER NOT NULL DEFAULT 100',
     abstract_original: 'TEXT', abstract_language: 'TEXT', abstract_source_url: 'TEXT',
     abstract_zh_translation: 'TEXT', abstract_credit: 'TEXT'
   };
@@ -82,6 +84,7 @@ function addEntry(db, item, replace = false) {
   for (const key of required) requireText(item[key], key);
   date(item.issue_date, 'issue_date');
   if (!/^https?:\/\//.test(item.primary_url)) throw new Error('primary_url must be an HTTP(S) URL');
+  if (item.placement === 'lead') throw new Error('lead is retired; use the subject section and featured');
   if (item.category === 'paper' && item.editorial_status === 'published' && item.issue_date >= '2026-11-02') {
     requireText(item.first_author_name, 'first_author_name');
     const eventDate = (item.event_time_bj ?? item.event_time_original ?? '').slice(0, 10);
@@ -108,11 +111,19 @@ function addEntry(db, item, replace = false) {
     if (item.first_author_affiliations?.length && !/^https?:\/\//.test(item.first_author_affiliation_source_url ?? '')) {
       throw new Error('first_author_affiliation_source_url must be an HTTP(S) URL when affiliation is shown');
     }
+    if (!Array.isArray(item.corresponding_authors ?? []) || (item.corresponding_authors ?? []).some(author =>
+      !author || !item.paper_authors.includes(author.name) || !Array.isArray(author.affiliations) ||
+      !author.affiliations.length || author.affiliations.some(value => typeof value !== 'string' || !/^.+，[^，]+$/.test(value.trim())) ||
+      !/^https?:\/\//.test(author.source_url ?? ''))) {
+      throw new Error('corresponding_authors must contain printed author names, verified affiliations, and a source URL');
+    }
   }
   if (replace && !db.prepare('SELECT 1 FROM entries WHERE id = ?').get(item.id)) {
     throw new Error(`Cannot replace missing entry: ${item.id}`);
   }
   const score = item.score ?? {};
+  if (![true, false, undefined].includes(item.featured)) throw new Error('featured must be boolean');
+  if (!Number.isInteger(item.importance_rank ?? 100) || (item.importance_rank ?? 100) < 1) throw new Error('importance_rank must be a positive integer');
   const scores = ['novelty', 'impact', 'evidence', 'utility'].map(key => {
     const value = score[key] ?? 0;
     if (!Number.isInteger(value) || value < 0 || value > 2) throw new Error(`score.${key} must be 0, 1 or 2`);
@@ -123,11 +134,11 @@ function addEntry(db, item, replace = false) {
     'category', 'topics', 'geography', 'entities', 'title_original', 'title_zh', 'title_en',
     'summary_zh', 'summary_en', 'why_it_matters_zh', 'limitations_zh', 'evidence_status',
     'deployment_stage', 'primary_url', 'supporting_urls', 'paper_id', 'paper_source_type', 'first_author_name', 'paper_authors',
-    'first_author_affiliations', 'first_author_affiliation_source_url',
+    'first_author_affiliations', 'first_author_affiliation_source_url', 'corresponding_authors',
     'abstract_original', 'abstract_language', 'abstract_source_url',
     'abstract_zh_translation', 'abstract_credit', 'publication_status',
     'code_url', 'data_url', 'claim_evidence_notes', 'score_novelty', 'score_impact',
-    'score_evidence', 'score_utility', 'editorial_status', 'placement', 'correction_of'
+    'score_evidence', 'score_utility', 'featured', 'importance_rank', 'editorial_status', 'placement', 'correction_of'
   ];
   const values = [
     item.id, item.issue_date, optionalText(item.event_time_original), optionalText(item.event_time_bj),
@@ -141,10 +152,11 @@ function addEntry(db, item, replace = false) {
     optionalText(item.first_author_name), textArray(item.paper_authors, 'paper_authors'),
     textArray(item.first_author_affiliations, 'first_author_affiliations'),
     optionalText(item.first_author_affiliation_source_url),
+    JSON.stringify(item.corresponding_authors ?? []),
     optionalText(item.abstract_original), optionalText(item.abstract_language), optionalText(item.abstract_source_url),
     optionalText(item.abstract_zh_translation), optionalText(item.abstract_credit),
     item.publication_status ?? 'not_applicable', optionalText(item.code_url), optionalText(item.data_url),
-    optionalText(item.claim_evidence_notes), ...scores, item.editorial_status ?? 'candidate',
+    optionalText(item.claim_evidence_notes), ...scores, item.featured ? 1 : 0, item.importance_rank ?? 100, item.editorial_status ?? 'candidate',
     item.placement ?? 'unassigned',
     optionalText(item.correction_of)
   ];
@@ -167,7 +179,7 @@ function addSource(db, item) {
 
 function decode(row) {
   if (!row) return row;
-  for (const key of ['topics', 'geography', 'entities', 'supporting_urls', 'paper_authors', 'first_author_affiliations']) {
+  for (const key of ['topics', 'geography', 'entities', 'supporting_urls', 'paper_authors', 'first_author_affiliations', 'corresponding_authors']) {
     if (key in row) row[key] = JSON.parse(row[key]);
   }
   if ('score_novelty' in row) {

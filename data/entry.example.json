@@ -26,6 +26,7 @@
   "paper_authors": ["Example Author", "Second Author"],
   "first_author_affiliations": ["Example University，国家或地区"],
   "first_author_affiliation_source_url": "https://example.org/replace-with-author-affiliation-source",
+  "corresponding_authors": [],
   "abstract_original": "Paste the exact abstract from the cited paper version here.",
   "abstract_language": "en",
   "abstract_source_url": "https://example.org/replace-with-paper-abstract",
@@ -35,6 +36,8 @@
   "data_url": null,
   "claim_evidence_notes": "示例记录，不是真实新闻。",
   "score": {"novelty": 1, "impact": 1, "evidence": 1, "utility": 1},
+  "featured": false,
+  "importance_rank": 100,
   "editorial_status": "candidate",
   "placement": "unassigned",
   "correction_of": null
