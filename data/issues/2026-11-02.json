@@ -2,7 +2,7 @@
   "coverage_start": "2026-10-26",
   "coverage_end": "2026-11-01",
   "revised_on": "2026-11-04",
-  "revision_note": "2026-11-04 修订：公开条目仅保留一条来源链接，辅助核查依据继续记录在数据中；上一版 PDF 已存档。",
-  "previous_pdf": "2026-11-02.v3.pdf",
-  "previous_commit": "d1deada"
+  "revision_note": "2026-11-04 修订：PDF 改用嵌入字体与完整卡片，跨页直接接续正文；周报内容未变。上一版 PDF 已存档。",
+  "previous_pdf": "2026-11-02.v4.pdf",
+  "previous_commit": "c61de35"
 }

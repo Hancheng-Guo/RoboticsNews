@@ -124,7 +124,7 @@ $env:ROBOTICS_NEWS_PYTHON = 'C:\path\to\python.exe'
 node scripts/build-site.mjs --date 2026-11-02
 ```
 
-输出应是 `site/index.html`、`site/current.json`、`diarys/2026-11-02.pdf`。网页只保留当期，PDF 每期新文件。`--date` 非周一会失败；条目事件日期不在统计窗口、论文必填项缺失或元数据窗口不一致也会失败。失败后检查源数据再重试，不要绕过校验或发布半成品。
+输出应是 `site/index.html`、`site/current.json`、`diarys/2026-11-02.pdf`。网页只保留当期，PDF 每期新文件。PDF 生成需可嵌入的中文无衬线常规和粗体字体；系统未提供时，同时设置 `ROBOTICS_NEWS_PDF_FONT_REGULAR` 与 `ROBOTICS_NEWS_PDF_FONT_BOLD` 为本机字体文件路径，见[呈现规范](PRESENTATION_SPEC.md)。`--date` 非周一会失败；条目事件日期不在统计窗口、论文必填项缺失或元数据窗口不一致也会失败。失败后检查源数据再重试，不要绕过校验或发布半成品。
 
 周报未到出版时间而需要先展示预告时：
 
