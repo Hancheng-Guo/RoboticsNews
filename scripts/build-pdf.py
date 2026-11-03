@@ -108,6 +108,12 @@ def build(source, target):
              para(f"覆盖北京时间 {issue.get('coverage_start', '')} 00:00 至 {issue.get('coverage_end', '')} 24:00 首次公开的信息。", "meta"),
              Spacer(1, 5 * mm)]
 
+    if issue.get("revision_note"):
+        story += [para(issue["revision_note"], "meta")]
+        if issue.get("previous_pdf_url"):
+            story += [source_link(issue["previous_pdf_url"], "初版 PDF")]
+        story += [Spacer(1, 5 * mm)]
+
     for section in SECTIONS:
         items = [e for e in issue["entries"] if e.get("placement", "unassigned") == section]
         if not items:

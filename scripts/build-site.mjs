@@ -75,7 +75,8 @@ function entryCard(item) {
 
 function issuePage(issue) {
   const groups = sections.map(key => [key, issue.entries.filter(e => e.placement === key)]).filter(([, items]) => items.length);
-  const body = `<main class="shell"><section class="hero"><div class="eyebrow">WEEKLY BRIEF · ${html(issue.date)}</div><h1>机器人学研究进展周报</h1><p class="hero-sub">Robotics Research & Industry · Weekly Brief</p><div class="hero-meta"><span>北京时间 ${html(issue.date)} 发布</span><span>${issue.entries.length} 条合格新增</span><a class="pdf-link" href="${url(issue.pdf_url)}" target="_blank" rel="noopener noreferrer">查看本期 PDF ↗</a></div></section><p class="issue-note">覆盖北京时间 ${html(issue.coverage_start)} 00:00 至 ${html(issue.coverage_end)} 24:00 首次公开的信息。${issue.entries.length ? '企业或机构单方发布的内容会明确标注；点击每条原始来源查看依据。' : '本期未检出符合采编标准的新增进展。'}</p>${groups.map(([key, items]) => `<section class="content-section"><div class="section-title"><span class="section-mark"></span><h2>${labels[key]}</h2><span class="section-count">${items.length}</span></div><div class="entries">${items.map(entryCard).join('')}</div></section>`).join('')}</main>`;
+  const revision = issue.revision_note ? `<p class="issue-note">${html(issue.revision_note)}${issue.previous_pdf_url ? ` <a href="${url(issue.previous_pdf_url)}" target="_blank" rel="noopener noreferrer">查看初版 PDF ↗</a>` : ''}</p>` : '';
+  const body = `<main class="shell"><section class="hero"><div class="eyebrow">WEEKLY BRIEF · ${html(issue.date)}</div><h1>机器人学研究进展周报</h1><p class="hero-sub">Robotics Research & Industry · Weekly Brief</p><div class="hero-meta"><span>北京时间 ${html(issue.date)} 发布</span><span>${issue.entries.length} 条合格新增</span><a class="pdf-link" href="${url(issue.pdf_url)}" target="_blank" rel="noopener noreferrer">查看本期 PDF ↗</a></div></section><p class="issue-note">覆盖北京时间 ${html(issue.coverage_start)} 00:00 至 ${html(issue.coverage_end)} 24:00 首次公开的信息。${issue.entries.length ? '企业或机构单方发布的内容会明确标注；点击每条原始来源查看依据。' : '本期未检出符合采编标准的新增进展。'}</p>${revision}${groups.map(([key, items]) => `<section class="content-section"><div class="section-title"><span class="section-mark"></span><h2>${labels[key]}</h2><span class="section-count">${items.length}</span></div><div class="entries">${items.map(entryCard).join('')}</div></section>`).join('')}</main>`;
   return layout(`${issue.date} 周报`, body);
 }
 
@@ -132,9 +133,14 @@ function main() {
     const coverageStart = coverageDate.toISOString().slice(0, 10);
     if ((meta.coverage_start && meta.coverage_start !== coverageStart) ||
         (meta.coverage_end && meta.coverage_end !== coverageEnd)) throw new Error('Issue metadata coverage must match the prior Monday–Sunday');
+    const previousPdf = meta.previous_pdf && /^\d{4}-\d{2}-\d{2}\.v\d+\.pdf$/.test(meta.previous_pdf) ? meta.previous_pdf : null;
+    if (meta.previous_pdf && !previousPdf) throw new Error('Invalid previous PDF filename');
     const issue = { date, coverage_start: coverageStart,
       coverage_end: coverageEnd, timezone: 'Asia/Shanghai',
-      pdf_url: `${pdfPublicBase.replace(/\/$/, '')}/${date}.pdf`, entries };
+      pdf_url: `${pdfPublicBase.replace(/\/$/, '')}/${date}.pdf`,
+      revision_note: meta.revision_note ?? null,
+      previous_pdf_url: previousPdf ? `${pdfPublicBase.replace(/\/$/, '')}/${previousPdf}` : null,
+      entries };
     for (const item of entries) {
       if (item.category === 'paper' && (!item.first_author_name || !item.paper_authors.length ||
           item.paper_authors[0] !== item.first_author_name ||
@@ -149,6 +155,10 @@ function main() {
       if (!eventDate || eventDate < issue.coverage_start || eventDate > issue.coverage_end) {
         throw new Error(`Entry ${item.id} is outside the Beijing coverage window`);
       }
+    }
+    const papersWithoutAffiliation = entries.filter(item => item.category === 'paper' && !item.first_author_affiliations?.length);
+    if (papersWithoutAffiliation.length) {
+      console.warn(`First-author affiliation unresolved for ${papersWithoutAffiliation.length} paper(s): ${papersWithoutAffiliation.map(item => item.id).join(', ')}. Check accessible paper HTML/PDF and record why each remains unclear.`);
     }
     const currentJson = join(out, 'current.json');
     mkdirSync(pdfDir, { recursive: true });

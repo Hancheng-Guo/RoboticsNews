@@ -2,8 +2,13 @@
   {
     "issue_date": "2026-11-02",
     "geography": [],
-    "supporting_urls": [],
-    "first_author_affiliations": [],
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license"
+    ],
+    "first_author_affiliations": [
+      "Beijing Institute of Technology，中国",
+      "State Key Laboratory of General Artificial Intelligence, BIGAI，中国"
+    ],
     "paper_source_type": "primary",
     "deployment_stage": "not_applicable",
     "editorial_status": "published",
@@ -49,13 +54,23 @@
       "Baoxiong Jia",
       "Siyuan Huang"
     ],
-    "placement": "lead"
+    "placement": "lead",
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2610.35075v1",
+    "abstract_original": "Learning generalizable humanoid loco-manipulation remains bottlenecked by costly real-world demonstrations. Simulation provides a scalable alternative, but requires visually faithful, physics-ready scenes and executable whole-body motions. We present Zero-HLM, a real-to-sim-to-real framework that transforms smartphone captures and simulated source demonstrations into scalable training data for humanoid loco-manipulation. Gaussian-guided agentic real-to-sim reconstruction aligns visual and physical scenes; motion-environment co-adaptation uses rollout feedback to correct whole-body references and interaction geometry. We generate 4,800 physically validated demonstrations for zero-shot transfer across three Unitree G1 tasks. Simulation-trained GR00T N1.7 achieves 66.7% mean full-task success, versus 46.7% with real-data training. On generalized configurations, expanded simulation training raises pooled success from 23% for base-trained real-data policies to 69%, without additional real demonstrations. Project page: https://young-bit.github.io/zero-hlm/",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2610.35075v1",
+    "abstract_zh_translation": "可泛化的人形机器人移动操作仍受昂贵的真实世界示范数据所限制。仿真提供可扩展的替代途径，但需要视觉逼真、具备物理属性的场景，以及可执行的全身动作。我们提出 Zero-HLM：一种从真实世界到仿真再回到真实世界的框架，将手机采集的场景与仿真源示范转化为可扩展的人形机器人移动操作训练数据。高斯引导的智能体式真实到仿真重建使视觉场景和物理场景对齐；动作与环境协同适配利用执行反馈修正全身动作参考和交互几何。我们生成了 4,800 条通过物理验证的示范，用于在三项 Unitree G1 任务上进行零样本迁移。仅用仿真数据训练的 GR00T N1.7 平均完整任务成功率为 66.7%，而用真实数据训练时为 46.7%。在泛化配置下，扩大仿真训练将汇总成功率从基于真实数据训练的基础策略的 23% 提高到 69%，且未增加真实示范。项目页：https://young-bit.github.io/zero-hlm/",
+    "abstract_credit": "Dianyi Yang, Mengya Liu, Zhumei Wang, Yu Liu, Xiaochen Zhang, Yixuan Li, Le Ma, Yuhang Yang, Weiqi Huang, Wei Liang, Baoxiong Jia, Siyuan Huang；arXiv:2610.35075v1 摘要元数据，CC0 1.0；中文译文由 RoboticsNews AI 辅助翻译。"
   },
   {
     "issue_date": "2026-11-02",
     "geography": [],
-    "supporting_urls": [],
-    "first_author_affiliations": [],
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license"
+    ],
+    "first_author_affiliations": [
+      "University of Washington，美国"
+    ],
     "paper_source_type": "primary",
     "deployment_stage": "not_applicable",
     "editorial_status": "published",
@@ -98,7 +113,13 @@
       "Siddhartha Srinivasa",
       "Yiyue Luo"
     ],
-    "placement": "lead"
+    "placement": "lead",
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2610.40646v1",
+    "abstract_original": "Robot manipulation in everyday environments inherently involves substantial tool usage. Seemingly simple household tasks, such as cooking pan-fried tofu, require forceful cutting, delicate brushing, and precise placement using different tools under contact-rich interaction. Thus, the ability to autonomously swap and use task-appropriate tools is important for tool-centric manipulation. We introduce SwapBot, a modular, tool-centric end effector system featuring low-cost adapters that quickly convert common household tools into robot end effectors. Rather than pursuing a single universal gripper, SwapBot adopts a unified design principle that combines a fixed robot-side coupling interface with low-cost, tool-side adapters, enabling compatibility with diverse tools, including articulated ones, and multiple robot platforms. Each adapter integrates compact tactile sensors, supports fast autonomous swapping, and interfaces with an intuitive teleoperation system for efficient demonstration collection. User studies show that, during teleoperation, SwapBot reduces task completion time and operator workload. Using collected demonstrations on the robot, we train imitation learning policies to successfully perform tool-centric tasks like cooking tofu, stirring salad, flipping meat. Our ablation study shows that using tactile-augmented demonstrations improves policy performance across contact-rich skills, increasing success rates by 15 to 25 percentage points over RGB-only policies. These results highlight modular, tactile-equipped tools as a practical and extensible pathway toward robust and capable robot manipulation. Project website https://personalrobotics.github.io/SwapBot.",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2610.40646v1",
+    "abstract_zh_translation": "日常环境中的机器人操作大量涉及工具使用。看似简单的家务任务，例如煎豆腐，也需要在接触丰富的交互中，使用不同工具进行用力切割、轻柔刷涂和精确放置。因此，自主更换并使用适合任务的工具对以工具为中心的操作很重要。我们提出 SwapBot，这是一种模块化、以工具为中心的末端执行器系统，采用低成本适配器，可迅速将常见家用工具转化为机器人末端执行器。SwapBot 不追求单一的通用夹爪，而是采用统一设计原则，将固定的机器人端耦合接口与低成本工具端适配器结合，以兼容包括铰接工具在内的多种工具及多个机器人平台。每个适配器集成紧凑型触觉传感器，支持快速自主更换，并连接直观的遥操作系统，以高效收集示范。用户研究表明，在遥操作期间，SwapBot 减少了任务完成时间和操作员工作负担。我们利用机器人上收集的示范训练模仿学习策略，成功执行煎豆腐、拌沙拉和翻肉等工具操作任务。消融研究表明，在接触丰富的技能中，使用触觉增强的示范可改善策略表现，相比仅使用 RGB 的策略，成功率提高了 15 至 25 个百分点。这些结果表明，配备触觉的模块化工具是实现稳健、强大机器人操作能力的一条实用且可扩展的路径。项目网站：https://personalrobotics.github.io/SwapBot。",
+    "abstract_credit": "Yunchu Zhang, Ray Song, Junhan Jiao, Liyiming Ke, Yuchen Yang, Ruihan Gao, Emma Romig, Siddhartha Srinivasa, Yiyue Luo；arXiv:2610.40646v1 摘要元数据，CC0 1.0；中文译文由 RoboticsNews AI 辅助翻译。"
   },
   {
     "issue_date": "2026-11-02",
@@ -144,8 +165,12 @@
   {
     "issue_date": "2026-11-02",
     "geography": [],
-    "supporting_urls": [],
-    "first_author_affiliations": [],
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license"
+    ],
+    "first_author_affiliations": [
+      "Yale University，美国"
+    ],
     "paper_source_type": "primary",
     "deployment_stage": "not_applicable",
     "editorial_status": "published",
@@ -185,13 +210,23 @@
       "Brandon Y. Yang",
       "Amish Sethi"
     ],
-    "placement": "research"
+    "placement": "research",
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2610.39385v1",
+    "abstract_original": "Universal Manipulation Interface (UMI) devices allow human experts to demonstrate tasks for robot learning without teleoperating physical robots. Using these demonstrations as training data still requires a consistent hardware setup, calibration, and data processing. We present UMI-Live, a full-stack open-source bimanual UMI system for in-the-wild data collection. We design our custom UMI-Live hardware to integrate camera and LiDAR--inertial sensing, onboard compute, and power, without external tracking equipment or calibration within the collection environment. We implement a simple user interface for recording data while an asynchronous pipeline performs parallel SLAM reconstruction and publishes training-ready datasets. We also release software that supports dual-YAM teleoperation and VLA policy training and inference. We validate UMI-Live data quality by fine-tuning $π_{0.5}$ and MolmoAct2, achieving success rates of 10/10 and 8/10, respectively on a bimanual pick-and-place task. Furthermore, we release 40 hours of UMI-Live data across three tasks, and complete hardware designs, software, and reproduction guides at our $\\href{https://umi-live.github.io/}{\\text{project website}}$.",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2610.39385v1",
+    "abstract_zh_translation": "通用操作接口（UMI）设备使人类专家无需遥操作实体机器人就能示范机器人学习任务。然而，要把这些示范用作训练数据，仍需要一致的硬件设置、校准和数据处理。我们提出 UMI-Live：一套用于真实环境数据采集的全栈开源双臂 UMI 系统。我们设计的 UMI-Live 硬件集成了相机、激光雷达与惯性传感、机载计算和电源，不需要外部跟踪设备，也无需在采集环境中校准。我们实现了简易的录制界面；与此同时，异步流程并行进行 SLAM 重建并发布可直接用于训练的数据集。我们还发布支持双 YAM 遥操作以及 VLA 策略训练和推理的软件。通过微调 π₀.₅ 和 MolmoAct2，我们验证 UMI-Live 的数据质量：在一项双臂抓取与放置任务上，两者成功次数分别为 10/10 和 8/10。此外，我们发布涵盖三项任务的 40 小时 UMI-Live 数据，以及完整硬件设计、软件和复现指南，见项目网站：https://umi-live.github.io/。",
+    "abstract_credit": "Govind Velamoor, Adrian Lin, Sam Jung, Spencer Mateega, Brandon Y. Yang, Amish Sethi；arXiv:2610.39385v1 摘要元数据，CC0 1.0；中文译文由 RoboticsNews AI 辅助翻译。"
   },
   {
     "issue_date": "2026-11-02",
     "geography": [],
-    "supporting_urls": [],
-    "first_author_affiliations": [],
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license"
+    ],
+    "first_author_affiliations": [
+      "University of Texas at Austin，美国"
+    ],
     "paper_source_type": "primary",
     "deployment_stage": "not_applicable",
     "editorial_status": "published",
@@ -230,13 +265,24 @@
       "Hari Nayar",
       "David Fridovich-Keil"
     ],
-    "placement": "research"
+    "placement": "research",
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2610.38657v1",
+    "abstract_original": "Future planetary rovers will traverse steep, deformable terrain where slip, sinkage, and terrain deformation can threaten mobility. Although simulation can capture some wheel-soil effects, unmodeled deformable-terrain phenomena create sim-to-real gaps requiring deployment-time adaptation. Yet, rover operations leave little room for extensive trial-and-error. We introduce TERRA (Targeted Exploration for Reward-Relevant Adaptation), an online adaptation framework that efficiently seeks deployment data exposing task-relevant model errors and corrects them. TERRA adapts a simulation-trained world model with a reward-weighted prediction loss and trains a loss predictor to estimate where future performance-relevant errors are likely to occur, using this signal to guide exploration during MPC. In simulation, TERRA reaches approximately 90% slope-climbing success within five trials under severe out-of-distribution pretraining conditions, outperforming exploration baselines in reward, completion time, and energy to first success. On the ERNEST rover, TERRA recovers coordinated active-suspension locomotion on a deformable Mars-simulant slope within three to five real-world trials. Project website: https://terra-explore.github.io",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2610.38657v1",
+    "abstract_zh_translation": "未来的行星车将穿越陡峭、可变形的地形，打滑、下陷和地形形变都可能威胁其机动能力。虽然仿真能捕捉部分轮土相互作用，未建模的可变形地形现象仍会造成从仿真到现实的差距，因而需要部署时适配。然而，行星车运行几乎没有大量试错的余地。我们提出 TERRA（面向回报相关适配的定向探索），一种在线适配框架，可高效寻找揭示与任务相关的模型误差的部署数据，并据此纠正模型。TERRA 使用按回报加权的预测损失适配仿真训练的世界模型，同时训练损失预测器，估计未来可能出现影响性能的误差的位置，并以此引导模型预测控制中的探索。在仿真中，当预训练条件严重偏离数据分布时，TERRA 在五次试验内达到约 90% 的坡面攀爬成功率，并在回报、完成时间和首次成功前能耗方面优于探索基线。在 ERNEST 行星车上，TERRA 在火星模拟土的可变形坡面上，经过三至五次真实世界试验恢复了协调的主动悬架运动。项目网站：https://terra-explore.github.io。",
+    "abstract_credit": "Jacob Levy, Arthur Bouton, Tristan D. Hassler, Hari Nayar, David Fridovich-Keil；arXiv:2610.38657v1 摘要元数据，CC0 1.0；中文译文由 RoboticsNews AI 辅助翻译。"
   },
   {
     "issue_date": "2026-11-02",
     "geography": [],
-    "supporting_urls": [],
-    "first_author_affiliations": [],
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license"
+    ],
+    "first_author_affiliations": [
+      "University of Cambridge，英国",
+      "Technical University of Munich，德国"
+    ],
     "paper_source_type": "primary",
     "deployment_stage": "not_applicable",
     "editorial_status": "published",
@@ -275,13 +321,23 @@
       "Marc Pollefeys",
       "Xi Wang"
     ],
-    "placement": "research"
+    "placement": "research",
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2610.39167v1",
+    "abstract_original": "Egocentric video has emerged as one of the most scalable sources of data for learning generalizable manipulation priors. Yet, despite its growing use in pretraining robotic policies, it has been underutilized as a validation tool for physical intelligence, a key component of which is understanding where to make contact with an object to achieve an intended interaction. We present EgoContact, a large-scale egocentric dataset for evaluating the generalizability and precision of learned manipulation priors through future contact-point prediction. EgoContact contains 22.5K manually verified interaction events, each with a pre-contact observation, semantic intent, and pixel-precise contact locations. We find that current methods often struggle to predict precise interaction contacts and sometimes fail to localize the target object in diverse, in-the-wild scenes, even when allowed multiple predictions. Furthermore, we demonstrate the usefulness of EgoContact's annotated interactions for robotic manipulation: simply using EgoContact as the memory bank of an existing affordance-transfer policy improves grasp success from 14.2% to 31.2% in simulation and from 16% to 58% on a real robot.",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2610.39167v1",
+    "abstract_zh_translation": "第一视角视频已成为学习可泛化操作先验的最具扩展性的数据来源之一。然而，尽管它越来越多地用于机器人策略预训练，却很少被用作实体智能的验证工具；实体智能的关键组成部分之一，是理解应在物体的何处建立接触，以实现预期交互。我们提出 EgoContact：一个大规模第一视角数据集，通过预测未来接触点来评估学得的操作先验的泛化性和精度。EgoContact 包含 2.25 万次人工核验的交互事件，每次都配有接触前观测、语义意图和像素级精确的接触位置。我们发现，在多样的真实场景中，现有方法往往难以预测精确的交互接触点，有时甚至无法定位目标物体，即使允许多次预测也是如此。此外，我们展示了 EgoContact 标注交互对机器人操作的用途：仅将 EgoContact 用作现有可供性迁移策略的记忆库，就使抓取成功率在仿真中从 14.2% 提升至 31.2%，在实体机器人上从 16% 提升至 58%。",
+    "abstract_credit": "Adam Deryło, Alexey Gavryushin, Daniel Cremers, Marc Pollefeys, Xi Wang；arXiv:2610.39167v1 摘要元数据，CC0 1.0；中文译文由 RoboticsNews AI 辅助翻译。"
   },
   {
     "issue_date": "2026-11-02",
     "geography": [],
-    "supporting_urls": [],
-    "first_author_affiliations": [],
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license"
+    ],
+    "first_author_affiliations": [
+      "The Hong Kong Polytechnic University，中国香港"
+    ],
     "paper_source_type": "primary",
     "deployment_stage": "not_applicable",
     "editorial_status": "published",
@@ -322,13 +378,23 @@
       "Chenhang He",
       "Lei Zhang"
     ],
-    "placement": "research"
+    "placement": "research",
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2610.35850v1",
+    "abstract_original": "Direct-policy World Action Models (WAM) have demonstrated the benefits of decoupling action generation from explicit future visual prediction for efficient inference in autonomous driving and embodied control. However, they still require tens of denoising steps to achieve competitive action quality, incurring substantial latency and hindering real-time deployment. Simply reducing the number of denoising steps will collapse the nonlinear multi-step denoising trajectory into coarse updates, substantially degrading action quality. To reduce the denoising steps while enabling real-time action generation, we present an effective world action model with one-step action generation, namely OSWAM, for autonomous driving and embodied control. We argue that it is the absence of structured action priors in random noise initialization that forces direct-policy WAMs to recover coherent action sequences through iterative denoising. Hence, we construct imagination tokens to initialize the diffusion process, providing physical priors and action-conditioned representations. We further introduce privileged information distillation with future conditioning to enhance future-aware action generation. As a result, OSWAM can efficiently and effectively generate high quality actions in just one diffusion step. Our experiments demonstrate that OSWAM achieves comparable or even better results in both autonomous driving and embodied control than direct-policy WAM and Joint-WAM that require tens of steps. It obtains approximately $3\\times$ speedup over direct-policy WAM baselines and supports real-time compiled inference with latency as low as 40ms on an NVIDIA RTX 5090 GPU. The project page is available at https://gwenzhang.github.io/OSWAM/",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2610.35850v1",
+    "abstract_zh_translation": "直接策略式世界动作模型（WAM）已表明，将动作生成与明确的未来视觉预测解耦，有助于自动驾驶和具身控制中的高效推理。然而，为了取得有竞争力的动作质量，此类模型仍需数十步去噪，带来显著延迟，阻碍实时部署。简单减少去噪步数，会把非线性的多步去噪轨迹压缩成粗略更新，从而显著降低动作质量。为在减少去噪步数的同时实现实时动作生成，我们提出 OSWAM，一种用于自动驾驶和具身控制的一步动作生成世界动作模型。我们认为，随机噪声初始化缺少结构化动作先验，迫使直接策略式 WAM 通过迭代去噪恢复连贯的动作序列。因此，我们构建想象 token 来初始化扩散过程，提供物理先验和以动作为条件的表征。我们还引入带未来条件的特权信息蒸馏，以增强面向未来的动作生成能力。由此，OSWAM 仅用一步扩散便可高效生成高质量动作。实验表明，在自动驾驶和具身控制中，OSWAM 达到与需要数十步的直接策略式 WAM 和联合 WAM 相当或更好的结果。相比直接策略式 WAM 基线，其速度约提高 3 倍；在 NVIDIA RTX 5090 GPU 上，编译后的实时推理延迟最低为 40 毫秒。项目页：https://gwenzhang.github.io/OSWAM/。",
+    "abstract_credit": "Guowen Zhang, Liyi Chen, Xu Hu, Pengfei Wang, Jingfan Chen, Chenhang He, Lei Zhang；arXiv:2610.35850v1 摘要元数据，CC0 1.0；中文译文由 RoboticsNews AI 辅助翻译。"
   },
   {
     "issue_date": "2026-11-02",
     "geography": [],
-    "supporting_urls": [],
-    "first_author_affiliations": [],
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license"
+    ],
+    "first_author_affiliations": [
+      "Cornell University，美国"
+    ],
     "paper_source_type": "primary",
     "deployment_stage": "not_applicable",
     "editorial_status": "published",
@@ -364,13 +430,23 @@
       "Immanuel Ampomah Mensah",
       "Hadas Kress-Gazit"
     ],
-    "placement": "paper_briefs"
+    "placement": "paper_briefs",
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2610.35730v1",
+    "abstract_original": "Simulation benchmarks are a useful way to measure progress in robotics; typically they provide success rate as the dominant measure of performance. However, success rate reports only whether a rollout completed the task, hiding by what margin it succeeded, how sensitive the success is to goal parameter changes, requirements it may have violated, and whether success persisted. Signal Temporal Logic (STL) provides a formal language for capturing specifications; it can be used to define requirements, and measure how close a robot behavior is to satisfying or violating them. Using STL monitors in a simulator, however, requires exposing simulator state and mapping it to specification-relevant signals. We present Specola, a tool for evaluating robot behaviors in simulation with respect to STL specifications. Specola provides an interface for writing specifications over simulator signals, and creates and manages the relevant monitors while a policy executes. We provide a Python API and command-line interface for integrating monitoring into existing policy execution loops. We provide an adapter interface for connecting new simulators, and provide adapters for nine simulation environments and benchmarks, including LIBERO, RoboCasa, Isaac Lab, and RoboDojo. We provide case studies that illustrate the nuanced evaluation that Specola enables. Code and adapters are available at https://github.com/specola-eval/specola.",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2610.35730v1",
+    "abstract_zh_translation": "仿真基准是衡量机器人技术进展的有用方式，通常以成功率作为主要性能指标。然而，成功率只反映一次执行是否完成任务，掩盖了成功的余量、对目标参数变化的敏感程度、可能违反的要求，以及成功是否持续。信号时序逻辑（STL）提供了表达规格的形式语言，可用于定义要求，并衡量机器人行为距离满足或违反要求有多近。不过，要在仿真器中使用 STL 监测器，需要暴露仿真器状态，并将其映射到与规格相关的信号。我们提出 Specola，一种依据 STL 规格评估仿真机器人行为的工具。Specola 提供编写仿真器信号规格的接口，并在策略执行期间创建和管理相关监测器。我们提供 Python API 和命令行接口，用于将监测集成到现有策略执行循环中；还提供连接新仿真器的适配器接口，以及九个仿真环境和基准的适配器，包括 LIBERO、RoboCasa、Isaac Lab 和 RoboDojo。我们给出案例研究，说明 Specola 能实现更细致的评估。代码和适配器见：https://github.com/specola-eval/specola。",
+    "abstract_credit": "Immanuel Ampomah Mensah, Hadas Kress-Gazit；arXiv:2610.35730v1 摘要元数据，CC0 1.0；中文译文由 RoboticsNews AI 辅助翻译。"
   },
   {
     "issue_date": "2026-11-02",
     "geography": [],
-    "supporting_urls": [],
-    "first_author_affiliations": [],
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license"
+    ],
+    "first_author_affiliations": [
+      "University of Alabama，美国"
+    ],
     "paper_source_type": "primary",
     "deployment_stage": "not_applicable",
     "editorial_status": "published",
@@ -410,7 +486,13 @@
       "Holly Yanco",
       "Haley Griffin"
     ],
-    "placement": "paper_briefs"
+    "placement": "paper_briefs",
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2610.40385v1",
+    "abstract_original": "This paper sets out what a sustained federal research and investment agenda would need to include to close that gap--not within a single budget cycle, but over the decade such an undertaking will realistically require. It identifies where the gap is most pronounced today: in the methods needed to verify and certify components of uncertain origin, in the foundational hardware research that has long been underfunded relative to software, in the physical infrastructure researchers need to test systems at scale, and in the workforce required to build and sustain all of it. Robotics should not be treated merely as a downstream beneficiary of a broader artificial intelligence investment strategy. It constitutes its own supply chain, with its own points of failure, and merits its own sustained federal commitment.",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2610.40385v1",
+    "abstract_zh_translation": "本文阐述了一项持续的联邦研究与投资议程需要包含哪些内容，才能弥补这一差距；这不是单一预算周期内就能完成的事，而是现实中需要十年左右的长期努力。文中指出，当前差距最明显的方面包括：验证和认证来源不明组件所需的方法、相对于软件长期投入不足的基础硬件研究、研究人员用于大规模测试系统的实体基础设施，以及构建并维持这些能力所需的人才队伍。机器人技术不应仅被视为更广泛人工智能投资战略的下游受益者。它有自己的供应链和失效点，值得获得持续的联邦支持。",
+    "abstract_credit": "Cindy L. Bethel, Henrik I. Christensen, Odest Chadwicke Jenkins, George Pappas, Holly Yanco, Haley Griffin；arXiv:2610.40385v1 摘要元数据，CC0 1.0；中文译文由 RoboticsNews AI 辅助翻译。"
   },
   {
     "issue_date": "2026-11-02",

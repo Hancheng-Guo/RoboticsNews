@@ -92,12 +92,28 @@
 ### 5.1 论文与研究成果
 
 1. 核对题名、**可确认的公开日期**、至少一位作者及其可见署名顺序；作者姓名按来源原样记录，全名和缩写均可，不能从缩写自行补全。`paper_authors` 首项须与 `first_author_name` 一致。日期优先取论文或出版页面；若缺失，继续查会议、机构、作者或其他可追溯来源，并把日期依据链接存入 `supporting_urls`。日期仍无法确认则**不收录**；完全找不到作者也**不收录**。仅转载可得时不要推断版本、DOI 或同行评审状态。
-2. **第一作者单位尽量核实。** 优先使用论文署名页、出版方作者信息页或研究团队官方项目页。核实后按署名顺序每项写“单位名，国家或地区”，省略详细地址；将能证明单位的链接存入 `first_author_affiliation_source_url`。无法确认时 `first_author_affiliations` 留空，网页和 PDF 显示“不明确”，不影响收录，也不猜测单位。
-3. **摘要按许可选择呈现。** 可确认公开转载许可时，从所引版本逐字核对摘要原文，保存 `abstract_original`、`abstract_language`、`abstract_source_url`；非中文原文另写忠实的 `abstract_zh_translation`，按许可署名。摘要受保护或许可不明时，不复制原文，也不把转述称为翻译；将可访问材料支持的内容写入 `summary_zh` 和 `summary_en`，页面明确标记“论文内容转述”，论文仍可收录。
+2. **第一作者单位逐篇查证。** arXiv 摘要页常不列单位；对可访问的预印本，先看同一版本 HTML 全文和 PDF 首页，核对第一作者的上标、脚注及其对应单位，再查论文项目页或出版方作者页。HTML 解析可能合并署名与单位，遇到歧义须回看 PDF 版面。核实后按署名顺序每项写“单位名，国家或地区”，省略详细地址；将直接证明作者与单位对应关系的链接存入 `first_author_affiliation_source_url`。若已尝试的材料均无法访问或仍无法确认，记录原因，`first_author_affiliations` 留空，网页和 PDF 显示“不明确”；不猜测单位，也不因此排除论文。
+3. **优先展示论文原文摘要与中文翻译。** arXiv 的[投稿协议](https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license)明确把投稿摘要列为元数据，并对元数据适用 CC0；即使论文全文采用 arXiv 非独占许可，也可从该论文的 arXiv 摘要页逐字记录摘要。将摘要页作为 `abstract_source_url`，核对所用版本，填写 `abstract_original`、`abstract_language`、忠实的 `abstract_zh_translation` 和出处说明。PDF/HTML 中的摘要可能与摘要页不同，不能未经核对就替换。论文全文及图片仍按该版本的论文许可处理；arXiv 的[许可说明](https://info.arxiv.org/help/license/index.html)区分元数据与全文。其他平台的摘要按其明确的许可或授权判断；确实无法确认原文转载依据时才使用有来源依据的中英转述，页面标记“论文内容转述”。
 4. 优先寻找论文版本页、出版页、预印本或会议官方链接；检索后仍找不到时，`primary_url` 可填有明确论文身份、作者和日期依据的转载页面，并设 `paper_source_type: reprint`。网页和 PDF 须标“转载来源；未找到论文一手链接”。转载报道不能独自证明正式录用、同行评审或性能数字；不确定时用 `unverified`、`not_applicable` 等准确状态，不用搜索结果页充当来源。
-5. 不要求访问论文全文，也不写“基于全文”的贡献总结。正文仅使用实际可访问材料支持的事实；未说明的实验规模、基线、性能和落地情况不推断。跨论文数字若数据集或测试协议不同，不直接比较。
+5. 核对单位和摘要时应尝试可公开访问的论文 HTML/PDF；不要求访问受限全文，也不写“基于全文”的贡献总结。正文仅使用实际可访问材料支持的事实；未说明的实验规模、基线、性能和落地情况不推断。跨论文数字若数据集或测试协议不同，不直接比较。
 6. 核实代码、模型权重、数据、评测脚本是否已可访问及其许可；“附有 GitHub 链接”不等于“可复现”。查询旧版本、会议版与期刊版避免重复报道；对 DOI 检查出版方更正/撤稿记录，必要时参考 [Crossmark](https://www.crossref.org/services/crossmark/)。
 7. 高校新闻稿或实验室博客中出现“突破”“首次”等措辞时，追到可访问的论文或其他证据；若只有新闻稿，标注为机构宣称，不能据此认定已同行评审。
+
+#### 摘要原文与中文翻译的转载判定
+
+**先找可用依据，再决定是否转述。** 对同一论文可能存在 arXiv、OpenReview、会议论文集、出版方和作者项目页多个版本，逐一记录摘要文本来自哪个版本、该版本的许可或平台元数据规则。不能因为某个平台的全文许可受限，就否定另一平台已明确开放的摘要。优先使用能够公开展示原文并允许发布中文翻译的版本；改用另一版本时须重新核对摘要措辞，不能混合不同版本。
+
+| 来源 | 摘要原文与翻译的判定 | 依据 |
+| --- | --- | --- |
+| arXiv 摘要页 | 投稿摘要属于 CC0 元数据，优先从摘要页逐字记录并翻译；全文的 CC 或 arXiv 非独占许可另行判断。 | [arXiv 投稿协议：元数据含摘要](https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license) |
+| OpenReview 公开论文页 | 其条款把论文摘要列为元数据，元数据适用 CC0；只用公开可读的该论文摘要。论文正文和评审意见不是同一许可规则。 | [OpenReview Terms：Metadata 与 Metadata Dedication](https://openreview.net/legal/terms) |
+| PMLR 论文集 | 出版协议为论文授予 CC BY 4.0；可转载摘要及翻译，保留作者、论文集原始引用、PMLR 论文链接、许可链接，并说明翻译。 | [PMLR Publication Agreement](https://proceedings.mlr.press/pmlr-license-agreement.html) |
+| ACL Anthology | 2016 年及之后的 ACL 材料按 CC BY 4.0；可转载并翻译，按许可署名。早期材料和第三方材料须核对相应条款。 | [ACL Anthology copyright FAQ](https://aclanthology.org/faq/copyright/) |
+| bioRxiv / medRxiv | 作者可选择不同许可，包括限制性许可或无进一步复用；查**该篇、该版本**页面摘要下方或版权信息。CC0、CC BY 等满足条件的版本可用，不能按平台统一推定。 | [bioRxiv About](https://www.biorxiv.org/about-biorxiv)、[medRxiv FAQ](https://www.medrxiv.org/about/FAQ) |
+| IEEE Xplore、ACM Digital Library、Springer Nature、Elsevier 等出版页 | 以**该篇文章**的开放许可、版权和复用说明为准；CC BY 论文可按许可使用。仅能免费阅读或整个平台推行开放获取，不自动证明这篇摘要可原文转载并公开翻译。IEEE 非开放授权文章的第三方复用通常需要许可。 | [IEEE Author Center](https://journals.ieeeauthorcenter.ieee.org/choose-a-publishing-agreement/avoid-infringement-upon-ieee-copyright/)、[ACM Open](https://libraries.acm.org/subscriptions-access/acmopen)、[Springer Nature](https://support.springernature.com/en/support/solutions/articles/6000214239-use-of-an-open-access-article)、[Elsevier](https://www.elsevier.com/about/policies-and-standards/copyright/permissions) |
+| 其他机构库、作者项目页、转载站 | 查该页面或所链原始版本的明确许可/授权；作者放出 PDF、媒体转贴摘要、搜索引擎显示摘要，都不足以单独证明第三方可原文转载。 | 原始页面的许可或权利人授权 |
+
+采用 [CC 许可](https://creativecommons.org/chooser/)时逐项核对：CC0 可用；CC BY 需署名、原链接和许可链接，翻译须注明；CC BY-SA 的译文还要遵守相同方式共享条件；带 NC 的许可须确认本项目的具体用途符合非商业条件；带 ND 的许可通常不允许公开发布翻译。对带 ND 或许可不清的版本，先寻找同一论文在 arXiv/OpenReview 等可用的摘要元数据或其他开放版本；仍没有依据时使用独立撰写的中英转述。不要把“平台可阅读”“论文开放获取”或“摘要出现在搜索结果”当作通用转载授权。`abstract_credit` 记录作者、版本、来源、所据许可及译者；`abstract_source_url` 指向真正复制摘要的页面，必要时在 `supporting_urls` 记录许可说明。
 
 ### 5.2 企业产品、演示与部署
 
