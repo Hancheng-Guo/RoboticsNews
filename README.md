@@ -1,44 +1,34 @@
 # RoboticsNews
 
-机器人学研究进展周报的采编规则见 [EDITORIAL_GUIDE.md](docs/EDITORIAL_GUIDE.md)，网页/PDF 规则与结构模板见 [PRESENTATION_SPEC.md](docs/PRESENTATION_SPEC.md) 和 [ISSUE_TEMPLATE.md](docs/ISSUE_TEMPLATE.md)。新会话接手与每期发布的操作流程见 [WEEKLY_OPERATIONS.md](docs/WEEKLY_OPERATIONS.md)。每周一北京时间 08:00 发布，汇总上一个完整自然周（周一至周日）的进展。
+RoboticsNews 面向机器人学研究人员与工程师，每周汇总上一完整自然周的论文、技术和产业进展，提供网页周报与 PDF 存档。**本项目完全由 AI 实现，周报内容由 AI 生成**；阅读具体信息时请以条目附带的来源为准。
 
-## 数据存储与查找
+## 在线阅读
 
-条目和信源保存在 `data/robotics_news.sqlite`，使用 Node.js 24 的内置 SQLite，无需安装依赖。表结构和备份说明见 [data/README.md](data/README.md)。数据库文件不纳入 Git；脚本和字段定义纳入 Git。
+- [最新周报](https://hancheng-guo.github.io/RoboticsNews/)
+- [历史 PDF](https://hancheng-guo.github.io/RoboticsNews/archive.html)
+
+## 使用方法
+
+直接访问网站阅读最新一期，点击“历史 PDF”查找往期文件。周报按北京时间的周一至周日统计，于下一周周一发布。
+
+### 用 AI 更新一期周报
+
+在本项目目录中开启新的 AI 会话，发送下面这段话即可，无需每周手动填写日期：
+
+> 请按 `AGENTS.md` 及其引用文档，制作最新一期已结束统计周的机器人学周报。完成采集、核验、入库和网页/PDF 生成后，我授权你 commit、push 到 `main`，并检查 GitHub Pages 与 PDF 链接是否已更新。无法核实的内容请暂缓收录并说明。
+
+如果想先检查成果，把提示词中的“我授权你 commit、push 到 `main`，并检查 GitHub Pages 与 PDF 链接是否已更新”改为“请把改动交给我审阅，暂时不要 commit 或 push”。AI 会依照 [周报维护手册](docs/WEEKLY_OPERATIONS.md)、[采编规范](docs/EDITORIAL_GUIDE.md)、[呈现规范](docs/PRESENTATION_SPEC.md) 和 [周报模板](docs/ISSUE_TEMPLATE.md) 工作。
+
+### 手动生成
+
+运行环境需要 Node.js 24、Python 3 和 `reportlab`。本地 SQLite 数据库不随 Git 同步；新环境须先恢复或导入目标刊期条目，不能仅凭仓库文件生成完整周报。确认目标刊期的已发布条目入库后运行：
 
 ```powershell
 node scripts/db.mjs init
-node scripts/db.mjs add path/to/entry.json
-node scripts/db.mjs replace path/to/updated-entry.json
-node scripts/db.mjs search --date 2026-11-02
-node scripts/db.mjs search --q 触觉 --topic manipulation --status published
-node scripts/db.mjs search --entity "Example Lab" --category paper --limit 20
-node scripts/db.mjs get example-2026-11-02-001
 node scripts/db.mjs stats
+node scripts/db.mjs search --date YYYY-MM-DD --status published --limit 100
+$env:ROBOTICS_NEWS_PYTHON = 'C:\path\to\python.exe' # Python 已在 PATH 时可省略
+node scripts/build-site.mjs --date YYYY-MM-DD
 ```
 
-单条记录格式见 [data/entry.example.json](data/entry.example.json)。`add` 支持一个 JSON 对象或对象数组，重复 ID 会报错；修改已有记录时使用 `replace`，并保留原创建时间。`search` 的关键词匹配支持中英文子串；日期、类别、状态、主题、机构可以组合筛选。`sources` 列出已登记的信源；用 `add-source source.json` 添加信源，字段参见 `data/schema.sql` 的 `sources` 表。设置环境变量 `ROBOTICS_NEWS_DB` 可指定另一数据库路径。
-
-## 生成周报网页与 PDF
-
-先运行 `node scripts/db.mjs init` 迁移旧数据库。将条目的 `editorial_status` 设为 `published`，并填写周一的 `issue_date`、中英概述和所属栏目 `placement`；重点条目另设 `featured: true`，并用 `importance_rank` 排定同分条目的先后。论文至少须核实日期和一位作者；作者姓名可按来源使用全名或缩写。能核实的第一作者单位按“单位名，国家或地区”填写，否则页面标为“不明确”。仅在论文明确标记通讯作者时，逐位记录姓名、署名单位及依据 URL；未标记时页面显示“论文未注明通讯作者”。优先从有明确转载依据的摘要版本展示原文及中文翻译；arXiv/OpenReview 公开摘要元数据、PMLR 等已有可用许可路径，详见[采编规范](docs/EDITORIAL_GUIDE.md#摘要原文与中文翻译的转载判定)。检索开放版本后仍无依据时改用明确标记的中英转述。找不到论文一手链接时可用转载链接，并设置 `paper_source_type: "reprint"`。不要求阅读论文全文或撰写全文贡献总结。完成后运行：
-
-```powershell
-$env:ROBOTICS_NEWS_PYTHON = 'C:\path\to\python.exe' # 需安装 reportlab；若 python 已在 PATH 可省略
-node scripts/build-site.mjs --date 2026-11-02
-```
-
-转载开放许可摘要时，可在 `abstract_credit` 写明作者、出处、许可及翻译说明，并把许可 URL 存入 `supporting_urls` 供核验。网页和 PDF 每条只展示一条 `primary_url` 来源链接，不额外展示摘要、单位、许可、代码或数据链接；使用摘要仍须满足其许可条件。
-
-在完整统计周结束、正式内容尚未核验完成时，可以先发布下一期预告页：
-
-```powershell
-node scripts/build-site.mjs --preview --date 2026-11-02
-```
-
-预告生成 `site/index.html` 和 `site/archive.html`，会移除旧的 `site/current.json`，不生成空白 PDF；预告页仍可进入历史 PDF 列表。正式出版时重新运行不带 `--preview` 的命令。
-
-不传 `--date` 时，默认以最近一个北京时间周一为刊期。刊期日期必须是周一；例如 2026-11-02 刊覆盖 2026-10-26 至 2026-11-01。周报应在覆盖周结束后、周一 08:00 发布。脚本从本地 SQLite 读取该刊期**已发布**条目，覆盖 `site/index.html` 与 `site/current.json`，并在仓库根目录的 `diarys/YYYY-MM-DD.pdf` 新增该期 PDF。首页只显示本期内容；`site/archive.html` 每次生成时扫描 `diarys/`，按日期逐行列出每期当前 PDF，首页“历史 PDF”按钮可跳转。不同刊期的 PDF 按日期保留，网页通过 GitHub 原始文件链接访问 PDF。刊期元数据可写在 `data/issues/YYYY-MM-DD.json`，已核实条目可保存为 `data/issues/YYYY-MM-DD.entries.json` 并导入数据库。没有条目且没有刊期元数据时，首页显示暂无内容；有刊期元数据时仍生成 PDF。PDF 使用 Python 3 与 `reportlab`；网页生成使用 Node.js 24 的内置 SQLite。若仓库地址改变，设置 `ROBOTICS_NEWS_PDF_URL_BASE` 为 `diarys` 的公开 URL 基址；PDF 输出目录可由 `ROBOTICS_NEWS_PDF_DIR` 覆盖。
-
-在 GitHub 仓库 **Settings → Pages → Build and deployment** 中将 Source 设为 **GitHub Actions**。提交并推送 `site/` 后，[Pages 工作流](.github/workflows/pages.yml)会发布网站；预期项目站点地址为 `https://hancheng-guo.github.io/RoboticsNews/`，以工作流返回的实际 URL 为准。本地数据库不会上传；但公开仓库中已提交的 `site/`、`diarys/`、`data/issues/` 等文件仍可被公众访问，提交前须检查内部记录和许可。若用户在任务中明确授权直接发布，完成核验后可提交、推送并验证站点；否则先交给用户审阅，获得明确同意后再提交、推送。网页顶部和 PDF 首页均标明“AI生成”。
-
+将 `YYYY-MM-DD` 替换为刊期所在的周一日期。构建命令会生成 `site/index.html`、`site/archive.html`、`site/current.json` 和 `diarys/YYYY-MM-DD.pdf`；提交并推送网站文件后，[GitHub Actions](.github/workflows/pages.yml)负责部署网页，不会自动采集或撰写周报。数据库命令、字段及发布检查的完整说明见[维护手册](docs/WEEKLY_OPERATIONS.md)和[数据说明](data/README.md)。
