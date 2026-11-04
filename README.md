@@ -36,9 +36,9 @@ node scripts/build-site.mjs --date 2026-11-02
 node scripts/build-site.mjs --preview --date 2026-11-02
 ```
 
-预告只生成 `site/index.html`，会移除旧的 `site/current.json`，不生成空白 PDF。正式出版时重新运行不带 `--preview` 的命令。
+预告生成 `site/index.html` 和 `site/archive.html`，会移除旧的 `site/current.json`，不生成空白 PDF；预告页仍可进入历史 PDF 列表。正式出版时重新运行不带 `--preview` 的命令。
 
-不传 `--date` 时，默认以最近一个北京时间周一为刊期。刊期日期必须是周一；例如 2026-11-02 刊覆盖 2026-10-26 至 2026-11-01。周报应在覆盖周结束后、周一 08:00 发布。脚本从本地 SQLite 读取该刊期**已发布**条目，覆盖 `site/index.html` 与 `site/current.json`，并在仓库根目录的 `diarys/YYYY-MM-DD.pdf` 新增该期 PDF。网页只显示本期内容；旧 PDF 按日期保留，网页通过 GitHub 原始文件链接访问 PDF。刊期元数据可写在 `data/issues/YYYY-MM-DD.json`，已核实条目可保存为 `data/issues/YYYY-MM-DD.entries.json` 并导入数据库。没有条目且没有刊期元数据时，首页显示暂无内容；有刊期元数据时仍生成 PDF。PDF 使用 Python 3 与 `reportlab`；网页生成使用 Node.js 24 的内置 SQLite。若仓库地址改变，设置 `ROBOTICS_NEWS_PDF_URL_BASE` 为 `diarys` 的公开 URL 基址；PDF 输出目录可由 `ROBOTICS_NEWS_PDF_DIR` 覆盖。
+不传 `--date` 时，默认以最近一个北京时间周一为刊期。刊期日期必须是周一；例如 2026-11-02 刊覆盖 2026-10-26 至 2026-11-01。周报应在覆盖周结束后、周一 08:00 发布。脚本从本地 SQLite 读取该刊期**已发布**条目，覆盖 `site/index.html` 与 `site/current.json`，并在仓库根目录的 `diarys/YYYY-MM-DD.pdf` 新增该期 PDF。首页只显示本期内容；`site/archive.html` 每次生成时扫描 `diarys/`，按日期逐行列出每期当前 PDF，首页“历史 PDF”按钮可跳转。不同刊期的 PDF 按日期保留，网页通过 GitHub 原始文件链接访问 PDF。刊期元数据可写在 `data/issues/YYYY-MM-DD.json`，已核实条目可保存为 `data/issues/YYYY-MM-DD.entries.json` 并导入数据库。没有条目且没有刊期元数据时，首页显示暂无内容；有刊期元数据时仍生成 PDF。PDF 使用 Python 3 与 `reportlab`；网页生成使用 Node.js 24 的内置 SQLite。若仓库地址改变，设置 `ROBOTICS_NEWS_PDF_URL_BASE` 为 `diarys` 的公开 URL 基址；PDF 输出目录可由 `ROBOTICS_NEWS_PDF_DIR` 覆盖。
 
 在 GitHub 仓库 **Settings → Pages → Build and deployment** 中将 Source 设为 **GitHub Actions**。提交并推送 `site/` 后，[Pages 工作流](.github/workflows/pages.yml)会发布网站；预期项目站点地址为 `https://hancheng-guo.github.io/RoboticsNews/`，以工作流返回的实际 URL 为准。本地数据库不会上传；但公开仓库中已提交的 `site/`、`diarys/`、`data/issues/` 等文件仍可被公众访问，提交前须检查内部记录和许可。若用户在任务中明确授权直接发布，完成核验后可提交、推送并验证站点；否则先交给用户审阅，获得明确同意后再提交、推送。网页顶部和 PDF 首页均标明“AI生成”。
 

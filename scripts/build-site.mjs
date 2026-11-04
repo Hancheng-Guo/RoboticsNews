@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { DatabaseSync } from 'node:sqlite';
 import { execFileSync } from 'node:child_process';
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -36,8 +36,25 @@ function argDate() {
   return value;
 }
 
-function layout(title, body) {
-  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="机器人学研究进展周报：论文、技术和产业动态"><title>${html(title)} · RoboticsNews</title><link rel="stylesheet" href="style.css"></head><body><header class="site-header"><div class="shell header-inner"><a class="brand" href="index.html">Robotics<span>News</span></a><span class="header-note">机器人学研究进展周报</span></div></header><div class="ai-disclosure" role="note"><div class="shell"><strong>AI生成</strong><span>内容由 AI 辅助整理与总结；请以每条所列来源为准。</span></div></div>${body}<footer class="site-footer"><div class="shell">RoboticsNews · 每周一追踪可核实的机器人学进展</div></footer></body></html>`;
+function layout(title, body, archive = false) {
+  const navigation = archive
+    ? '<a class="header-action" href="index.html">返回最新周报</a>'
+    : '<a class="header-action" href="archive.html">历史 PDF</a>';
+  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="机器人学研究进展周报：论文、技术和产业动态"><title>${html(title)} · RoboticsNews</title><link rel="stylesheet" href="style.css"></head><body><header class="site-header"><div class="shell header-inner"><a class="brand" href="index.html">Robotics<span>News</span></a><span class="header-note">机器人学研究进展周报</span><nav aria-label="主导航">${navigation}</nav></div></header><div class="ai-disclosure" role="note"><div class="shell"><strong>AI生成</strong><span>内容由 AI 辅助整理与总结；请以每条所列来源为准。</span></div></div>${body}<footer class="site-footer"><div class="shell">RoboticsNews · 每周一追踪可核实的机器人学进展</div></footer></body></html>`;
+}
+
+function archivePage() {
+  const archiveRoot = join(root, 'diarys');
+  const issues = existsSync(archiveRoot)
+    ? readdirSync(archiveRoot).filter(name => /^\d{4}-\d{2}-\d{2}\.pdf$/i.test(name)).sort((a, b) => b.localeCompare(a))
+    : [];
+  const rows = issues.map(name => {
+    const date = name.slice(0, 10);
+    const href = `${pdfPublicBase.replace(/\/$/, '')}/${encodeURIComponent(name)}`;
+    return `<li class="archive-row"><span>${html(date)} 周报</span><a href="${url(href)}" target="_blank" rel="noopener noreferrer">PDF 文件 ↗</a></li>`;
+  }).join('');
+  const body = `<main class="shell"><section class="hero archive-hero"><div class="eyebrow">WEEKLY ARCHIVE</div><h1>历史 PDF</h1><p class="hero-sub">按刊期查找机器人学研究进展周报。</p><div class="hero-meta"><span>${issues.length} 期周报</span></div></section>${issues.length ? `<ul class="archive-list">${rows}</ul>` : '<p class="empty archive-empty">暂无已归档的 PDF。</p>'}</main>`;
+  return layout('历史 PDF', body, true);
 }
 
 const labels = {
@@ -68,7 +85,7 @@ function entryCard(item) {
 
 function issuePage(issue) {
   const groups = sections.map(key => [key, issue.entries.filter(e => e.placement === key)]).filter(([, items]) => items.length);
-  const revision = issue.revision_note ? `<p class="issue-note">${html(issue.revision_note)}${issue.previous_pdf_url ? ` <a href="${url(issue.previous_pdf_url)}" target="_blank" rel="noopener noreferrer">查看上一版 PDF ↗</a>` : ''}</p>` : '';
+  const revision = issue.revision_note ? `<p class="issue-note">${html(issue.revision_note)}</p>` : '';
   const body = `<main class="shell"><section class="hero"><div class="eyebrow">WEEKLY BRIEF · ${html(issue.date)}</div><h1>机器人学研究进展周报</h1><p class="hero-sub">Robotics Research & Industry · Weekly Brief</p><div class="hero-meta"><span>北京时间 ${html(issue.date)} 发布</span><span>${issue.entries.length} 条合格新增</span><a class="pdf-link" href="${url(issue.pdf_url)}" target="_blank" rel="noopener noreferrer">查看本期 PDF ↗</a></div></section><p class="issue-note">覆盖北京时间 ${html(issue.coverage_start)} 00:00 至 ${html(issue.coverage_end)} 24:00 首次公开的信息。${issue.entries.length ? '企业或机构单方发布的内容会明确标注；点击每条原始来源查看依据。' : '本期未检出符合采编标准的新增进展。'}</p>${revision}${groups.map(([key, items]) => `<section class="content-section"><div class="section-title"><span class="section-mark"></span><h2>${labels[key]}</h2><span class="section-count">${items.length}</span></div><div class="entries">${items.map(entryCard).join('')}</div></section>`).join('')}</main>`;
   return layout(`${issue.date} 周报`, body);
 }
@@ -97,6 +114,7 @@ function main() {
   if (process.argv.includes('--preview')) {
     rmSync(join(out, 'current.json'), { force: true });
     writeFileSync(join(out, 'index.html'), previewPage(date));
+    writeFileSync(join(out, 'archive.html'), archivePage());
     console.log(`Built weekly preview for ${date}`);
     return;
   }
@@ -127,13 +145,10 @@ function main() {
     const coverageStart = coverageDate.toISOString().slice(0, 10);
     if ((meta.coverage_start && meta.coverage_start !== coverageStart) ||
         (meta.coverage_end && meta.coverage_end !== coverageEnd)) throw new Error('Issue metadata coverage must match the prior Monday–Sunday');
-    const previousPdf = meta.previous_pdf && /^\d{4}-\d{2}-\d{2}\.v\d+\.pdf$/.test(meta.previous_pdf) ? meta.previous_pdf : null;
-    if (meta.previous_pdf && !previousPdf) throw new Error('Invalid previous PDF filename');
     const issue = { date, coverage_start: coverageStart,
       coverage_end: coverageEnd, timezone: 'Asia/Shanghai',
       pdf_url: `${pdfPublicBase.replace(/\/$/, '')}/${date}.pdf`,
       revision_note: meta.revision_note ?? null,
-      previous_pdf_url: previousPdf ? `${pdfPublicBase.replace(/\/$/, '')}/${previousPdf}` : null,
       entries };
     for (const item of entries) {
       if (item.category === 'paper' && (!item.first_author_name || !item.paper_authors.length ||
@@ -166,6 +181,7 @@ function main() {
   } else {
     writeFileSync(join(out, 'index.html'), emptyPage());
   }
+  writeFileSync(join(out, 'archive.html'), archivePage());
   console.log(`Built ${out}; ${date}: ${entries.length} published entries`);
 }
 

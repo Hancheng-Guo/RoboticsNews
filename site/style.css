@@ -10,6 +10,8 @@ a:hover{text-decoration:underline}
 .brand{font-size:21px;font-weight:800;letter-spacing:-.04em;color:var(--ink)}
 .brand span{color:var(--accent)}
 .header-note{font-size:12px;color:var(--muted);letter-spacing:.08em}
+.header-action{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:6px 12px;font-size:13px;font-weight:700;white-space:nowrap}
+.header-action:hover{border-color:var(--accent);background:#e8f4f5;text-decoration:none}
 .ai-disclosure{background:#fff4d8;border-bottom:1px solid #e7c879;color:#47370c}
 .ai-disclosure .shell{display:flex;align-items:center;gap:12px;padding-top:11px;padding-bottom:11px;font-size:13px}
 .ai-disclosure strong{flex:none;background:#8b5200;color:#fff;border-radius:4px;padding:2px 9px;font-size:14px}
@@ -47,5 +49,11 @@ h2{font-size:23px;letter-spacing:-.025em;margin:0}
 .paper-abstract p{white-space:pre-wrap;line-height:1.75}
 .entry-links{display:flex;flex-wrap:wrap;gap:18px;padding-top:12px;font-size:13px;font-weight:700}
 .empty{padding:28px;color:var(--muted);background:white;border:1px dashed var(--line);border-radius:7px}
+.archive-hero{padding-bottom:36px}
+.archive-list{list-style:none;display:grid;gap:12px;padding:32px 0 8px;margin:0}
+.archive-row{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--white);border:1px solid var(--line);border-radius:9px;padding:17px 22px;font-size:15px}
+.archive-row span{font-weight:700}
+.archive-row a{font-weight:700;white-space:nowrap}
+.archive-empty{margin-top:32px}
 .site-footer{border-top:1px solid var(--line);margin-top:64px;padding:28px 0;color:var(--muted);font-size:12px}
-@media(max-width:640px){.shell{width:min(100% - 28px,940px)}.header-note{display:none}.ai-disclosure .shell{align-items:flex-start}.hero{padding:48px 0 32px}.home-hero{padding:64px 0 52px}.hero-sub{font-size:15px}.hero-meta span+span:before{display:none}.entry{padding:20px}.entry h3{font-size:18px}}
+@media(max-width:640px){.shell{width:min(100% - 28px,940px)}.header-note{display:none}.header-action{font-size:12px;padding:5px 9px}.ai-disclosure .shell{align-items:flex-start}.hero{padding:48px 0 32px}.home-hero{padding:64px 0 52px}.hero-sub{font-size:15px}.hero-meta span+span:before{display:none}.entry{padding:20px}.entry h3{font-size:18px}.archive-row{padding:15px 16px;flex-wrap:wrap}}

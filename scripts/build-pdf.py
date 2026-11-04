@@ -366,8 +366,6 @@ def build(source, target):
              Spacer(1, 3 * mm)]
     if issue.get("revision_note"):
         story += [para(issue["revision_note"], "note")]
-        if issue.get("previous_pdf_url"):
-            story += [source_link(issue["previous_pdf_url"], "查看上一版 PDF")]
         story += [Spacer(1, 4 * mm)]
 
     for section, label in LABELS.items():
