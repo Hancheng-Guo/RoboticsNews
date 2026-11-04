@@ -8,8 +8,9 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dbPath = resolve(process.env.ROBOTICS_NEWS_DB ?? join(root, 'data', 'robotics_news.sqlite'));
 const out = resolve(process.env.ROBOTICS_NEWS_SITE_DIR ?? join(root, 'site'));
-const pdfDir = resolve(process.env.ROBOTICS_NEWS_PDF_DIR ?? join(root, 'diarys'));
-const pdfPublicBase = process.env.ROBOTICS_NEWS_PDF_URL_BASE ?? 'https://raw.githubusercontent.com/Hancheng-Guo/RoboticsNews/main/diarys';
+const digestDir = resolve(process.env.ROBOTICS_NEWS_DIGEST_DIR ?? join(root, 'digests'));
+const digestPublicBase = process.env.ROBOTICS_NEWS_DIGEST_URL_BASE ?? 'https://hancheng-guo.github.io/RoboticsNews/digests';
+const projectUrl = 'https://github.com/Hancheng-Guo/RoboticsNews';
 const python = process.env.ROBOTICS_NEWS_PYTHON ?? (process.platform === 'win32' ? 'python' : 'python3');
 const todayBj = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 function latestMonday() {
@@ -36,25 +37,32 @@ function argDate() {
   return value;
 }
 
-function layout(title, body, archive = false) {
+function layout(title, body, archive = false, relativeRoot = '') {
   const navigation = archive
-    ? '<a class="header-action" href="index.html">返回最新周报</a>'
-    : '<a class="header-action" href="archive.html">历史 PDF</a>';
-  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="机器人学研究进展周报：论文、技术和产业动态"><title>${html(title)} · RoboticsNews</title><link rel="stylesheet" href="style.css"></head><body><header class="site-header"><div class="shell header-inner"><a class="brand" href="index.html">Robotics<span>News</span></a><span class="header-note">机器人学研究进展周报</span><nav aria-label="主导航">${navigation}</nav></div></header><div class="ai-disclosure" role="note"><div class="shell"><strong>AI生成</strong><span>内容由 AI 辅助整理与总结；请以每条所列来源为准。</span></div></div>${body}<footer class="site-footer"><div class="shell">RoboticsNews · 每周一追踪可核实的机器人学进展</div></footer></body></html>`;
+    ? `<a class="header-action" href="${relativeRoot}index.html">返回最新周报</a>`
+    : `<a class="header-action" href="${relativeRoot}archive.html">历史周报</a>`;
+  return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="机器人学研究进展周报：论文、技术和产业动态"><title>${html(title)} · RoboticsNews</title><link rel="stylesheet" href="${relativeRoot}style.css"></head><body><header class="site-header"><div class="shell header-inner"><a class="brand" href="${relativeRoot}index.html">Robotics<span>News</span></a><span class="header-note">机器人学研究进展周报</span><nav aria-label="主导航">${navigation}</nav></div></header><div class="ai-disclosure" role="note"><div class="shell"><strong>AI生成</strong><span>内容由 AI 辅助整理与总结；请以每条所列来源为准。</span></div></div>${body}<footer class="site-footer"><div class="shell">RoboticsNews · 每周一追踪可核实的机器人学进展<br>项目主页：<a href="${url(projectUrl)}" target="_blank" rel="noopener noreferrer">${html(projectUrl)}</a></div></footer></body></html>`;
 }
 
 function archivePage() {
-  const archiveRoot = join(root, 'diarys');
-  const issues = existsSync(archiveRoot)
-    ? readdirSync(archiveRoot).filter(name => /^\d{4}-\d{2}-\d{2}\.pdf$/i.test(name)).sort((a, b) => b.localeCompare(a))
+  const pages = existsSync(digestDir)
+    ? readdirSync(digestDir).filter(name => /^\d{4}-\d{2}-\d{2}\.html$/.test(name)).map(name => name.slice(0, 10))
     : [];
-  const rows = issues.map(name => {
-    const date = name.slice(0, 10);
-    const href = `${pdfPublicBase.replace(/\/$/, '')}/${encodeURIComponent(name)}`;
-    return `<li class="archive-row"><span>${html(date)} 周报</span><a href="${url(href)}" target="_blank" rel="noopener noreferrer">PDF 文件 ↗</a></li>`;
+  const pdfs = existsSync(digestDir)
+    ? readdirSync(digestDir).filter(name => /^\d{4}-\d{2}-\d{2}\.pdf$/.test(name)).map(name => name.slice(0, 10))
+    : [];
+  const missingPages = pdfs.filter(date => !pages.includes(date));
+  const missingPdfs = pages.filter(date => !pdfs.includes(date));
+  if (missingPages.length || missingPdfs.length) {
+    throw new Error(`Weekly archive is incomplete: missing HTML for ${missingPages.join(', ') || 'none'}; missing PDF for ${missingPdfs.join(', ') || 'none'}`);
+  }
+  const issues = pages.sort((a, b) => b.localeCompare(a));
+  const rows = issues.map(date => {
+    const base = digestPublicBase.replace(/\/$/, '');
+    return `<li class="archive-row"><span>${html(date)} 周报</span><div class="archive-links"><a href="${url(`${base}/${date}.html`)}">网页 ↗</a><a href="${url(`${base}/${date}.pdf`)}" target="_blank" rel="noopener noreferrer">PDF 文件 ↗</a></div></li>`;
   }).join('');
-  const body = `<main class="shell"><section class="hero archive-hero"><div class="eyebrow">WEEKLY ARCHIVE</div><h1>历史 PDF</h1><p class="hero-sub">按刊期查找机器人学研究进展周报。</p><div class="hero-meta"><span>${issues.length} 期周报</span></div></section>${issues.length ? `<ul class="archive-list">${rows}</ul>` : '<p class="empty archive-empty">暂无已归档的 PDF。</p>'}</main>`;
-  return layout('历史 PDF', body, true);
+  const body = `<main class="shell"><section class="hero archive-hero"><div class="eyebrow">WEEKLY ARCHIVE</div><h1>历史周报</h1><p class="hero-sub">按刊期查找机器人学研究进展周报的网页和 PDF。</p><div class="hero-meta"><span>${issues.length} 期周报</span></div></section>${issues.length ? `<ul class="archive-list">${rows}</ul>` : '<p class="empty archive-empty">暂无已归档的周报。</p>'}</main>`;
+  return layout('历史周报', body, true);
 }
 
 const labels = {
@@ -83,11 +91,11 @@ function entryCard(item) {
   return `<article class="entry${item.featured ? ' featured' : ''}" id="${html(item.id)}">${item.featured ? '<span class="featured-corner" role="img" aria-label="重点条目" title="重点条目"></span>' : ''}<div class="tags">${tags.map(t => `<span class="tag">${html(t)}</span>`).join('')}<span class="tag">${item.event_time_bj ? '北京时间' : '原文日期'} ${html((item.event_time_bj ?? item.event_time_original ?? '').slice(0, 10))}</span></div><h3>${html(item.title_zh)}</h3><p class="entry-en-title">${html(item.title_en)}</p>${content}${item.why_it_matters_zh ? `<p><strong>意义：</strong>${html(item.why_it_matters_zh)}</p>` : ''}${item.limitations_zh ? `<p class="limitations"><strong>局限：</strong>${html(item.limitations_zh)}</p>` : ''}<div class="entry-links">${sourceLink}</div></article>`;
 }
 
-function issuePage(issue) {
+function issuePage(issue, relativeRoot = '') {
   const groups = sections.map(key => [key, issue.entries.filter(e => e.placement === key)]).filter(([, items]) => items.length);
   const revision = issue.revision_note ? `<p class="issue-note">${html(issue.revision_note)}</p>` : '';
   const body = `<main class="shell"><section class="hero"><div class="eyebrow">WEEKLY BRIEF · ${html(issue.date)}</div><h1>机器人学研究进展周报</h1><p class="hero-sub">Robotics Research & Industry · Weekly Brief</p><div class="hero-meta"><span>北京时间 ${html(issue.date)} 发布</span><span>${issue.entries.length} 条合格新增</span><a class="pdf-link" href="${url(issue.pdf_url)}" target="_blank" rel="noopener noreferrer">查看本期 PDF ↗</a></div></section><p class="issue-note">覆盖北京时间 ${html(issue.coverage_start)} 00:00 至 ${html(issue.coverage_end)} 24:00 首次公开的信息。${issue.entries.length ? '企业或机构单方发布的内容会明确标注；点击每条原始来源查看依据。' : '本期未检出符合采编标准的新增进展。'}</p>${revision}${groups.map(([key, items]) => `<section class="content-section"><div class="section-title"><span class="section-mark"></span><h2>${labels[key]}</h2><span class="section-count">${items.length}</span></div><div class="entries">${items.map(entryCard).join('')}</div></section>`).join('')}</main>`;
-  return layout(`${issue.date} 周报`, body);
+  return layout(`${issue.date} 周报`, body, false, relativeRoot);
 }
 
 function emptyPage() {
@@ -147,7 +155,7 @@ function main() {
         (meta.coverage_end && meta.coverage_end !== coverageEnd)) throw new Error('Issue metadata coverage must match the prior Monday–Sunday');
     const issue = { date, coverage_start: coverageStart,
       coverage_end: coverageEnd, timezone: 'Asia/Shanghai',
-      pdf_url: `${pdfPublicBase.replace(/\/$/, '')}/${date}.pdf`,
+      pdf_url: `${digestPublicBase.replace(/\/$/, '')}/${date}.pdf`,
       revision_note: meta.revision_note ?? null,
       entries };
     for (const item of entries) {
@@ -174,10 +182,11 @@ function main() {
       console.warn(`First-author affiliation unresolved for ${papersWithoutAffiliation.length} paper(s): ${papersWithoutAffiliation.map(item => item.id).join(', ')}. Check accessible paper HTML/PDF and record why each remains unclear.`);
     }
     const currentJson = join(out, 'current.json');
-    mkdirSync(pdfDir, { recursive: true });
+    mkdirSync(digestDir, { recursive: true });
     writeFileSync(currentJson, JSON.stringify(issue, null, 2) + '\n');
-    execFileSync(python, [join(root, 'scripts', 'build-pdf.py'), currentJson, join(pdfDir, `${date}.pdf`)], { stdio: 'inherit' });
+    execFileSync(python, [join(root, 'scripts', 'build-pdf.py'), currentJson, join(digestDir, `${date}.pdf`)], { stdio: 'inherit' });
     writeFileSync(join(out, 'index.html'), issuePage(issue));
+    writeFileSync(join(digestDir, `${date}.html`), issuePage(issue, '../'));
   } else {
     writeFileSync(join(out, 'index.html'), emptyPage());
   }

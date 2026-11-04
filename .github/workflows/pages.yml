@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'site/**'
+      - 'digests/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -24,10 +25,15 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Assemble site with archived issues
+        run: |
+          mkdir -p "$RUNNER_TEMP/pages-site"
+          cp -a site/. "$RUNNER_TEMP/pages-site/"
+          cp -a digests "$RUNNER_TEMP/pages-site/digests"
       - name: Upload static site
         uses: actions/upload-pages-artifact@v4
         with:
-          path: site
+          path: ${{ runner.temp }}/pages-site
 
   deploy:
     needs: build

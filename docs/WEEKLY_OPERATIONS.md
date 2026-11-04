@@ -10,13 +10,13 @@
 | `data/issues/YYYY-MM-DD.entries.json` | 该刊期的可回填条目文件；日期为**周一刊期**，须与本地库保持同步 | 可提交；先检查内部内容、来源许可和公开风险 |
 | `data/issues/YYYY-MM-DD.json` | 可选刊期元数据；`coverage_start/end` 必须等于上周一/周日；修订时存修订说明 | 可提交；`revision_note` 会公开显示 |
 | `site/index.html` | 当前网页；每次正式生成或预告生成都会覆盖 | 是 |
-| `site/archive.html` | 历史 PDF 列表；每次生成网站时从 `diarys/` 自动更新 | 是 |
+| `site/archive.html` | 历史周报列表；每次生成网站时从 `digests/` 的 HTML/PDF 配对自动更新 | 是 |
 | `site/current.json` | 当前正式刊的机器可读公开数据；预告模式会删除 | 是，正式刊才存在 |
 | `site/style.css`、`site/.nojekyll` | 页面样式、Pages 静态站点配置 | 是 |
-| `diarys/YYYY-MM-DD.pdf` | 逐期 PDF 归档；旧文件应保留 | 是 |
-| `.github/workflows/pages.yml` | 监听 `site/**` 推送并部署 GitHub Pages | 是 |
+| `digests/YYYY-MM-DD.html`、`digests/YYYY-MM-DD.pdf` | 逐期网页与 PDF 成品；其他刊期文件应保留 | 是 |
+| `.github/workflows/pages.yml` | 监听 `site/**`、`digests/**`，将两目录组装后部署 GitHub Pages | 是 |
 
-网页地址：[RoboticsNews 项目站点](https://hancheng-guo.github.io/RoboticsNews/)。PDF 链接指向仓库 `main` 分支根目录的 `diarys/`。**每条公开网页卡片和 PDF 条目只展示一条 `primary_url` 来源链接**；论文摘要、单位、通讯作者、许可、代码和数据等依据 URL 仍在条目数据中记录供核查，但不作为卡片中的额外链接。本期及历史刊期 PDF 的导航链接不计入条目来源链接。当前构建脚本**不自动抓取新闻、不自动总结论文、也没有每周定时生成任务**；必须先完成采编、入库、生成和核验。用户若在任务中明确授权直接发布，才可随任务提交、推送并验证站点；否则先交给用户审阅，获得明确同意后再提交和推送。GitHub Actions 只负责部署已提交的网站文件。
+网页地址：[RoboticsNews 项目站点](https://hancheng-guo.github.io/RoboticsNews/)。每期 HTML/PDF 的公开地址是站点的 `/digests/YYYY-MM-DD.html` 和 `.pdf`；源文件在仓库根目录 `digests/`，Pages 工作流将其复制到部署包。**每条公开网页卡片和 PDF 条目只展示一条 `primary_url` 来源链接**；论文摘要、单位、通讯作者、许可、代码和数据等依据 URL 仍在条目数据中记录供核查，但不作为卡片中的额外链接。刊期网页/PDF 与项目主页导航链接不计入条目来源链接。当前构建脚本**不自动抓取新闻、不自动总结论文、也没有每周定时生成任务**；必须先完成采编、入库、生成和核验。用户若在任务中明确授权直接发布，才可随任务提交、推送并验证站点；否则先交给用户审阅，获得明确同意后再提交和推送。GitHub Actions 只负责部署已提交的网站文件。
 
 本项目只维护周报。接手时重新检查 `git status`、站点和数据库，以实时状态为准；不要从已删除的旧刊恢复或改名生成周报。
 
@@ -69,7 +69,7 @@ node scripts/db.mjs search --date 2026-11-02 --limit 100
 - 以**新事件首次公开时间**落入上周窗口为准。发布日期只有日期时保留日期精度，不补造时分。涉及跨时区边界时核对原始页面时间戳并记录换算依据。
 - DOI、arXiv ID、版本号、规范化 URL、产品型号和事件主体联合去重。同一论文的预印本、项目页和新闻稿通常归一条；正式录用、重大修订、开源代码或独立验证确有新增事实时可作为后续进展。
 - 不因周一才发现的旧新闻自动纳入本刊。重要漏报先留在候选池，记录原事件日期与漏报原因。**当前构建器会拒绝所有统计窗口外的 `event_time_bj`，补录旧事件前必须先实现并验证专门的补录规则**，不能改写原始事件日期来绕过校验。
-- 已发布的旧刊不静默改写。更正需说明具体变化；同一期只保留 `diarys/YYYY-MM-DD.pdf` 当前版，修订前记录已发布的提交 SHA，修订后通过 Git 历史追溯旧版。其他刊期的 PDF 不应受影响。
+- 已发布的旧刊不静默改写。更正需说明具体变化；同一期只保留 `digests/YYYY-MM-DD.html` 与同名 PDF 的当前版，修订前记录已发布的提交 SHA，修订后通过 Git 历史追溯旧版。其他刊期的 HTML/PDF 不应受影响。
 - 目标是 10–15 条主要内容；合格条目不足时减少数量。论文速览也必须满足论文核验与字段要求。
 - 同一事实跨多个平台反复发布，只保留一个稳定条目 ID；保留其他核验来源在 `supporting_urls`。确有新事件时新建条目，写明相对旧事件新增了什么。近统计窗口边界而只有源站日期、无法可靠换算北京时间时先暂缓，不凭猜测改日期使其落入本周。
 
@@ -136,7 +136,7 @@ $env:ROBOTICS_NEWS_PYTHON = 'C:\path\to\python.exe'
 node scripts/build-site.mjs --date 2026-11-02
 ```
 
-输出应是 `site/index.html`、`site/current.json`、`site/archive.html`、`diarys/2026-11-02.pdf`。首页只保留当期，历史 PDF 页按根目录 `diarys/YYYY-MM-DD.pdf` 的文件自动列出每期当前版，每期一行；PDF 每期新文件。PDF 生成需可嵌入的中文无衬线常规和粗体字体；系统未提供时，同时设置 `ROBOTICS_NEWS_PDF_FONT_REGULAR` 与 `ROBOTICS_NEWS_PDF_FONT_BOLD` 为本机字体文件路径，见[呈现规范](PRESENTATION_SPEC.md)。`--date` 非周一会失败；条目事件日期不在统计窗口、论文必填项缺失或元数据窗口不一致也会失败。失败后检查源数据再重试，不要绕过校验或发布半成品。
+输出应是 `site/index.html`、`site/current.json`、`site/archive.html`、`digests/2026-11-02.html` 和同名 PDF。首页只保留当期，历史周报页按根目录 `digests/YYYY-MM-DD.html/.pdf` 的配对文件自动列出每期当前版，每期一行、两个链接；每期 HTML/PDF 新文件。两种成品末尾均有项目主页链接。PDF 生成需可嵌入的中文无衬线常规和粗体字体；系统未提供时，同时设置 `ROBOTICS_NEWS_PDF_FONT_REGULAR` 与 `ROBOTICS_NEWS_PDF_FONT_BOLD` 为本机字体文件路径，见[呈现规范](PRESENTATION_SPEC.md)。`--date` 非周一会失败；条目事件日期不在统计窗口、论文必填项缺失、元数据窗口不一致或归档配对缺失也会失败。失败后检查源数据再重试，不要绕过校验或发布半成品。
 
 周报未到出版时间而需要先展示预告时：
 
@@ -144,16 +144,16 @@ node scripts/build-site.mjs --date 2026-11-02
 node scripts/build-site.mjs --preview --date 2026-11-02
 ```
 
-预告会覆盖首页并删除 `site/current.json`，**不会生成 PDF**；仍会更新 `site/archive.html` 并保留“历史 PDF”入口。它不是正式刊。不要为了测试在真实 `site/` 下执行预告或正式构建；试运行时将 `ROBOTICS_NEWS_SITE_DIR` 和 `ROBOTICS_NEWS_PDF_DIR` 指向 `tmp/` 下隔离目录。`ROBOTICS_NEWS_DB` 仅在需要隔离数据库时改到测试库；若仍指向真实库，构建器只读，但先核对目标刊期与条目状态。试运行成功后清除这些环境变量，再对真实路径正式生成。真实生成失败时，`site/current.json` 可能已被新数据覆盖而 `site/index.html` 仍是旧版；先修复错误并重跑，重新核对网站、归档页及 PDF 一致，不能提交半成品。
+预告会覆盖首页并删除 `site/current.json`，**不会生成新刊 HTML/PDF**；仍会更新 `site/archive.html` 并保留“历史周报”入口。它不是正式刊。不要为了测试在真实 `site/` 下执行预告或正式构建；试运行时将 `ROBOTICS_NEWS_SITE_DIR` 和 `ROBOTICS_NEWS_DIGEST_DIR` 指向 `tmp/` 下隔离目录。`ROBOTICS_NEWS_DB` 仅在需要隔离数据库时改到测试库；若仍指向真实库，构建器只读，但先核对目标刊期与条目状态。试运行成功后清除这些环境变量，再对真实路径正式生成。真实生成失败时，网站、JSON、HTML/PDF 可能部分更新；先修复错误并重跑，重新核对所有成品一致，不能提交半成品。
 
 ```powershell
 $env:ROBOTICS_NEWS_SITE_DIR = (Join-Path (Get-Location) 'tmp/site-check')
-$env:ROBOTICS_NEWS_PDF_DIR = (Join-Path (Get-Location) 'tmp/pdf-check')
+$env:ROBOTICS_NEWS_DIGEST_DIR = (Join-Path (Get-Location) 'tmp/digest-check')
 node scripts/build-site.mjs --date 2026-11-02
-Remove-Item Env:ROBOTICS_NEWS_SITE_DIR, Env:ROBOTICS_NEWS_PDF_DIR
+Remove-Item Env:ROBOTICS_NEWS_SITE_DIR, Env:ROBOTICS_NEWS_DIGEST_DIR
 ```
 
-以上日期和路径只是示例。实际生成时仍需设置有效的 Python 与字体环境；不要把 `tmp/` 中的试运行输出提交。归档页始终读取根目录 `diarys/`，因此隔离试运行中新生成到 `tmp/` 的 PDF 不会进入列表；正式生成到根目录后再核对新刊链接。注意：若使用 `--preview`，只生成网页、不检查 PDF。
+以上日期和路径只是示例。实际生成时仍需设置有效的 Python 与字体环境；不要把 `tmp/` 中的试运行输出提交。隔离试运行的归档页只读取对应临时 `digests` 目录，因此只用于验证结构；正式生成到根目录后再核对所有历史刊期。注意：若使用 `--preview`，不生成新刊 HTML/PDF。
 
 ### 6.3 发布前检查
 
@@ -161,14 +161,14 @@ Remove-Item Env:ROBOTICS_NEWS_SITE_DIR, Env:ROBOTICS_NEWS_PDF_DIR
 
 - 日期是周一，窗口恰好是上周一至周日；没有把未结束的周报成完整刊，也没有因源站时区误放条目。
 - `site/current.json` 的 `date`、`coverage_start/end`、条目数与正文一致；每条来源链接可打开；没有 `claim_evidence_notes`、编辑说明或核查记录。
-- 首页和预告页均有“历史 PDF”按钮，指向 `archive.html`；归档页有返回首页入口。按文件名清点 `diarys/YYYY-MM-DD.pdf` 与归档列表：每期恰好一行、一条“PDF 文件”链接，刊期由新到旧，无上级目录或修订版行。归档页列出的文件需在本次提交中存在，推送后抽查线上链接。
+- 首页和预告页均有“历史周报”按钮，指向 `archive.html`；归档页有返回首页入口。按文件名清点 `digests/YYYY-MM-DD.html` 与同名 PDF：每期恰好一行、一条历史网页链接和一条 PDF 链接，刊期由新到旧，无上级目录或修订版行。归档页列出的文件需在本次提交中存在，推送后抽查两个线上链接。
 - 每篇论文至少有可确认的日期和一位作者；作者按来源使用全名或缩写。对预印本逐篇检查 HTML/PDF 署名页和作者单位对应关系；第一作者及明确标记的通讯作者单位可核实时以“单位名，国家或地区”展示，并在数据中记录直接依据 URL。无明确通讯标记时公开写“论文未注明通讯作者”。摘要可转载时展示原文与必要译文，否则只展示明确标记的转述；转载来源也须标明。PDF 和网页表述一致，不出现全文贡献总结。
-- 网页和 PDF 的每个条目恰有一条可点击的 `primary_url` 来源链接；没有摘要、单位、通讯作者、许可、代码、数据或其他核查依据的附加链接。核查字段仍保存在条目归档和机器可读数据中，不得因页面简化而停止核验。本期及历史刊期 PDF 链接是页面导航，不计入条目链接数。
+- 网页和 PDF 的每个条目恰有一条可点击的 `primary_url` 来源链接；没有摘要、单位、通讯作者、许可、代码、数据或其他核查依据的附加链接。核查字段仍保存在条目归档和机器可读数据中，不得因页面简化而停止核验。期刊网页/PDF 和项目主页链接是条目外的导航，不计入条目链接数。
 - 企业宣称和预印本有恰当证据标签；数字、单位、会议/期刊状态、部署阶段及局限写法与原文一致。
 - 网页顶部有醒目的 **`AI生成`**；PDF 首页有同样标记；网站上不出现编辑说明与内部核查记录。
-- PDF 文件存在且非空，工具可读取页数和基本元数据；若能可靠提取文本，核对刊期、标题、`AI生成`、论文单位、摘要及译文。PDF 链接指向本期真实文件，历史**周报** PDF 未被误删或覆盖。
+- 本期 HTML/PDF 文件存在且非空，PDF 可读取页数和基本元数据；若能可靠提取文本，核对刊期、标题、`AI生成`、论文单位、摘要及译文。首页与历史网页的正文一致、样式和返回链接可用；两种网页及 PDF 最下方有可点击的项目主页链接。历史**周报**成品未被误删或覆盖。
 - PDF 生成器在跨页时直接接续正文，不重复同一条的中英标题；核对跨页条目的标题行未重复，来源链接随该条内容保留。可选渲染检查首页、跨页和末页；无法视觉检查时如实记录，不阻断已完成的可执行检查。
-- `git diff` 中只包含预期文件；尤其检查 `site/index.html`、`site/current.json`、`diarys/YYYY-MM-DD.pdf` 和归档条目文件。不要提交本地 SQLite、临时文件、未授权摘要或内部敏感信息。
+- `git diff` 中只包含预期文件；尤其检查 `site/index.html`、`site/archive.html`、`site/current.json`、`digests/YYYY-MM-DD.html/.pdf` 和归档条目文件。不要提交本地 SQLite、临时文件、未授权摘要或内部敏感信息。
 
 ```powershell
 git status --short
@@ -176,18 +176,18 @@ git diff --check
 node scripts/db.mjs search --date 2026-11-02 --status published --limit 100
 ```
 
-若系统有 Poppler，可用 `pdfinfo diarys/2026-11-02.pdf` 检查页数，并在文本提取可靠时用 `pdftotext diarys/2026-11-02.pdf -` 抽查关键字段。对照[呈现规范](PRESENTATION_SPEC.md)和[周报模板](ISSUE_TEMPLATE.md)检查 HTML、JSON 与 PDF 的内容一致性。浏览器或图片渲染检查仅作可选补充，不是发布门槛；未执行时如实说明。`site/current.json` 中的 `entries`、网页卡片、PDF 条目应按栏目和内容对应；每个 PDF 条目与网页卡片各有一条 `primary_url` 来源链接，历史刊期 PDF 导航链接另计。
+若系统有 Poppler，可用 `pdfinfo digests/2026-11-02.pdf` 检查页数，并在文本提取可靠时用 `pdftotext digests/2026-11-02.pdf -` 抽查关键字段。对照[呈现规范](PRESENTATION_SPEC.md)和[周报模板](ISSUE_TEMPLATE.md)检查首页、历史 HTML、JSON 与 PDF 的内容一致性。浏览器或图片渲染检查仅作可选补充，不是发布门槛；未执行时如实说明。`site/current.json` 中的 `entries`、两份网页卡片、PDF 条目应按栏目和内容对应；每个条目各有一条 `primary_url` 来源链接，归档和项目主页导航链接另计。
 
 ### 6.4 已发布刊期的修订
 
-这一步只适用于修改已上线刊期。先查工作区、线上刊期和当前 PDF，确认改动是事实更正还是排版修订，记录具体变化及修订前线上提交 SHA。在 `data/issues/YYYY-MM-DD.json` 中填写 `revised_on`、可公开的 `revision_note` 和 `previous_commit`，保持原统计窗口，不再使用 `previous_pdf` 或生成 `vN` 旧版文件。修订来源条目时同步更新条目 JSON 与 SQLite；纯排版修订不得暗改新闻事实。然后重新生成同名 `diarys/YYYY-MM-DD.pdf`、检查网页与 PDF 的修订说明，并确认归档页仍只列该刊一行。Git 历史保留被替换的旧版文件，当前仓库目录每期只保留一份 PDF；提交时包含当前 PDF、元数据和更新的 `site/`。
+这一步只适用于修改已上线刊期。先查工作区、线上刊期和当前 HTML/PDF，确认改动是事实更正还是排版修订，记录具体变化及修订前线上提交 SHA。在 `data/issues/YYYY-MM-DD.json` 中填写 `revised_on`、可公开的 `revision_note` 和 `previous_commit`，保持原统计窗口，不再使用 `previous_pdf` 或生成 `vN` 旧版文件。修订来源条目时同步更新条目 JSON 与 SQLite；纯排版修订不得暗改新闻事实。然后重新生成同名 `digests/YYYY-MM-DD.html/.pdf`、检查两者与首页的修订说明，并确认归档页仍只列该刊一行。Git 历史保留被替换的旧版文件，当前仓库目录每期只保留一对 HTML/PDF；提交时包含当前成品、元数据和更新的 `site/`。
 
 ### 6.5 审阅、提交、部署和核验
 
-完成核对后，先确定本次任务的授权范围：**用户已明确要求直接把本期周报发布到 GitHub Pages，并授权 commit 和 push**，即可提交并推送网站、该期 PDF 和可公开的条目归档；没有这项明确授权时，先把改动和检查结果交给用户审阅，待其明确同意后再提交和推送。不要把过去某期的发布授权当作以后每期的授权。现有 [Pages 工作流](../.github/workflows/pages.yml)只在 `site/**` 或工作流文件变化的 `main` 推送时启动；只推 PDF 不会触发网页部署。网站来源必须是 GitHub Actions。发布前检查公开仓库中可能暴露的内容。提交后检查对应工作流运行成功、站点实际返回本期内容、网页 PDF 链接可用。不要仅凭 `git push` 成功就声称网站已上线。
+完成核对后，先确定本次任务的授权范围：**用户已明确要求直接把本期周报发布到 GitHub Pages，并授权 commit 和 push**，即可提交并推送 `site/`、该期 `digests/` 的 HTML/PDF 和可公开的条目归档；没有这项明确授权时，先把改动和检查结果交给用户审阅，待其明确同意后再提交和推送。不要把过去某期的发布授权当作以后每期的授权。[Pages 工作流](../.github/workflows/pages.yml)监听 `site/**`、`digests/**` 或工作流文件变化的 `main` 推送，并将 `digests/` 复制到站点部署包；GitHub Actions 不生成周报。网站来源必须是 GitHub Actions。发布前检查公开仓库中可能暴露的内容。提交后检查对应工作流运行成功、首页及历史网页返回本期内容、PDF 链接可用。不要仅凭 `git push` 成功就声称网站已上线。
 
 ```powershell
-git add -- site/index.html site/archive.html site/current.json diarys/2026-11-02.pdf data/issues/2026-11-02.entries.json
+git add -- site/index.html site/archive.html site/current.json digests/2026-11-02.html digests/2026-11-02.pdf data/issues/2026-11-02.entries.json
 git diff --cached --name-only
 git diff --cached --stat
 git diff --cached --check
@@ -195,7 +195,7 @@ git commit -m "Publish robotics weekly brief for 2026-11-02"
 git push origin main
 ```
 
-以上命令仅在本次任务已明确授权 commit/push 后执行；路径和日期是示例，按实际刊期替换。刊期元数据、文档或样式确有变更时也要显式加入；提交前核对暂存文件列表，不要用无差别暂存混入本地库、临时文件或私人笔记。若 `site/current.json` 被预告模式删除，应在提交时显式暂存该删除。推送前核实本地分支与 `origin/main` 的关系，若远端已有新提交先处理冲突，不强推。推送后检查对应 SHA 的 GitHub Actions **Deploy RoboticsNews site** 运行成功，再打开[站点](https://hancheng-guo.github.io/RoboticsNews/)检查标题、刊期、`AI生成` 和 PDF，确认线上 PDF URL 返回成功且文件与本次提交对应。Pages/CDN 可能短暂延迟；工作流失败时先查日志，按错误原因修复，不通过删除历史部署或 PDF 作为常规排障手段。仅修改 `docs/` 而未改 `site/` 的提交不会触发 Pages，也无需声称网站已重新部署。
+以上命令仅在本次任务已明确授权 commit/push 后执行；路径和日期是示例，按实际刊期替换。迁移或修订时，旧路径的删除也须显式暂存。刊期元数据、文档或样式确有变更时也要显式加入；提交前核对暂存文件列表，不要用无差别暂存混入本地库、临时文件或私人笔记。若 `site/current.json` 被预告模式删除，应在提交时显式暂存该删除。推送前核实本地分支与 `origin/main` 的关系，若远端已有新提交先处理冲突，不强推。推送后检查对应 SHA 的 GitHub Actions **Deploy RoboticsNews site** 运行成功，再打开[站点](https://hancheng-guo.github.io/RoboticsNews/)检查标题、刊期、`AI生成`、历史网页和 PDF，确认两个归档 URL 返回成功且文件与本次提交对应。Pages/CDN 可能短暂延迟；工作流失败时先查日志，按错误原因修复，不通过删除历史部署或成品作为常规排障手段。仅修改 `docs/` 而未改 `site/` 或 `digests/` 的提交不会触发 Pages，也无需声称网站已重新部署。
 
 ## 7. 常见故障与处理
 
@@ -209,10 +209,10 @@ git push origin main
 | 本地没有数据库或条目数为 0 | 本地 `data/*.sqlite` 是否丢失、条目归档是否存在 | 恢复备份或导入经核实的归档；不要发布空刊 |
 | Python 无法启动 / `reportlab` 缺失 | `ROBOTICS_NEWS_PYTHON` 路径与 Python 环境 | 指向可执行 Python，安装 `reportlab` 后在隔离输出目录重试 |
 | PDF 提示无可嵌入中文字体 | 本机字体文件是否存在，字体环境变量是否成对设置 | 按[呈现规范](PRESENTATION_SPEC.md)配置常规/粗体字体后重试；不要退回依赖阅读器替换的字体 |
-| 生成失败后网页、JSON、PDF 不一致 | `build-site.mjs` 的错误输出与三件生成文件的修改时间 | 修复数据或环境后重新生成全部文件并复查；失败的半成品不得暂存或发布 |
+| 生成失败后网页、JSON、PDF 不一致 | `build-site.mjs` 的错误输出与全部生成文件的修改时间 | 修复数据或环境后重新生成全部文件并复查；失败的半成品不得暂存或发布 |
 | 元数据窗口不一致 | `data/issues/YYYY-MM-DD.json` 的 `coverage_start/end` | 改成上周一/周日，不修改生成器的周界规则 |
 | 站点仍显示旧刊或预告 | 新 `site/index.html` 是否已提交、Pages 工作流是否成功、缓存 | 核实提交 SHA 与部署、稍后强制刷新；避免重复制造部署 |
-| PDF 链接 404 | 本期 PDF 是否提交并推送至 `diarys/`，仓库地址是否变化 | 补推 PDF；迁移仓库时设置 `ROBOTICS_NEWS_PDF_URL_BASE` |
+| 历史网页或 PDF 链接 404 | 同期 HTML/PDF 是否已提交到 `digests/`、工作流是否复制并部署、站点地址是否变化 | 补齐成品并重新部署；迁移站点时设置 `ROBOTICS_NEWS_DIGEST_URL_BASE` |
 
 ## 8. 完成一期后向用户报告什么
 

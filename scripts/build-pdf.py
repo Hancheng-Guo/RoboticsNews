@@ -57,6 +57,7 @@ LINE = colors.HexColor("#DCE5EA")
 ORANGE = colors.HexColor("#E88926")
 PANEL = colors.HexColor("#F7FBFC")
 PILL = colors.HexColor("#E8F4F5")
+PROJECT_URL = "https://github.com/Hancheng-Guo/RoboticsNews"
 
 LABELS = {
     "research": "学术研究", "industry": "工业与应用",
@@ -376,6 +377,9 @@ def build(source, target):
                   section_heading(label, len(items), doc.width), Spacer(1, 5 * mm)]
         for item in items:
             story += [CondPageBreak(55 * mm), card(item, doc.width), Spacer(1, 4 * mm)]
+    story += [Spacer(1, 5 * mm), HRFlowable(width="100%", thickness=0.8, color=LINE),
+              Spacer(1, 5 * mm),
+              Paragraph(f'项目主页：<link href="{escape(PROJECT_URL, quote=True)}" color="#16738A">{escape(PROJECT_URL)}</link>', ST["source"])]
     doc.build(story)
 
 

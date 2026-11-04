@@ -3,8 +3,8 @@
   "coverage_start": "2026-10-26",
   "coverage_end": "2026-11-01",
   "timezone": "Asia/Shanghai",
-  "pdf_url": "https://raw.githubusercontent.com/Hancheng-Guo/RoboticsNews/main/diarys/2026-11-02.pdf",
-  "revision_note": "2026-11-04 修订：PDF 改用嵌入字体与完整卡片，跨页直接接续正文；周报内容未变。",
+  "pdf_url": "https://hancheng-guo.github.io/RoboticsNews/digests/2026-11-02.pdf",
+  "revision_note": "2026-11-04 修订：PDF 改用嵌入字体与完整卡片，跨页直接接续正文；新增项目主页链接与独立历史网页，并将成品迁入 digests；条目内容未变。",
   "entries": [
     {
       "id": "arxiv-2610.35075",

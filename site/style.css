@@ -54,6 +54,8 @@ h2{font-size:23px;letter-spacing:-.025em;margin:0}
 .archive-row{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--white);border:1px solid var(--line);border-radius:9px;padding:17px 22px;font-size:15px}
 .archive-row span{font-weight:700}
 .archive-row a{font-weight:700;white-space:nowrap}
+.archive-links{display:flex;align-items:center;flex-wrap:wrap;gap:10px 24px}
 .archive-empty{margin-top:32px}
 .site-footer{border-top:1px solid var(--line);margin-top:64px;padding:28px 0;color:var(--muted);font-size:12px}
+.site-footer a{overflow-wrap:anywhere}
 @media(max-width:640px){.shell{width:min(100% - 28px,940px)}.header-note{display:none}.header-action{font-size:12px;padding:5px 9px}.ai-disclosure .shell{align-items:flex-start}.hero{padding:48px 0 32px}.home-hero{padding:64px 0 52px}.hero-sub{font-size:15px}.hero-meta span+span:before{display:none}.entry{padding:20px}.entry h3{font-size:18px}.archive-row{padding:15px 16px;flex-wrap:wrap}}

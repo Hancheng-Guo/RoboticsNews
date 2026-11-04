@@ -5,11 +5,11 @@ RoboticsNews 面向机器人学研究人员与工程师，每周汇总上一完�
 ## 在线阅读
 
 - [最新周报](https://hancheng-guo.github.io/RoboticsNews/)
-- [历史 PDF](https://hancheng-guo.github.io/RoboticsNews/archive.html)
+- [历史周报](https://hancheng-guo.github.io/RoboticsNews/archive.html)
 
 ## 使用方法
 
-直接访问网站阅读最新一期，点击“历史 PDF”查找往期文件。周报按北京时间的周一至周日统计，于下一周周一发布。
+直接访问网站阅读最新一期，点击“历史周报”查找往期网页与 PDF。周报按北京时间的周一至周日统计，于下一周周一发布。
 
 ### 用 AI 更新一期周报
 
@@ -31,4 +31,4 @@ $env:ROBOTICS_NEWS_PYTHON = 'C:\path\to\python.exe' # Python 已在 PATH 时可�
 node scripts/build-site.mjs --date YYYY-MM-DD
 ```
 
-将 `YYYY-MM-DD` 替换为刊期所在的周一日期。构建命令会生成 `site/index.html`、`site/archive.html`、`site/current.json` 和 `diarys/YYYY-MM-DD.pdf`；提交并推送网站文件后，[GitHub Actions](.github/workflows/pages.yml)负责部署网页，不会自动采集或撰写周报。数据库命令、字段及发布检查的完整说明见[维护手册](docs/WEEKLY_OPERATIONS.md)和[数据说明](data/README.md)。
+将 `YYYY-MM-DD` 替换为刊期所在的周一日期。构建命令会更新 `site/index.html`、`site/archive.html`、`site/current.json`，并在根目录的 `digests/` 中保存该期同名 HTML 与 PDF。提交并推送 `site/` 和 `digests/` 后，[GitHub Actions](.github/workflows/pages.yml)将两者部署为网站，不会自动采集或撰写周报。数据库命令、字段及发布检查的完整说明见[维护手册](docs/WEEKLY_OPERATIONS.md)和[数据说明](data/README.md)。

@@ -2,6 +2,6 @@
   "coverage_start": "2026-10-26",
   "coverage_end": "2026-11-01",
   "revised_on": "2026-11-04",
-  "revision_note": "2026-11-04 修订：PDF 改用嵌入字体与完整卡片，跨页直接接续正文；周报内容未变。",
-  "previous_commit": "c61de35"
+  "revision_note": "2026-11-04 修订：PDF 改用嵌入字体与完整卡片，跨页直接接续正文；新增项目主页链接与独立历史网页，并将成品迁入 digests；条目内容未变。",
+  "previous_commit": "b8c3e82"
 }
