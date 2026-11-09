@@ -1,0 +1,637 @@
+[
+  {
+    "id": "arxiv-2611.02497",
+    "issue_date": "2026-11-09",
+    "event_time_original": "Mon, 2 Nov 2026 04:16:47 UTC",
+    "event_time_bj": "2026-11-02T12:16:47+08:00",
+    "first_seen_at": "2026-11-09T12:12:29+08:00",
+    "last_verified_at": "2026-11-09T12:12:29+08:00",
+    "category": "paper",
+    "placement": "research",
+    "title_original": "RoboColosseum: Evaluating Physical Intelligence at Scale In-The-Wild",
+    "title_en": "RoboColosseum: Evaluating Physical Intelligence at Scale In-The-Wild",
+    "title_zh": "RoboColosseum 在分布式实机网络中评测机器人策略",
+    "summary_zh": "统一策略服务和评测协议，在不同地点用配对试验比较模型，并另设等量示范的微调评测。",
+    "summary_en": "A distributed physical evaluation pairs policies under matched local conditions and separately compares adaptation with equal demonstration budgets.",
+    "primary_url": "https://arxiv.org/abs/2611.02497v1",
+    "topics": [
+      "机器人评测",
+      "视觉语言动作模型",
+      "实机试验"
+    ],
+    "geography": [
+      "新加坡",
+      "美国"
+    ],
+    "entities": [
+      "National University of Singapore"
+    ],
+    "score": {
+      "novelty": 2,
+      "impact": 2,
+      "evidence": 2,
+      "utility": 2
+    },
+    "featured": true,
+    "importance_rank": 1,
+    "editorial_status": "published",
+    "evidence_status": "preprint",
+    "publication_status": "preprint",
+    "paper_id": "arXiv:2611.02497",
+    "first_author_name": "Tan Sang Nguyen",
+    "paper_authors": [
+      "Tan Sang Nguyen",
+      "Yi Ru Wang",
+      "Shailesh Shailesh",
+      "Gang Yang",
+      "Jiamo Hu",
+      "Jianuo Jiang",
+      "Haoquan Fang",
+      "Zhongzheng Ren",
+      "Zhongyi Luo",
+      "Ian Chong",
+      "Aaron Tung",
+      "Santiago Pravisani",
+      "Minghui Lin",
+      "Yao Mo",
+      "Ishneet Singh",
+      "Benjamin Tee",
+      "Harold Soh",
+      "Siddhartha Srinivasa",
+      "Dieter Fox",
+      "David Hsu",
+      "Haoming Song",
+      "Maxime Ellerbach",
+      "Thomas Wolf",
+      "Pepijn Kooijmans",
+      "Ruijie He",
+      "Michael Cho",
+      "Jiafei Duan"
+    ],
+    "first_author_affiliations": [
+      "National University of Singapore，新加坡"
+    ],
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2611.02497v1",
+    "corresponding_authors": [
+      {
+        "name": "Jiafei Duan",
+        "affiliations": [
+          "National University of Singapore，新加坡",
+          "Singapore Embodied AI Centre，新加坡"
+        ],
+        "source_url": "https://arxiv.org/pdf/2611.02497v1"
+      }
+    ],
+    "abstract_original": "General-purpose robot policies must work across robots, tasks, and environments, yet the variation that makes physical trials informative also makes them difficult to reproduce. We introduce RoboColosseum, a distributed evaluation framework that combines unified policy serving and standardized protocols across a network of locally operated robots in diverse environments. Our initial study evaluates five vision-language-action (VLA) policies and three frontier AI agents across four embodiments (SO-101, Franka, Bimanual-YAM, and G1 Humanoid). The Open Track compares models without task-specific adaptation in blinded, pairwise trials under matched local conditions. The Fine-tune Track measures how well VLA policies adapt to 20 tasks across all four embodiments when each policy receives the same 100 demonstrations per task. Across 5,699 pairwise Open Track comparisons at 124 sites, frontier agents rival specialized VLA policies, while all systems struggle to complete open-world tasks reliably. After fine-tuning, GR00T N1.7 leads on SO-101 and pi0.5 leads on Franka and Bimanual-YAM. Policy rankings show weak agreement across embodiment-specific task suites (Kendall W = 0.24). Open Track rankings poorly predict relative performance after fine-tuning, with substantial rank reversals on all three embodiments shared between tracks. Measuring partial progress reveals differences that task success alone misses. On the G1 Humanoid, no policy completes any of the five tasks, yet average progress ranges from 13.3% to 23.2% across policies. Open Track rankings stabilize as trials accumulate, and active matchmaking achieves comparable ranking agreement with substantially fewer physical trials than uniform sampling. These results show how distributed physical evaluation can reveal where robot policies generalize, how well they adapt to new tasks, and how far they progress on tasks they fail to complete.",
+    "abstract_zh_translation": "通用机器人策略必须能跨机器人、任务和环境工作。然而，让实体试验具有信息量的差异也使试验难以复现。我们提出 RoboColosseum，这是一套分布式评测框架，在不同环境下由各地运营的机器人网络中统一部署策略并采用标准化协议。初步研究在四种机器人本体（SO-101、Franka、双臂 YAM 和 G1 人形机器人）上评测五种视觉语言动作（VLA）策略和三种前沿 AI 智能体。开放赛道在匹配的本地条件下进行盲测配对试验，比较未经任务专门适配的模型。微调赛道评估 VLA 策略在四种本体上对 20 项任务的适配能力，每种策略对每项任务获得相同的 100 条示范。在 124 个地点进行的 5,699 次开放赛道配对比较中，前沿智能体可与专用 VLA 策略匹敌，但所有系统都难以可靠地完成开放世界任务。微调后，GR00T N1.7 在 SO-101 上领先，pi0.5 在 Franka 和双臂 YAM 上领先。各本体专属任务组之间的策略排名一致性较弱（Kendall W = 0.24）。开放赛道的排名难以预测微调后的相对表现，两个赛道共有的三种本体上均出现显著的排名反转。测量部分进度可揭示仅看任务成功率时遗漏的差异。在 G1 人形机器人上，没有策略完成五项任务中的任何一项，但各策略的平均进度在 13.3% 到 23.2% 之间。随着试验累积，开放赛道排名趋于稳定，主动配对比均匀采样所需的实体试验显著更少，同时取得相当的排名一致性。这些结果说明，分布式实机评测能够揭示机器人策略在哪里可以泛化、对新任务的适配程度，以及未能完成任务时推进了多远。",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2611.02497v1",
+    "abstract_credit": "作者见上。arXiv:2611.02497v1 摘要元数据采用 CC0 1.0。中文译文由 RoboticsNews AI 辅助翻译。",
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license",
+      "https://robocolosseum.ai/"
+    ],
+    "code_url": "https://github.com/RoboColosseum",
+    "data_url": "https://huggingface.co/RoboColosseum",
+    "limitations_zh": "开放赛道与微调赛道的结果受任务和机器人本体影响。跨本体排名一致性较弱。"
+  },
+  {
+    "id": "arxiv-2611.03648",
+    "issue_date": "2026-11-09",
+    "event_time_original": "Mon, 2 Nov 2026 18:59:32 UTC",
+    "event_time_bj": "2026-11-03T02:59:32+08:00",
+    "first_seen_at": "2026-11-09T12:12:29+08:00",
+    "last_verified_at": "2026-11-09T12:12:29+08:00",
+    "category": "paper",
+    "placement": "research",
+    "title_original": "Pixel: A Co-Designed Full-Stack Robot System for Learning General-Purpose Mobile Manipulation",
+    "title_en": "Pixel: A Co-Designed Full-Stack Robot System for Learning General-Purpose Mobile Manipulation",
+    "title_zh": "Pixel 联合设计移动操作机器人的硬件、数据采集与控制",
+    "summary_zh": "轮式人形平台集成遥操作、人类示范采集、全身控制和分层策略学习。",
+    "summary_en": "Pixel integrates a wheeled humanoid, human and robot demonstration interfaces, whole-body control and hierarchical policy learning.",
+    "primary_url": "https://arxiv.org/abs/2611.03648v1",
+    "topics": [
+      "移动操作",
+      "全身控制",
+      "示范数据"
+    ],
+    "geography": [
+      "美国"
+    ],
+    "entities": [
+      "Carnegie Mellon University"
+    ],
+    "score": {
+      "novelty": 2,
+      "impact": 2,
+      "evidence": 1,
+      "utility": 2
+    },
+    "featured": true,
+    "importance_rank": 2,
+    "editorial_status": "published",
+    "evidence_status": "preprint",
+    "publication_status": "preprint",
+    "paper_id": "arXiv:2611.03648",
+    "first_author_name": "Tony Tao",
+    "paper_authors": [
+      "Tony Tao",
+      "Jason Jingzhou Liu",
+      "Ruslan Salakhutdinov",
+      "Deepak Pathak"
+    ],
+    "first_author_affiliations": [
+      "Carnegie Mellon University，美国"
+    ],
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2611.03648v1",
+    "corresponding_authors": [],
+    "abstract_original": "General-purpose mobile manipulation requires a combination of capable robot hardware, scalable demonstration collection, expressive whole-body control, and effective policy learning. Yet these components are often developed independently, creating mismatches that limit the capabilities of the complete system. We present Pixel, a co-designed full-stack system for learning general-purpose mobile manipulation. Pixel combines a low-cost wheeled humanoid with human-aligned kinematics and compliant grippers, multiple teleoperation and robot-free human data-collection interfaces, a unified whole-body controller, and a common policy learning pipeline across human and robot demonstrations. A hierarchical learning stack further enables language-conditioned visuomotor control and long-horizon task execution. We evaluate the system across hardware, data collection, and policy learning, and demonstrate mobile-manipulation behaviors requiring dexterity, active perception, navigation, and whole-body coordination. We hope that Pixel provides an integrated and extensible foundation for studying how robot hardware, data, control, and learning can be designed together for robot learning. More results at this https URL",
+    "abstract_zh_translation": "通用移动操作需要结合能力充足的机器人硬件、可扩展的示范采集、能表达多种动作的全身控制和有效的策略学习。这些组件往往各自开发，造成不匹配，限制了整个系统的能力。我们提出 Pixel，一套为学习通用移动操作而联合设计的全栈系统。Pixel 将低成本轮式人形机器人与多种遥操作及无需机器人的人类数据采集接口、统一的全身控制器和适用于人类及机器人示范的共同策略学习流程结合起来。机器人采用与人类对齐的运动学设计和柔顺夹爪。分层学习架构进一步支持以语言为条件的视觉运动控制和长时序任务执行。我们从硬件、数据采集和策略学习几个方面评估系统，并展示需要灵巧操作、主动感知、导航和全身协调的移动操作行为。我们希望 Pixel 为研究如何联合设计机器人硬件、数据、控制和学习提供一个集成且可扩展的基础。更多结果见原摘要所链接的项目页。",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2611.03648v1",
+    "abstract_credit": "作者见上。arXiv:2611.03648v1 摘要元数据采用 CC0 1.0。中文译文由 RoboticsNews AI 辅助翻译。",
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license",
+      "https://pixel-robot.com/"
+    ],
+    "code_url": null,
+    "data_url": null,
+    "limitations_zh": "论文展示了选定任务上的系统表现，未据此验证广泛场景中的可靠性。"
+  },
+  {
+    "id": "arxiv-2611.03059",
+    "issue_date": "2026-11-09",
+    "event_time_original": "Mon, 2 Nov 2026 12:50:09 UTC",
+    "event_time_bj": "2026-11-02T20:50:09+08:00",
+    "first_seen_at": "2026-11-09T12:12:29+08:00",
+    "last_verified_at": "2026-11-09T12:12:29+08:00",
+    "category": "paper",
+    "placement": "research",
+    "title_original": "BeyondContact: A Reinforcement Learning Framework for Airflow-Based Non-Contact Manipulation",
+    "title_en": "BeyondContact: A Reinforcement Learning Framework for Airflow-Based Non-Contact Manipulation",
+    "title_zh": "BeyondContact 在仿真中训练吹气与推吹混合操控",
+    "summary_zh": "在 Isaac Lab 中建模气流对物体的作用，再将训练所得策略迁移到装有吹风装置的机械臂。",
+    "summary_en": "An Isaac Lab airflow extension trains non-contact and hybrid manipulation policies for a physical arm equipped with a blower.",
+    "primary_url": "https://arxiv.org/abs/2611.03059v1",
+    "topics": [
+      "非接触操作",
+      "强化学习",
+      "仿真到现实"
+    ],
+    "geography": [
+      "意大利"
+    ],
+    "entities": [
+      "Istituto Italiano di Tecnologia"
+    ],
+    "score": {
+      "novelty": 2,
+      "impact": 1,
+      "evidence": 2,
+      "utility": 2
+    },
+    "featured": false,
+    "importance_rank": 3,
+    "editorial_status": "published",
+    "evidence_status": "preprint",
+    "publication_status": "preprint",
+    "paper_id": "arXiv:2611.03059",
+    "first_author_name": "Peiyu Yang",
+    "paper_authors": [
+      "Peiyu Yang",
+      "Mohamad S. Moudallal",
+      "Antonio Langella",
+      "Giulio Turrisi",
+      "Victor Barasuol",
+      "Claudio Semini"
+    ],
+    "first_author_affiliations": [
+      "Istituto Italiano di Tecnologia，意大利"
+    ],
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2611.03059v1",
+    "corresponding_authors": [],
+    "abstract_original": "Contact-based robotic manipulation is constrained by end-effector reachability and the mechanical properties of objects. Airflow can exert forces without direct robot-object contact, enabling manipulation of objects beyond the reach or when direct contact is undesirable. However, the lack of suitable simulation has hindered the application of reinforcement learning to airflow-based manipulation, limiting the broader adoption of this mechanism compared with contact-based methods. To address this gap, we developed a robot- and task-agnostic airflow extension for Isaac Lab that supports massively parallel training. The extension uses experimentally identified airflow models to compute the forces and torques exerted on objects. Based on this extension, we train a hybrid push-blow (HPB) policy that combines contact-based pushing with airflow manipulation and a rectangular reorientation (RR) policy that controls a cuboid's heading using airflow alone. To enable physical execution, we design a lightweight, high-speed blower that coexists with a gripper. In zero-shot real-world deployment, HPB achieves an 80% success rate over 20 trials, while RR achieves a mean absolute heading error of 2.6 degrees across four target headings. The project materials are available at this https URL.",
+    "abstract_zh_translation": "基于接触的机器人操作受末端执行器可达范围和物体力学性质的限制。气流可以在机器人和物体不直接接触的情况下施力，因此可用于超出可达范围或不适合直接接触的操作。缺少合适的仿真环境阻碍了强化学习在气流操控中的应用。与基于接触的方法相比，这也限制了这一机制的广泛采用。为弥补这一缺口，我们为 Isaac Lab 开发了与机器人和任务无关的气流扩展，支持大规模并行训练。该扩展使用通过实验辨识的气流模型来计算作用在物体上的力和力矩。我们借助此扩展训练两种策略：结合接触推动和气流操控的混合推吹（HPB）策略，以及仅用气流控制长方体朝向的矩形物体重定向（RR）策略。为支持实体执行，我们设计了可与夹爪共存的轻量高速吹风装置。在实体零样本部署中，HPB 在 20 次试验中达到 80% 的成功率，RR 在四个目标朝向上的平均绝对朝向误差为 2.6 度。项目资料见原摘要所链接的地址。",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2611.03059v1",
+    "abstract_credit": "作者见上。arXiv:2611.03059v1 摘要元数据采用 CC0 1.0。中文译文由 RoboticsNews AI 辅助翻译。",
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license",
+      "https://github.com/iit-DLSLab/BeyondContact"
+    ],
+    "code_url": null,
+    "data_url": null,
+    "limitations_zh": "实体评估限于文中设备和两类任务，推吹成功率的试验样本为 20 次。"
+  },
+  {
+    "id": "arxiv-2611.06118",
+    "issue_date": "2026-11-09",
+    "event_time_original": "Wed, 4 Nov 2026 08:05:32 UTC",
+    "event_time_bj": "2026-11-04T16:05:32+08:00",
+    "first_seen_at": "2026-11-09T12:12:29+08:00",
+    "last_verified_at": "2026-11-09T12:12:29+08:00",
+    "category": "paper",
+    "placement": "research",
+    "title_original": "Online Adaptation to Latent Physical Properties for Learning from Demonstration",
+    "title_en": "Online Adaptation to Latent Physical Properties for Learning from Demonstration",
+    "title_zh": "示范学习策略通过交互在线估计物体的潜在物理属性",
+    "summary_zh": "在执行时根据预测误差更新物体表征，使策略可对不同质心作出调整。",
+    "summary_en": "Prediction errors update an object representation during execution so a fixed policy can adapt to different centers of mass.",
+    "primary_url": "https://arxiv.org/abs/2611.06118v1",
+    "topics": [
+      "模仿学习",
+      "在线适配",
+      "物体操作"
+    ],
+    "geography": [
+      "日本"
+    ],
+    "entities": [
+      "University of Tsukuba",
+      "CNRS-AIST JRL, National Institute of Advanced Industrial Science and Technology"
+    ],
+    "score": {
+      "novelty": 2,
+      "impact": 1,
+      "evidence": 2,
+      "utility": 1
+    },
+    "featured": false,
+    "importance_rank": 4,
+    "editorial_status": "published",
+    "evidence_status": "preprint",
+    "publication_status": "preprint",
+    "paper_id": "arXiv:2611.06118",
+    "first_author_name": "Kotaro Kajitsuka",
+    "paper_authors": [
+      "Kotaro Kajitsuka",
+      "Masaki Murooka",
+      "Fumio Kanehiro"
+    ],
+    "first_author_affiliations": [
+      "University of Tsukuba，日本",
+      "CNRS-AIST JRL, National Institute of Advanced Industrial Science and Technology，日本"
+    ],
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2611.06118v1",
+    "corresponding_authors": [],
+    "abstract_original": "Manipulating visually identical objects with different physical properties requires adapting actions based on information acquired through interaction. We address the problem of learning from demonstrations how to adapt manipulation actions, such as regrasping and changing contact locations, based on physical-property information acquired during interaction. To this end, we propose a learning-from-demonstration method that learns latent representations of physical properties needed to predict object responses and conditions a policy on online estimates of these representations. A dynamics model and object-specific latent representations are jointly learned from demonstrations that include behaviors adapting to the objects' physical properties, and the learned representations are then used to condition an imitation policy. During execution, the dynamics model and policy weights remain fixed, while the latent representation is updated based on the discrepancy between predicted and actual observations, allowing interaction with the object to inform action generation. Real-world and simulation experiments with objects whose centers of mass differ suggest that online adaptation through latent representations of physical properties can improve task success rates. However, in simulation, success rates on center-of-mass locations absent from the demonstrations remained around 30%, indicating limited adaptation to unseen physical properties. Project page: this https URL",
+    "abstract_zh_translation": "操作外观相同但物理属性不同的物体，需要根据交互中获得的信息调整动作。我们研究如何从示范中学习利用交互获得的物理属性信息调整操作动作，例如重新抓握和改变接触位置。为此，我们提出一种示范学习方法，学习预测物体响应所需的物理属性潜在表征，并将该表征的在线估计作为策略的条件输入。我们用包含根据物体物理属性调整行为的示范联合学习动力学模型和各物体的潜在表征，再用学得的表征作为模仿策略的条件输入。执行过程中，动力学模型和策略权重保持固定，潜在表征根据预测与实际观测的偏差更新，从而利用物体交互来指导动作生成。针对质心不同物体的实机与仿真实验表明，通过物理属性潜在表征进行在线适配可以提高任务成功率。不过，在仿真中，面对示范中未出现的质心位置，成功率仍在 30% 左右，表明对未见物理属性的适配有限。项目页见原摘要所附链接。",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2611.06118v1",
+    "abstract_credit": "作者见上。arXiv:2611.06118v1 摘要元数据采用 CC0 1.0。中文译文由 RoboticsNews AI 辅助翻译。",
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license"
+    ],
+    "code_url": null,
+    "data_url": null,
+    "limitations_zh": "作者报告，仿真中示范未覆盖的质心位置上，成功率仍约为 30%。"
+  },
+  {
+    "id": "arxiv-2611.05938",
+    "issue_date": "2026-11-09",
+    "event_time_original": "Wed, 4 Nov 2026 04:26:39 UTC",
+    "event_time_bj": "2026-11-04T12:26:39+08:00",
+    "first_seen_at": "2026-11-09T12:12:29+08:00",
+    "last_verified_at": "2026-11-09T12:12:29+08:00",
+    "category": "paper",
+    "placement": "paper_briefs",
+    "title_original": "Reflection-Robust Stereo Visual-Inertial Odometry via Kalman-Filtered Ground-Height Estimation",
+    "title_en": "Reflection-Robust Stereo Visual-Inertial Odometry via Kalman-Filtered Ground-Height Estimation",
+    "title_zh": "用地面高度估计剔除反光地面的虚假里程计特征",
+    "summary_zh": "实时估计地面高度，选择性拒绝反光区域内被三角化至地面下方的特征点。",
+    "summary_en": "A stereo VIO front end estimates ground height online and rejects below-floor virtual features in reflection-prone regions.",
+    "primary_url": "https://arxiv.org/abs/2611.05938v1",
+    "topics": [
+      "定位",
+      "视觉惯性里程计",
+      "反光地面"
+    ],
+    "geography": [
+      "韩国"
+    ],
+    "entities": [
+      "Korea Advanced Institute of Science and Technology"
+    ],
+    "score": {
+      "novelty": 1,
+      "impact": 1,
+      "evidence": 2,
+      "utility": 2
+    },
+    "featured": false,
+    "importance_rank": 5,
+    "editorial_status": "published",
+    "evidence_status": "preprint",
+    "publication_status": "preprint",
+    "paper_id": "arXiv:2611.05938",
+    "first_author_name": "Uihyun Hwang",
+    "paper_authors": [
+      "Uihyun Hwang",
+      "Sungjae Shin",
+      "Dongjae Kim",
+      "Hyun Myung"
+    ],
+    "first_author_affiliations": [
+      "Korea Advanced Institute of Science and Technology，韩国"
+    ],
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2611.05938v1",
+    "corresponding_authors": [
+      {
+        "name": "Hyun Myung",
+        "affiliations": [
+          "Korea Advanced Institute of Science and Technology，韩国"
+        ],
+        "source_url": "https://arxiv.org/pdf/2611.05938v1"
+      }
+    ],
+    "abstract_original": "Visual-inertial odometry relies on visual features that correspond to 3D points with consistent projections across sequential frames. In reflective indoor-floor environments, however, specular floor patterns can be detected and triangulated as virtual features below the physical ground plane, producing unreliable feature associations and inconsistent visual residuals. This paper proposes a lightweight reflection-aware front-end for feature-based stereo VIO. Rather than suppressing all floor-region features, the proposed method estimates the ground height in real time and rejects only feature candidates whose inferred 3D positions are below the estimated ground height. A floor-region mask restricts the validation process to reflection-prone regions, while stereo height uncertainty and pose uncertainty are used to construct frame-level ground-height measurements. A scalar Kalman filter with Normalized Innovation Squared (NIS) gating then provides a stable ground-height estimate, and an uncertainty-aware safety margin is used for selective below-ground virtual feature rejection. Experiments on real reflective-floor indoor sequences show that the proposed front-end generally improves trajectory accuracy in reflection-dominant environments while maintaining accurate ground-height estimates and recovering from actual ground-height changes.",
+    "abstract_zh_translation": "视觉惯性里程计依靠与三维点对应、且在连续帧中投影一致的视觉特征。然而，在室内反光地面环境中，地面的镜面反射图案可能被检测并三角化为真实地面下方的虚拟特征，导致特征关联不可靠、视觉残差不一致。本文提出一种用于基于特征的双目视觉惯性里程计的轻量抗反射前端。该方法实时估计地面高度，仅拒绝推断三维位置低于估计地面高度的候选特征，并保留其他地面区域特征。地面区域掩码将验证限制在易反光区域，利用双目高度不确定性和位姿不确定性构造逐帧地面高度测量。随后，采用归一化新息平方（NIS）门控的标量卡尔曼滤波器给出稳定的地面高度估计，并利用考虑不确定性的安全裕量选择性地剔除地面下方的虚拟特征。在真实室内反光地面序列上的实验表明，在反射占主导的环境中，该前端通常能提高轨迹精度，同时保持准确的地面高度估计，并能在实际地面高度改变后恢复。",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2611.05938v1",
+    "abstract_credit": "作者见上。arXiv:2611.05938v1 摘要元数据采用 CC0 1.0。中文译文由 RoboticsNews AI 辅助翻译。",
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license"
+    ],
+    "code_url": null,
+    "data_url": null,
+    "limitations_zh": "实验范围为文中采集的室内反光地面序列。"
+  },
+  {
+    "id": "arxiv-2611.07515",
+    "issue_date": "2026-11-09",
+    "event_time_original": "Thu, 5 Nov 2026 06:24:24 UTC",
+    "event_time_bj": "2026-11-05T14:24:24+08:00",
+    "first_seen_at": "2026-11-09T12:12:29+08:00",
+    "last_verified_at": "2026-11-09T12:12:29+08:00",
+    "category": "paper",
+    "placement": "paper_briefs",
+    "title_original": "LMGN: A Unified Policy Learning Model for Last-Mile Grasp-Navigation",
+    "title_en": "LMGN: A Unified Policy Learning Model for Last-Mile Grasp-Navigation",
+    "title_zh": "LMGN 将四足机器人抓取前的接近和操作纳入同一策略",
+    "summary_zh": "用显式距离和方向可达性表征约束底座接近，再由分层混合专家处理各操作阶段。",
+    "summary_en": "LMGN combines grasp-aware approach reachability and stage-specific policies for last-mile quadruped mobile manipulation.",
+    "primary_url": "https://arxiv.org/abs/2611.07515v1",
+    "topics": [
+      "四足机器人",
+      "局部导航",
+      "抓取"
+    ],
+    "geography": [
+      "中国"
+    ],
+    "entities": [
+      "Hubei University"
+    ],
+    "score": {
+      "novelty": 1,
+      "impact": 1,
+      "evidence": 1,
+      "utility": 2
+    },
+    "featured": false,
+    "importance_rank": 6,
+    "editorial_status": "published",
+    "evidence_status": "preprint",
+    "publication_status": "preprint",
+    "paper_id": "arXiv:2611.07515",
+    "first_author_name": "Xuenmin Hu",
+    "paper_authors": [
+      "Xuenmin Hu",
+      "Qingxue Qian",
+      "Wei Luo",
+      "Benyi Ma",
+      "Bo Tang",
+      "Long Chen"
+    ],
+    "first_author_affiliations": [
+      "Hubei University，中国"
+    ],
+    "first_author_affiliation_source_url": "https://arxiv.org/pdf/2611.07515v1",
+    "corresponding_authors": [
+      {
+        "name": "Long Chen",
+        "affiliations": [
+          "Institute of Automation, Chinese Academy of Sciences，中国"
+        ],
+        "source_url": "https://arxiv.org/html/2611.07515v1"
+      }
+    ],
+    "abstract_original": "Legged robots equipped with manipulators have shown significant potential in the fields of daily life and industry in complex environments. However, existing methods mainly focus on global navigation or manipulation independently, while overlooking the last-mile navigation problem, where the robot must jointly determine the base placement, approach direction, and grasp execution to achieve reliable object grasping, and different manipulation stages require distinct control behaviors. To address these challenges, we propose Last-Mile Grasp-Navigation (LMGN), a unified policy learning model for Quadruped robot loco-manipulation. An Explicit Distance and Directional Reachability (ED-DR) representation is first introduced to explicitly represent the features of grasp-compatible base placement and approach direction. We then develop a semantically aligned Hierarchical Mixture-of-Experts (HMoE) policy that models stage-aware behaviors across the stages of base adjustment, pre-grasp alignment and grasp execution, and object lift. Finally, a new optimization method that jointly aligns navigation and manipulation, stage-dependent expert routing, and action-level consistency is proposed to optimize the HMoE policy. Extensive experiments on the Habitat and Isaac Gym simulators demonstrate that LMGN consistently outperforms state-of-the-art methods, denoting that integrating grasp-aware reachability with stage-aware policy learning significantly improves the success rates of last-mile navigation and target grasp for robots.",
+    "abstract_zh_translation": "带机械臂的足式机器人在复杂环境中的日常生活和工业应用中展现出显著潜力。然而，现有方法主要分别关注全局导航或操作，忽视了最后一段导航问题。为可靠抓取物体，机器人必须联合确定底座位置、接近方向和抓取执行方式，不同的操作阶段也需要不同的控制行为。为解决这些问题，我们提出最后一段抓取导航（LMGN），一种面向四足机器人移动操作的统一策略学习模型。首先引入显式距离与方向可达性（ED-DR）表征，显式描述与抓取兼容的底座位置和接近方向特征。随后，我们开发语义对齐的分层混合专家（HMoE）策略，为底座调整、抓取前对齐与抓取执行、物体抬升等阶段建模相应行为。最后，我们提出新的优化方法，联合对齐导航与操作、依阶段路由专家以及动作层面的一致性，以优化 HMoE 策略。在 Habitat 和 Isaac Gym 仿真器中的广泛实验显示，LMGN 持续优于现有先进方法，表明将考虑抓取的可达性与依阶段的策略学习结合，可显著提高机器人最后一段导航和目标抓取的成功率。",
+    "abstract_language": "en",
+    "abstract_source_url": "https://arxiv.org/abs/2611.07515v1",
+    "abstract_credit": "作者见上。arXiv:2611.07515v1 摘要元数据采用 CC0 1.0。中文译文由 RoboticsNews AI 辅助翻译。",
+    "supporting_urls": [
+      "https://info.arxiv.org/help/policies/submission_agreement.html#metadata-license"
+    ],
+    "code_url": null,
+    "data_url": null,
+    "limitations_zh": "所报告的对比实验使用 Habitat 和 Isaac Gym 仿真环境。"
+  },
+  {
+    "id": "lerobot-v0-7-0",
+    "issue_date": "2026-11-09",
+    "event_time_original": "2026-11-05",
+    "event_time_bj": "2026-11-05",
+    "first_seen_at": "2026-11-09T12:12:29+08:00",
+    "last_verified_at": "2026-11-09T12:12:29+08:00",
+    "category": "open_source",
+    "placement": "industry",
+    "title_original": "LeRobot v0.7.0: From Terabytes to Prompting Robots",
+    "title_en": "LeRobot v0.7.0: From Terabytes to Prompting Robots",
+    "title_zh": "LeRobot v0.7.0 加入交互执行、流式训练和远程推理",
+    "summary_zh": "Hugging Face 的 LeRobot 项目发布 v0.7.0，加入执行中切换子任务的接口、从数据存储直接流式读取训练集，以及在远程 GPU 上运行策略的服务端。",
+    "summary_en": "LeRobot v0.7.0 introduces interactive rollout, streaming training data and a server for running policies on a remote GPU.",
+    "primary_url": "https://github.com/huggingface/lerobot/releases/tag/v0.7.0",
+    "topics": [
+      "开源工具",
+      "策略部署",
+      "训练数据"
+    ],
+    "geography": [],
+    "entities": [
+      "Hugging Face",
+      "LeRobot"
+    ],
+    "score": {
+      "novelty": 2,
+      "impact": 2,
+      "evidence": 2,
+      "utility": 2
+    },
+    "featured": true,
+    "importance_rank": 7,
+    "editorial_status": "published",
+    "evidence_status": "official_claim",
+    "supporting_urls": [
+      "https://huggingface.co/blog/lerobot/lerobot-release-v070"
+    ],
+    "code_url": "https://github.com/huggingface/lerobot/tree/v0.7.0",
+    "limitations_zh": "项目的版本说明标注了不兼容变更，涉及安装、训练、推理与硬件接口。"
+  },
+  {
+    "id": "serve-physical-ai-services-2026-11-05",
+    "issue_date": "2026-11-09",
+    "event_time_original": "2026-11-05（美国公告日期）",
+    "event_time_bj": "2026-11-05",
+    "first_seen_at": "2026-11-09T12:12:29+08:00",
+    "last_verified_at": "2026-11-09T12:12:29+08:00",
+    "category": "industry",
+    "placement": "industry",
+    "title_original": "Serve Robotics Launches Physical AI Services, Opening Technology Behind Its Robot Fleets to Leading Physical AI Companies",
+    "title_en": "Serve Robotics Launches Physical AI Services, Opening Technology Behind Its Robot Fleets to Leading Physical AI Companies",
+    "title_zh": "Serve Robotics 宣布向第三方提供车队连接与数据服务",
+    "summary_zh": "Serve 宣布推出面向第三方车队的连接、训练样本筛选和人行道采集数据服务，并将工程机械自动化公司 Bedrock Robotics 列为首批客户之一。",
+    "summary_en": "Serve announced third-party fleet connectivity, training data curation and sidewalk data services, naming construction autonomy company Bedrock Robotics among launch customers.",
+    "primary_url": "https://serverobotics.gcs-web.com/news-releases/news-release-details/serve-robotics-launches-physical-ai-services-opening-technology",
+    "topics": [
+      "车队基础设施",
+      "数据筛选",
+      "工程机械"
+    ],
+    "geography": [
+      "美国"
+    ],
+    "entities": [
+      "Serve Robotics",
+      "Bedrock Robotics"
+    ],
+    "score": {
+      "novelty": 1,
+      "impact": 2,
+      "evidence": 1,
+      "utility": 2
+    },
+    "featured": false,
+    "importance_rank": 8,
+    "editorial_status": "published",
+    "evidence_status": "official_claim",
+    "deployment_stage": "undisclosed",
+    "limitations_zh": "公告未提供第三方车队的独立性能评测或合同条款。"
+  },
+  {
+    "id": "pudu-europe-summit-2026-11-04",
+    "issue_date": "2026-11-09",
+    "event_time_original": "2026-11-04（阿姆斯特丹峰会当地日期，依据厂商新闻稿）",
+    "event_time_bj": "2026-11-04",
+    "first_seen_at": "2026-11-09T12:12:29+08:00",
+    "last_verified_at": "2026-11-09T12:12:29+08:00",
+    "category": "industry",
+    "placement": "industry",
+    "title_original": "Pudu Robotics Unveils \"One Brain, Multiple Embodiments\" Strategy and Showcases Full Portfolio in European First",
+    "title_en": "Pudu Robotics Unveils \"One Brain, Multiple Embodiments\" Strategy and Showcases Full Portfolio in European First",
+    "title_zh": "普渡机器人在欧洲峰会宣布跨形态软件架构策略",
+    "summary_zh": "普渡机器人称，将以 PuduFM 和 PuduAgent OS 为不同机器人形态提供可复用的模型能力、模块和技能，硬件与运动控制仍按任务设计。公司在峰会展示了六条产品线。",
+    "summary_en": "Pudu announced a shared architecture based on PuduFM and PuduAgent OS, with reusable software and skills alongside task-specific hardware and motion control. It showcased six product lines.",
+    "primary_url": "https://www.pudurobotics.com/en/news/pudu-robotics-european-partner-summit-2026",
+    "topics": [
+      "服务机器人",
+      "系统架构",
+      "商业应用"
+    ],
+    "geography": [
+      "中国",
+      "荷兰"
+    ],
+    "entities": [
+      "Pudu Robotics"
+    ],
+    "score": {
+      "novelty": 1,
+      "impact": 1,
+      "evidence": 1,
+      "utility": 1
+    },
+    "featured": false,
+    "importance_rank": 9,
+    "editorial_status": "published",
+    "evidence_status": "official_claim",
+    "deployment_stage": "demo",
+    "limitations_zh": "发布材料为策略说明与产品展示，未披露跨平台技能迁移的对照评测。"
+  },
+  {
+    "id": "agility-churchill-closing-2026-11-04",
+    "issue_date": "2026-11-09",
+    "event_time_original": "2026-11-04（美国公告日期）",
+    "event_time_bj": "2026-11-04",
+    "first_seen_at": "2026-11-09T12:12:29+08:00",
+    "last_verified_at": "2026-11-09T12:12:29+08:00",
+    "category": "funding",
+    "placement": "ecosystem",
+    "title_original": "Agility Robotics and Churchill Capital Corp XI Complete Business Combination",
+    "title_en": "Agility Robotics and Churchill Capital Corp XI Complete Business Combination",
+    "title_zh": "Agility Robotics 与 Churchill XI 完成业务合并",
+    "summary_zh": "Agility 公告宣布与 Churchill XI 完成交割。随后提交的 8-K 披露，合并后公司的普通股与认股权证在纳斯达克以 AGLT、AGLTW 为代码上市。这是上期拟议交易的交割进展。",
+    "summary_en": "Agility announced the closing of its combination with Churchill XI. Its subsequent Form 8-K reports Nasdaq listings under AGLT and AGLTW for common stock and warrants.",
+    "primary_url": "https://www.agilityrobotics.com/content/agility-robotics-and-churchill-capital-corp-xi-complete-business-combination",
+    "topics": [
+      "人形机器人",
+      "业务合并",
+      "公司披露"
+    ],
+    "geography": [
+      "美国"
+    ],
+    "entities": [
+      "Agility Robotics",
+      "Churchill Capital Corp XI"
+    ],
+    "score": {
+      "novelty": 1,
+      "impact": 2,
+      "evidence": 2,
+      "utility": 1
+    },
+    "featured": false,
+    "importance_rank": 10,
+    "editorial_status": "published",
+    "evidence_status": "independent_evidence",
+    "supporting_urls": [
+      "https://investors.agilityrobotics.com/static-files/cc7604df-afb4-44e9-8099-ecd897651792"
+    ]
+  },
+  {
+    "id": "abb-softbank-china-review-2026-11-05",
+    "issue_date": "2026-11-09",
+    "event_time_original": "2026-11-05（ABB 瑞士公告日期）",
+    "event_time_bj": "2026-11-05",
+    "first_seen_at": "2026-11-09T12:12:29+08:00",
+    "last_verified_at": "2026-11-09T12:12:29+08:00",
+    "category": "funding",
+    "placement": "ecosystem",
+    "title_original": "Update on divestment of ABB Robotics",
+    "title_en": "Update on divestment of ABB Robotics",
+    "title_zh": "ABB 与软银披露中国机器人业务收购受阻",
+    "summary_zh": "ABB 在 11 月 5 日披露，软银获悉中国外商投资安全审查机构禁止收购 ABB 在中国的机器人业务。软银翌日确认于 11 月 4 日收到通知，并称双方仍在就交易沟通。",
+    "summary_en": "ABB disclosed that SoftBank had been informed that China’s foreign investment security review office prohibited acquisition of ABB’s robotics business in China. SoftBank confirmed receipt of the notice on November 4 and said talks continued.",
+    "primary_url": "https://resources.news.e.abb.com/attachments/published/140154/en-US/0A15DBC92198/20261105_Update_on_divestment_of_ABB_Robotics_EN.pdf",
+    "topics": [
+      "工业机器人",
+      "并购",
+      "投资审查"
+    ],
+    "geography": [
+      "中国",
+      "瑞士",
+      "日本"
+    ],
+    "entities": [
+      "ABB",
+      "SoftBank Group"
+    ],
+    "score": {
+      "novelty": 1,
+      "impact": 2,
+      "evidence": 2,
+      "utility": 2
+    },
+    "featured": true,
+    "importance_rank": 11,
+    "editorial_status": "published",
+    "evidence_status": "official_claim",
+    "limitations_zh": "双方披露的决定涉及中国业务。公告未确认全球交易的最终结果或替代方案。",
+    "supporting_urls": [
+      "https://group.softbank/media/Project/sbg/sbg/news/press/2026/20261106/pdf/20261106_en.pdf"
+    ]
+  }
+]
